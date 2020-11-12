@@ -1,0 +1,135 @@
+#+title: Laat emacs config
+#+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
+
+
+* Package manager
+  #+begin_src emacs-lisp
+    ;; NOTE: init.el is now generated from emacs.org.
+    (require 'package)
+
+    (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+			     ("org" . "https://orgmode.org/elpa/")
+			     ("elpa" . "https://elpa.gnu.org/packages/")))
+
+    (package-initialize)
+    (unless package-archive-contents (package-refresh-contents))
+
+    ;; Initialize use-package on non-Linux platforms
+    (unless (package-installed-p 'use-package) (package-install 'use-package))
+
+    (require 'use-package)
+  #+end_src
+
+* Basic UI
+
+  #+begin_src emacs-lisp
+    (setq inhibit-startup-message t)
+
+    (scroll-bar-mode -1)        ; Disable visible scrollbar
+    (tool-bar-mode -1)          ; Disable the toolbar
+    (tooltip-mode -1)           ; Disable tooltips
+    (set-fringe-mode 10)        ; Give some breathing room
+    (menu-bar-mode -1)          ; Disable the menu bar
+
+    (visual-line-mode 1)        ; Break long lines at word boundaries
+  #+end_src
+
+* Basic Config
+
+  #+begin_src emacs-lisp
+    (setq custom-file "~/.emacs.d/custom.el")
+    (when (file-exists-p custom-file) (load custom-file))
+
+    (setq backup-directory-alist `(("." . "~/.emacs.d/.saves")))
+    (setq auto-save-file-name-transforms `((".*" "~/.emacs.d/.saves/" t)))
+  #+end_src
+
+* Key Binds
+
+** evil
+  #+begin_src emacs-lisp
+    (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
+    (use-package evil
+      :ensure t
+      :init
+      (setq evil-want-integration t)
+      (setq evil-want-keybinding nil)
+      :config
+      (evil-mode 1))
+
+    (use-package evil-collection
+      :after evil
+      :ensure t
+      :config
+      (evil-collection-init))
+  #+end_src
+** save like intellij
+
+  #+begin_src emacs-lisp
+    (defadvice switch-to-buffer (before save-buffer-now activate)
+      (when (and buffer-file-name (buffer-modified-p)) (save-buffer)))
+    (defadvice other-window (before other-window-now activate)
+      (when (and buffer-file-name (buffer-modified-p)) (save-buffer)))
+    (defadvice windmove-up (before other-window-now activate)
+      (when buffer-file-name (save-buffer)))
+    (defadvice windmove-down (before other-window-now activate)
+      (when buffer-file-name (save-buffer)))
+    (defadvice windmove-left (before other-window-now activate)
+      (when buffer-file-name (save-buffer)))
+    (defadvice windmove-right (before other-window-now activate)
+      (when buffer-file-name (save-buffer)))
+    (add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
+  #+end_src
+
+* UI Configuration
+
+** Color Theme
+   #+begin_src emacs-lisp
+     (use-package doom-themes
+       :ensure t
+       :init (load-theme 'doom-dracula t))
+   #+end_src
+** Mode line
+   #+begin_src emacs-lisp
+     (use-package all-the-icons
+       :ensure t)
+
+     (use-package doom-modeline
+       :ensure t
+       :init (doom-modeline-mode 1)
+       :custom ((doom-modeline-height 15)))
+   #+end_src
+
+* Org
+  
+   #+begin_src emacs-lisp
+     (use-package org
+         :ensure t)
+   #+end_src
+
+** Auto-Tangle init.el
+
+   #+begin_src emacs-lisp
+     (defun laat/org-babel-tangle-config ()
+       (when (string-equal (buffer-file-name)
+			   (expand-file-name "~/.emacs.d/emacs.org"))
+	 ;; Dynamic scoping to the rescue
+	 (let ((org-confirm-babel-evaluate nil))
+	   (org-babel-tangle))))
+
+     (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'laat/org-babel-tangle-config)))
+   #+end_src
+
+   #+RESULTS:
+   | (lambda nil (add-hook 'after-save-hook #'laat/org-babel-tangle-config)) | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
+
+* Terminals
+  
+** vterm
+  
+   #+begin_src emacs-lisp
+     (use-package vterm
+         :ensure t)
+   #+end_src
+   

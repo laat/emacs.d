@@ -209,8 +209,7 @@
      (use-package whitespace
        :ensure t
        :init
-       (dolist (hook '(prog-mode-hook text-mode-hook))
-         (add-hook hook #'whitespace-mode))
+       (add-hook 'prog-mode-hook #'whitespace-mode)
        (add-hook 'before-save-hook #'whitespace-cleanup)
        :config
        (setq whitespace-line-column nil)
@@ -232,6 +231,15 @@
                )))
    #+end_src
 
+** Unicode Trolls
+   #+begin_src emacs-lisp
+     (use-package unicode-troll-stopper
+       :ensure t
+       :diminish unicode-troll-stopper-mode
+       :commands unicode-troll-stopper-mode
+       :init
+       (add-hook 'prog-mode-hook 'unicode-troll-stopper-mode))
+   #+end_src
 
 ** Magit
 

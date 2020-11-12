@@ -8,14 +8,15 @@
     (require 'package)
 
     (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			     ("org" . "https://orgmode.org/elpa/")
-			     ("elpa" . "https://elpa.gnu.org/packages/")))
+                             ("org" . "https://orgmode.org/elpa/")
+                             ("elpa" . "https://elpa.gnu.org/packages/")))
 
     (package-initialize)
     (unless package-archive-contents (package-refresh-contents))
 
     ;; Initialize use-package on non-Linux platforms
-    (unless (package-installed-p 'use-package) (package-install 'use-package))
+    (unless (package-installed-p 'use-package)
+      (package-install 'use-package))
 
     (require 'use-package)
   #+end_src
@@ -44,7 +45,6 @@
     (setq auto-save-file-name-transforms `((".*" "~/.emacs.d/.saves/" t)))
 
     (global-auto-revert-mode 1)
-    (setq show-trailing-whitespace t)
   #+end_src
 
 * Key Binds
@@ -127,18 +127,18 @@
        :ensure t
        :diminish
        :bind (("C-s" . swiper)
-	      :map ivy-minibuffer-map
-	      ("TAB" . ivy-alt-done)
-	      ("C-l" . ivy-alt-done)
-	      ("C-j" . ivy-next-line)
-	      ("C-k" . ivy-previous-line)
-	      :map ivy-switch-buffer-map
-	      ("C-k" . ivy-previous-line)
-	      ("C-l" . ivy-done)
-	      ("C-d" . ivy-switch-buffer-kill)
-	      :map ivy-reverse-i-search-map
-	      ("C-k" . ivy-previous-line)
-	      ("C-d" . ivy-reverse-i-search-kill))
+        :map ivy-minibuffer-map
+        ("TAB" . ivy-alt-done)
+        ("C-l" . ivy-alt-done)
+        ("C-j" . ivy-next-line)
+        ("C-k" . ivy-previous-line)
+        :map ivy-switch-buffer-map
+        ("C-k" . ivy-previous-line)
+        ("C-l" . ivy-done)
+        ("C-d" . ivy-switch-buffer-kill)
+        :map ivy-reverse-i-search-map
+        ("C-k" . ivy-previous-line)
+        ("C-d" . ivy-reverse-i-search-kill))
        :config
        (ivy-mode 1))
 
@@ -150,8 +150,8 @@
      (use-package counsel
        :ensure t
        :bind (("C-M-j" . 'counsel-switch-buffer)
-	      :map minibuffer-local-map
-	      ("C-r" . 'counsel-minibuffer-history))
+        :map minibuffer-local-map
+        ("C-r" . 'counsel-minibuffer-history))
        :config
        (counsel-mode 1))
    #+end_src
@@ -168,15 +168,71 @@
    #+begin_src emacs-lisp
      (defun laat/org-babel-tangle-config ()
        (when (string-equal (buffer-file-name)
-			   (expand-file-name "~/.emacs.d/emacs.org"))
-	 ;; Dynamic scoping to the rescue
-	 (let ((org-confirm-babel-evaluate nil))
-	   (org-babel-tangle))))
+         (expand-file-name "~/.emacs.d/emacs.org"))
+   ;; Dynamic scoping to the rescue
+   (let ((org-confirm-babel-evaluate nil))
+     (org-babel-tangle))))
 
      (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'laat/org-babel-tangle-config)))
    #+end_src
 
 * Development
+
+** Languages
+*** Emacs Lisp
+
+   #+begin_src emacs-lisp
+     (use-package aggressive-indent
+       :ensure t
+       :diminish
+       :commands aggressive-indent-mode
+       :init
+       (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
+   #+end_src
+
+** Whitespace
+
+   #+begin_src emacs-lisp
+     (use-package whitespace-cleanup-mode
+       :ensure t
+       :diminish whitespace-cleanup-mode
+       :commands whitespace-cleanup-mode
+       :init
+       (add-hook 'prog-mode-hook 'whitespace-cleanup-mode))
+
+     (setq-default tab-width 2)
+     (setq-default indent-tabs-mode nil)
+
+     (add-hook 'prog-mode-hook
+               (lambda () (setq show-trailing-whitespace t)))
+
+     (use-package whitespace
+       :ensure t
+       :init
+       (dolist (hook '(prog-mode-hook text-mode-hook))
+         (add-hook hook #'whitespace-mode))
+       (add-hook 'before-save-hook #'whitespace-cleanup)
+       :config
+       (setq whitespace-line-column nil)
+       (setq whitespace-global-modes '(not org-mode))
+       (setq whitespace-style
+             '(face
+               tabs
+               spaces
+               trailing
+               ;; lines
+               space-before-tab
+               newline
+               indentation
+               empty
+               space-after-tab
+               space-mark
+               tab-mark
+               ;; newline-mark
+               )))
+   #+end_src
+
+
 ** Magit
 
    #+begin_src emacs-lisp
@@ -195,4 +251,3 @@
      (use-package vterm
          :ensure t)
    #+end_src
-

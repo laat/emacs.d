@@ -1,4 +1,4 @@
-#+title: Laat emacs config
+#+title: Laat Emacs Config
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
 
 
@@ -47,6 +47,7 @@
 * Key Binds
 
 ** evil
+
   #+begin_src emacs-lisp
     (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
@@ -64,6 +65,7 @@
       :config
       (evil-collection-init))
   #+end_src
+
 ** save like intellij
 
   #+begin_src emacs-lisp
@@ -85,12 +87,15 @@
 * UI Configuration
 
 ** Color Theme
+
    #+begin_src emacs-lisp
      (use-package doom-themes
        :ensure t
        :init (load-theme 'doom-dracula t))
    #+end_src
+
 ** Mode line
+
    #+begin_src emacs-lisp
      (use-package all-the-icons
        :ensure t)
@@ -102,7 +107,7 @@
    #+end_src
 
 * Org
-  
+
    #+begin_src emacs-lisp
      (use-package org
          :ensure t)
@@ -121,15 +126,22 @@
      (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'laat/org-babel-tangle-config)))
    #+end_src
 
-   #+RESULTS:
-   | (lambda nil (add-hook 'after-save-hook #'laat/org-babel-tangle-config)) | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
+* Development
+** Magit
+
+   #+begin_src emacs-lisp
+     (use-package magit
+         :ensure t)
+     (use-package evil-magit
+         :ensure t
+         :after magit)
+   #+end_src
 
 * Terminals
-  
+
 ** vterm
-  
+
    #+begin_src emacs-lisp
      (use-package vterm
          :ensure t)
    #+end_src
-   

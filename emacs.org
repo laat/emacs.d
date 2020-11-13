@@ -94,8 +94,10 @@
    #+begin_src emacs-lisp
      (use-package doom-themes
        :ensure t
-       :init (load-theme 'doom-dracula t))
+       :init (load-theme 'doom-one t))
    #+end_src
+
+   #+RESULTS:
 
 ** Mode line
 
@@ -179,6 +181,16 @@
 * Development
 
 ** Languages
+
+*** F#
+   #+begin_src emacs-lisp :tangle no
+     (use-package fsharp-mode
+       :defer t
+       :ensure t)
+   #+end_src
+
+   #+RESULTS:
+
 *** Emacs Lisp
 
    #+begin_src emacs-lisp

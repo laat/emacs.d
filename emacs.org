@@ -137,18 +137,18 @@
     :ensure t
     :diminish
     :bind (("C-s" . swiper)
-     :map ivy-minibuffer-map
-     ("TAB" . ivy-alt-done)
-     ("C-l" . ivy-alt-done)
-     ("C-j" . ivy-next-line)
-     ("C-k" . ivy-previous-line)
-     :map ivy-switch-buffer-map
-     ("C-k" . ivy-previous-line)
-     ("C-l" . ivy-done)
-     ("C-d" . ivy-switch-buffer-kill)
-     :map ivy-reverse-i-search-map
-     ("C-k" . ivy-previous-line)
-     ("C-d" . ivy-reverse-i-search-kill))
+           :map ivy-minibuffer-map
+           ("TAB" . ivy-alt-done)
+           ("C-l" . ivy-alt-done)
+           ("C-j" . ivy-next-line)
+           ("C-k" . ivy-previous-line)
+           :map ivy-switch-buffer-map
+           ("C-k" . ivy-previous-line)
+           ("C-l" . ivy-done)
+           ("C-d" . ivy-switch-buffer-kill)
+           :map ivy-reverse-i-search-map
+           ("C-k" . ivy-previous-line)
+           ("C-d" . ivy-reverse-i-search-kill))
     :config
     (ivy-mode 1))
 
@@ -160,8 +160,8 @@
   (use-package counsel
     :ensure t
     :bind (("C-M-j" . 'counsel-switch-buffer)
-     :map minibuffer-local-map
-     ("C-r" . 'counsel-minibuffer-history))
+           :map minibuffer-local-map
+           ("C-r" . 'counsel-minibuffer-history))
     :config
     (counsel-mode 1))
 #+end_src
@@ -247,6 +247,7 @@
 
 ** Languages
 *** F#
+
 #+begin_src emacs-lisp :tangle no
   (use-package fsharp-mode
     :defer t
@@ -306,6 +307,7 @@
 #+end_src
 
 ** Unicode Trolls
+
 #+begin_src emacs-lisp
   (use-package unicode-troll-stopper
     :ensure t

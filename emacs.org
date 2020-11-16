@@ -3,305 +3,321 @@
 
 
 * Package manager
-  #+begin_src emacs-lisp
-    ;; NOTE: init.el is now generated from emacs.org.
-    (require 'package)
 
-    (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                             ("org" . "https://orgmode.org/elpa/")
-                             ("elpa" . "https://elpa.gnu.org/packages/")))
+#+begin_src emacs-lisp
+  ;; NOTE: init.el is now generated from emacs.org.
+  (require 'package)
 
-    (package-initialize)
-    (unless package-archive-contents (package-refresh-contents))
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")))
 
-    ;; Initialize use-package on non-Linux platforms
-    (unless (package-installed-p 'use-package)
-      (package-install 'use-package))
+  (package-initialize)
+  (unless package-archive-contents (package-refresh-contents))
 
-    (require 'use-package)
-  #+end_src
+  ;; Initialize use-package on non-Linux platforms
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
+
+  (require 'use-package)
+#+end_src
 
 * Basic UI
 
-  #+begin_src emacs-lisp
-    (setq inhibit-startup-message t)
+#+begin_src emacs-lisp
+  (setq inhibit-startup-message t)
 
-    (scroll-bar-mode -1)        ; Disable visible scrollbar
-    (tool-bar-mode -1)          ; Disable the toolbar
-    (tooltip-mode -1)           ; Disable tooltips
-    (set-fringe-mode 10)        ; Give some breathing room
-    (menu-bar-mode -1)          ; Disable the menu bar
+  (scroll-bar-mode -1)        ; Disable visible scrollbar
+  (tool-bar-mode -1)          ; Disable the toolbar
+  (tooltip-mode -1)           ; Disable tooltips
+  (set-fringe-mode 10)        ; Give some breathing room
+  (menu-bar-mode -1)          ; Disable the menu bar
 
-    (visual-line-mode 1)        ; Break long lines at word boundaries
-  #+end_src
+  (visual-line-mode 1)        ; Break long lines at word boundaries
+#+end_src
 
 * Basic Config
 
-  #+begin_src emacs-lisp
-    (setq custom-file "~/.emacs.d/custom.el")
-    (when (file-exists-p custom-file) (load custom-file))
+#+begin_src emacs-lisp
+  (setq custom-file "~/.emacs.d/custom.el")
+  (when (file-exists-p custom-file) (load custom-file))
 
-    (setq backup-directory-alist `(("." . "~/.emacs.d/.saves")))
-    (setq auto-save-file-name-transforms `((".*" "~/.emacs.d/.saves/" t)))
+  (setq backup-directory-alist `(("." . "~/.emacs.d/.saves")))
+  (setq auto-save-file-name-transforms `((".*" "~/.emacs.d/.saves/" t)))
 
-    (global-auto-revert-mode 1)
-  #+end_src
+  (global-auto-revert-mode 1)
+#+end_src
 
 * Key Binds
-
 ** evil
 
-  #+begin_src emacs-lisp
-    (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+#+begin_src emacs-lisp
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
-    (use-package evil
-      :ensure t
-      :init
-      (setq evil-want-integration t)
-      (setq evil-want-keybinding nil)
-      :config
-      (evil-mode 1))
+  (use-package evil
+    :ensure t
+    :init
+    (setq evil-want-integration t)
+    (setq evil-want-keybinding nil)
+    :config
+    (evil-mode 1))
 
-    (use-package evil-collection
-      :after evil
-      :ensure t
-      :config
-      (evil-collection-init))
-  #+end_src
+  (use-package evil-collection
+    :after evil
+    :ensure t
+    :config
+    (evil-collection-init))
+#+end_src
 
 ** save like intellij
 
-  #+begin_src emacs-lisp
-    (defadvice switch-to-buffer (before save-buffer-now activate)
-      (when (and buffer-file-name (buffer-modified-p)) (save-buffer)))
-    (defadvice other-window (before other-window-now activate)
-      (when (and buffer-file-name (buffer-modified-p)) (save-buffer)))
-    (defadvice windmove-up (before other-window-now activate)
-      (when buffer-file-name (save-buffer)))
-    (defadvice windmove-down (before other-window-now activate)
-      (when buffer-file-name (save-buffer)))
-    (defadvice windmove-left (before other-window-now activate)
-      (when buffer-file-name (save-buffer)))
-    (defadvice windmove-right (before other-window-now activate)
-      (when buffer-file-name (save-buffer)))
-    (add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
-  #+end_src
+#+begin_src emacs-lisp
+  (defadvice switch-to-buffer (before save-buffer-now activate)
+    (when (and buffer-file-name (buffer-modified-p)) (save-buffer)))
+  (defadvice other-window (before other-window-now activate)
+    (when (and buffer-file-name (buffer-modified-p)) (save-buffer)))
+  (defadvice windmove-up (before other-window-now activate)
+    (when buffer-file-name (save-buffer)))
+  (defadvice windmove-down (before other-window-now activate)
+    (when buffer-file-name (save-buffer)))
+  (defadvice windmove-left (before other-window-now activate)
+    (when buffer-file-name (save-buffer)))
+  (defadvice windmove-right (before other-window-now activate)
+    (when buffer-file-name (save-buffer)))
+  (add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
+#+end_src
 
 * UI Configuration
-
 ** Color Theme
 
-   #+begin_src emacs-lisp
-     (use-package doom-themes
-       :ensure t
-       :init (load-theme 'doom-one t))
-   #+end_src
+#+begin_src emacs-lisp
+  (use-package doom-themes
+    :ensure t
+    :init (load-theme 'doom-one t))
+#+end_src
 
 ** Mode line
 
-   #+begin_src emacs-lisp
-     (use-package all-the-icons
-       :ensure t)
+#+begin_src emacs-lisp
+  (use-package all-the-icons
+    :ensure t)
 
-     (use-package doom-modeline
-       :ensure t
-       :init (doom-modeline-mode 1)
-       :custom ((doom-modeline-height 15)))
-   #+end_src
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1)
+    :custom ((doom-modeline-height 15)))
+#+end_src
 
 ** Which Key
 
-   #+begin_src emacs-lisp
-     (use-package which-key
-       :ensure t
-       :init (which-key-mode)
-       :diminish which-key-mode
-       :config
-       (setq which-key-idle-delay 1))
-   #+end_src
+#+begin_src emacs-lisp
+  (use-package which-key
+    :ensure t
+    :init (which-key-mode)
+    :diminish which-key-mode
+    :config
+    (setq which-key-idle-delay 1))
+#+end_src
 
 ** Ivy
 
-   #+begin_src emacs-lisp
-     (use-package ivy
-       :ensure t
-       :diminish
-       :bind (("C-s" . swiper)
-        :map ivy-minibuffer-map
-        ("TAB" . ivy-alt-done)
-        ("C-l" . ivy-alt-done)
-        ("C-j" . ivy-next-line)
-        ("C-k" . ivy-previous-line)
-        :map ivy-switch-buffer-map
-        ("C-k" . ivy-previous-line)
-        ("C-l" . ivy-done)
-        ("C-d" . ivy-switch-buffer-kill)
-        :map ivy-reverse-i-search-map
-        ("C-k" . ivy-previous-line)
-        ("C-d" . ivy-reverse-i-search-kill))
-       :config
-       (ivy-mode 1))
+#+begin_src emacs-lisp
+  (use-package ivy
+    :ensure t
+    :diminish
+    :bind (("C-s" . swiper)
+     :map ivy-minibuffer-map
+     ("TAB" . ivy-alt-done)
+     ("C-l" . ivy-alt-done)
+     ("C-j" . ivy-next-line)
+     ("C-k" . ivy-previous-line)
+     :map ivy-switch-buffer-map
+     ("C-k" . ivy-previous-line)
+     ("C-l" . ivy-done)
+     ("C-d" . ivy-switch-buffer-kill)
+     :map ivy-reverse-i-search-map
+     ("C-k" . ivy-previous-line)
+     ("C-d" . ivy-reverse-i-search-kill))
+    :config
+    (ivy-mode 1))
 
-     (use-package ivy-rich
-       :ensure t
-       :init
-       (ivy-rich-mode 1))
+  (use-package ivy-rich
+    :ensure t
+    :init
+    (ivy-rich-mode 1))
 
-     (use-package counsel
-       :ensure t
-       :bind (("C-M-j" . 'counsel-switch-buffer)
-        :map minibuffer-local-map
-        ("C-r" . 'counsel-minibuffer-history))
-       :config
-       (counsel-mode 1))
-   #+end_src
+  (use-package counsel
+    :ensure t
+    :bind (("C-M-j" . 'counsel-switch-buffer)
+     :map minibuffer-local-map
+     ("C-r" . 'counsel-minibuffer-history))
+    :config
+    (counsel-mode 1))
+#+end_src
 
 * Org
 
-   #+begin_src emacs-lisp
-     (use-package org
-         :ensure t)
-   #+end_src
+#+begin_src emacs-lisp
+  (defun laat/org-mode-setup ()
+    (org-indent-mode)
+    (visual-line-mode 1))
+  (use-package org
+    :ensure t
+    :hook (org-mode . laat/org-mode-setup)
+    :config
+    (setq org-ellipsis " ▾"))
+#+end_src
 
 ** nice bullets
-   #+begin_src emacs-lisp
-     (use-package org-bullets
-       :ensure t
-       :after org
-       :hook (org-mode . org-bullets-mode)
-       :custom
-       (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-   #+end_src
+#+begin_src emacs-lisp
+  (use-package org-bullets
+    :ensure t
+    :after org
+    :hook (org-mode . org-bullets-mode)
+    :custom
+    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+#+end_src
 
 ** visual center
 
-   #+begin_src emacs-lisp
-      (defun laat/org-mode-visual-fill ()
-       (setq visual-fill-column-width 100
-             visual-fill-column-center-text t)
-       (visual-fill-column-mode 1))
+#+begin_src emacs-lisp
+  (defun laat/org-mode-visual-fill ()
+    (setq visual-fill-column-width 100
+          visual-fill-column-center-text t)
+    (visual-fill-column-mode 1))
 
-     (use-package visual-fill-column
-       :ensure t
-       :hook (org-mode . laat/org-mode-visual-fill))
-   #+end_src
-
-   #+RESULTS:
-   | laat/org-mode-visual-fill | org-tempo-setup | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | (lambda nil (add-hook 'after-save-hook #'laat/org-babel-tangle-config)) | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
+  (use-package visual-fill-column
+    :ensure t
+    :hook (org-mode . laat/org-mode-visual-fill))
+#+end_src
 
 ** <lang templates
 
-   #+begin_src emacs-lisp
-     (require 'org-tempo)
+#+begin_src emacs-lisp
+  (require 'org-tempo)
 
-     (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-     (add-to-list 'org-structure-template-alist '("py" . "src python"))
-   #+end_src
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+#+end_src
 
 ** Auto-Tangle init.el
 
-   #+begin_src emacs-lisp
-     (defun laat/org-babel-tangle-config ()
-       (when (string-equal (buffer-file-name)
-         (expand-file-name "~/.emacs.d/emacs.org"))
-   ;; Dynamic scoping to the rescue
-   (let ((org-confirm-babel-evaluate nil))
-     (org-babel-tangle))))
+#+begin_src emacs-lisp
+  (defun laat/org-babel-tangle-config ()
+    (when (string-equal (buffer-file-name)
+                        (expand-file-name "~/.emacs.d/emacs.org"))
+      ;; Dynamic scoping to the rescue
+      (let ((org-confirm-babel-evaluate nil))
+        (org-babel-tangle))))
 
-     (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'laat/org-babel-tangle-config)))
-   #+end_src
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'laat/org-babel-tangle-config)))
+#+end_src
 
 * Development
+** Projects
+#+begin_src emacs-lisp
+  (use-package projectile
+    :ensure t
+    :diminish projectile-mode
+    :config (projectile-mode)
+    :custom ((projectile-completion-system 'ivy))
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :init
+    ;; NOTE: Set this to the folder where you keep your Git repos!
+    (setq projectile-project-search-path '("~/git"))
+    (setq projectile-switch-project-action #'projectile-dired))
+
+  (use-package counsel-projectile
+    :ensure t
+    :config (counsel-projectile-mode))
+#+end_src
 
 ** Languages
-
 *** F#
-   #+begin_src emacs-lisp :tangle no
-     (use-package fsharp-mode
-       :defer t
-       :ensure t)
-   #+end_src
-
-   #+RESULTS:
+#+begin_src emacs-lisp :tangle no
+  (use-package fsharp-mode
+    :defer t
+    :ensure t)
+#+end_src
 
 *** Emacs Lisp
 
-   #+begin_src emacs-lisp
-     (use-package aggressive-indent
-       :ensure t
-       :diminish
-       :commands aggressive-indent-mode
-       :init
-       (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
-   #+end_src
+#+begin_src emacs-lisp
+  (use-package aggressive-indent
+    :ensure t
+    :diminish
+    :commands aggressive-indent-mode
+    :init
+    (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
+#+end_src
 
 ** Whitespace
 
-   #+begin_src emacs-lisp
-     (use-package whitespace-cleanup-mode
-       :ensure t
-       :diminish whitespace-cleanup-mode
-       :commands whitespace-cleanup-mode
-       :init
-       (add-hook 'prog-mode-hook 'whitespace-cleanup-mode))
+#+begin_src emacs-lisp
+  (use-package whitespace-cleanup-mode
+    :ensure t
+    :diminish whitespace-cleanup-mode
+    :commands whitespace-cleanup-mode
+    :init
+    (add-hook 'prog-mode-hook 'whitespace-cleanup-mode))
 
-     (setq-default tab-width 2)
-     (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 2)
+  (setq-default indent-tabs-mode nil)
 
-     (add-hook 'prog-mode-hook
-               (lambda () (setq show-trailing-whitespace t)))
+  (add-hook 'prog-mode-hook
+            (lambda () (setq show-trailing-whitespace t)))
 
-     (use-package whitespace
-       :ensure t
-       :init
-       (add-hook 'prog-mode-hook #'whitespace-mode)
-       (add-hook 'before-save-hook #'whitespace-cleanup)
-       :config
-       (setq whitespace-line-column nil)
-       (setq whitespace-global-modes '(not org-mode))
-       (setq whitespace-style
-             '(face
-               tabs
-               spaces
-               trailing
-               ;; lines
-               space-before-tab
-               newline
-               indentation
-               empty
-               space-after-tab
-               space-mark
-               tab-mark
-               ;; newline-mark
-               )))
-   #+end_src
+  (use-package whitespace
+    :ensure t
+    :init
+    (add-hook 'prog-mode-hook #'whitespace-mode)
+    (add-hook 'before-save-hook #'whitespace-cleanup)
+    :config
+    (setq whitespace-line-column nil)
+    (setq whitespace-global-modes '(not org-mode))
+    (setq whitespace-style
+          '(face
+            tabs
+            spaces
+            trailing
+            ;; lines
+            space-before-tab
+            newline
+            indentation
+            empty
+            space-after-tab
+            space-mark
+            tab-mark
+            ;; newline-mark
+            )))
+#+end_src
 
 ** Unicode Trolls
-   #+begin_src emacs-lisp
-     (use-package unicode-troll-stopper
-       :ensure t
-       :diminish unicode-troll-stopper-mode
-       :commands unicode-troll-stopper-mode
-       :init
-       (add-hook 'prog-mode-hook 'unicode-troll-stopper-mode))
-   #+end_src
+#+begin_src emacs-lisp
+  (use-package unicode-troll-stopper
+    :ensure t
+    :diminish unicode-troll-stopper-mode
+    :commands unicode-troll-stopper-mode
+    :init
+    (add-hook 'prog-mode-hook 'unicode-troll-stopper-mode))
+#+end_src
 
 ** Magit
 
-   #+begin_src emacs-lisp
-     (use-package magit
-         :ensure t)
-     (use-package evil-magit
-         :ensure t
-         :after magit)
-   #+end_src
+#+begin_src emacs-lisp
+  (use-package magit
+    :ensure t)
+  (use-package evil-magit
+    :ensure t
+    :after magit)
+#+end_src
 
 * Terminals
-
 ** vterm
 
-   #+begin_src emacs-lisp
-     (use-package vterm
-         :ensure t)
-   #+end_src
+#+begin_src emacs-lisp
+  (use-package vterm
+    :ensure t)
+#+end_src

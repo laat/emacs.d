@@ -67,6 +67,17 @@
     :ensure t
     :config
     (evil-collection-init))
+
+  (use-package evil-surround
+    :ensure t
+    :after evil
+    :config (global-evil-surround-mode 1))
+
+  (use-package expand-region
+    :ensure t
+    :after evil
+    :config
+    (define-key evil-normal-state-map (kbd "+") 'er/expand-region))
 #+end_src
 
 ** save like intellij
@@ -312,6 +323,14 @@
   (use-package evil-magit
     :ensure t
     :after magit)
+#+end_src
+
+* File Management
+
+#+begin_src emacs-lisp
+  (use-package all-the-icons-dired
+    :ensure t
+    :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 
 * Terminals

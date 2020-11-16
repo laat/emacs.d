@@ -230,7 +230,7 @@
   Accept: application/json
 #+End_src
 
-*** mermaid diabrams
+*** mermaid diagrams
 [[https://mermaid-js.github.io/mermaid/#/][mermaid]] can draw nice diagrams that can be displayed inline in emacs
 
 =C-c C-x C-v org-toggle-inline-images=

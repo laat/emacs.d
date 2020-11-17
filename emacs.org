@@ -168,13 +168,11 @@
 * Org
 
 #+begin_src emacs-lisp
-  (defun laat/org-mode-setup ()
-    (org-indent-mode)
-    (visual-line-mode 1))
-
   (use-package org
     :ensure org-plus-contrib
-    :hook (org-mode . laat/org-mode-setup)
+    :hook 
+    ((org-mode . visual-line-mode)
+     (org-mode . org-indent-mode))
     :config
     (setq org-ellipsis " ▾"))
 
@@ -471,6 +469,9 @@ sequenceDiagram
 - [[https://github.com/ffevotte/script2svg][script2svg]]
 - [[https://github.com/prettier/prettier-emacs][prettier]]
 - [[https://polymode.github.io/][polymode]]
+- [[https://github.com/abo-abo/avy][avy]]
+- [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]]
+- [[https://github.com/Fanael/highlight-numbers][highlight-numbers]]
 ** OSX
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

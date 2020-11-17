@@ -442,7 +442,9 @@ sequenceDiagram
 #+end_src
 
 * Future Cusomizations?
-
+- [[https://github.com/emacs-dashboard/emacs-dashboard][emacs-dashboard]]
+- [[https://github.com/noctuid/general.el][general.el]]
+- [[https://github.com/abo-abo/hydra][hydra]]
 - [[https://github.com/quelpa/quelpa-use-package][quelpa]]
 - [[https://github.com/magit/orgit][orgit]]
 - [[https://github.com/abo-abo/org-download][org-download]]
@@ -450,6 +452,9 @@ sequenceDiagram
 - [[https://gitlab.com/oer/org-re-reveal][org-re-reveal]]
 - [[https://github.com/alf/ob-restclient.el][ob-restclient]]
 - [[https://github.com/kawabata/ox-pandoc][ox-pandoc]]
+- [[https://github.com/jkitchin/ox-clip][ox-clip]]
+- [[https://github.com/jkitchin/scimax/blob/master/ox-word.el][ox-word]]
+-
 - [[https://ox-hugo.scripter.co/][ox-hugo]]
 - [[https://github.com/aspiers/orgmode/blob/master/contrib/lisp/ox-confluence.el][ox-confluence]]
 - [[https://orgmode.org/worg/exporters/beamer/ox-beamer.html][ox-beamer]]
@@ -465,6 +470,7 @@ sequenceDiagram
 - [[https://github.com/iqbalansari/emacs-emojify][emacs-emojify]]
 - [[https://github.com/ffevotte/script2svg][script2svg]]
 - [[https://github.com/prettier/prettier-emacs][prettier]]
+- [[https://polymode.github.io/][polymode]]
 ** OSX
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]
@@ -473,3 +479,4 @@ sequenceDiagram
 - [[https://github.com/xuchunyang/osx-dictionary.el][osx-dictionary.el]]
 - [[https://github.com/kaz-yos/reveal-in-osx-finder][reveal-in-osx-finder]]
 - [[https://github.com/bbatsov/prelude/blob/27652fa3b776122a3c43d1dd258eebd831373be7/core/prelude-macos.el#L60][menu-bar-mode]]
+- [[https://github.com/seagle0128/.emacs.d/blob/643efc9065dcc16fc111d3c251d3ffb4f0753cb5/lisp/init-basic.el#L52-L61][⌘-q]]

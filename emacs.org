@@ -489,6 +489,7 @@ sequenceDiagram
 - [[https://github.com/Fanael/highlight-numbers][highlight-numbers]]
 - [[https://github.com/joewreschnig/auto-minor-mode][auto-minor-mode]]
 - [[https://github.com/emacsmirror/gcmh][gcmh]]
+- org-sidebar
 ** OSX
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

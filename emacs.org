@@ -443,6 +443,22 @@ sequenceDiagram
 - [[https://github.com/emacs-dashboard/emacs-dashboard][emacs-dashboard]]
 - [[https://github.com/noctuid/general.el][general.el]]
 - [[https://github.com/abo-abo/hydra][hydra]]
+- [[https://github.com/raxod502/straight.el][staight.el]]
+- [[https://github.com/gilbertw1/better-jumper][better-jumper]]
+- [[https://github.com/jscheid/dtrt-indent][dtrt-indent]]
+- [[https://github.com/hlissner/emacs-so-long/blob/master/so-long.el][so-long.el]]
+- [[https://github.com/hlissner/ws-butler][ws-butler]]
+- [[https://github.com/mhayashi1120/Emacs-langtool][langtool]]
+- [[https://github.com/bnbeckwith/writegood-mode][writegood-mode]]
+- flyspell-correct
+- flyspell-correct-ivy 
+- flyspell-lazy
+- flycheck
+- flycheck-popup-tip
+- minimap-mode
+- [[https://github.com/rejeep/drag-stuff.el][drag-stuff]]
+- [[https://github.com/noctuid/link-hint.el][link-hint.el]]
+- [[https://github.com/DarthFennec/highlight-indent-guides][highlight-indent-guides]]
 - [[https://github.com/quelpa/quelpa-use-package][quelpa]]
 - [[https://github.com/magit/orgit][orgit]]
 - [[https://github.com/abo-abo/org-download][org-download]]
@@ -452,7 +468,6 @@ sequenceDiagram
 - [[https://github.com/kawabata/ox-pandoc][ox-pandoc]]
 - [[https://github.com/jkitchin/ox-clip][ox-clip]]
 - [[https://github.com/jkitchin/scimax/blob/master/ox-word.el][ox-word]]
--
 - [[https://ox-hugo.scripter.co/][ox-hugo]]
 - [[https://github.com/aspiers/orgmode/blob/master/contrib/lisp/ox-confluence.el][ox-confluence]]
 - [[https://orgmode.org/worg/exporters/beamer/ox-beamer.html][ox-beamer]]
@@ -472,6 +487,8 @@ sequenceDiagram
 - [[https://github.com/abo-abo/avy][avy]]
 - [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]]
 - [[https://github.com/Fanael/highlight-numbers][highlight-numbers]]
+- [[https://github.com/joewreschnig/auto-minor-mode][auto-minor-mode]]
+- [[https://github.com/emacsmirror/gcmh][gcmh]]
 ** OSX
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

@@ -187,6 +187,16 @@
                         (evil-org-set-key-theme)))))
 #+end_src
 
+** org-download
+#+begin_src emacs-lisp
+  (use-package org-download :ensure t)
+#+end_src
+
+On OSX use before calling =org-download-clipboard=
+#+begin_src shell :tangle no
+  brew install pngpaste
+#+end_src
+
 ** nice bullets
 #+begin_src emacs-lisp
   (use-package org-bullets
@@ -218,7 +228,7 @@
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
   (add-to-list 'org-structure-template-alist '("me" . "src mermaid"))
   (add-to-list 'org-structure-template-alist '("http" . "src http"))
-  (add-to-list 'org-structure-template-alist '("rest" . "src rest"))
+  (add-to-list 'org-structure-template-alist '("rest" . "src restclient"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
 #+end_src

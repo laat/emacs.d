@@ -621,7 +621,6 @@ sequenceDiagram
 - [[https://www.emacswiki.org/emacs/ParEdit][ParEdit]]
 - [[https://github.com/DanielDe/org-web][org-web]]
 - [[https://github.com/alphapapa/org-protocol-capture-html][org-protocol-capture-html]]
-- [[https://github.com/dgutov/diff-hl][diff-hl]]
 - [[https://github.com/emacsorphanage/terraform-mode][terraform-mode]]
 - [[https://github.com/chrisbarrett/kubernetes-el][kubernetes-el]]
 - [[https://github.com/iqbalansari/emacs-emojify][emacs-emojify]]

@@ -30,7 +30,7 @@
   (tool-bar-mode -1)          ; Disable the toolbar
   (tooltip-mode -1)           ; Disable tooltips
   (set-fringe-mode 10)        ; Give some breathing room
-  (menu-bar-mode -1)          ; Disable the menu bar
+  ;;(menu-bar-mode -1)          ; Disable the menu bar
 
   (visual-line-mode 1)        ; Break long lines at word boundaries
 #+end_src
@@ -98,6 +98,15 @@
 #+end_src
 
 * UI Configuration
+
+** Emacs Dashboard
+#+begin_src emacs-lisp
+  (use-package dashboard
+    :ensure t
+    :config
+    (dashboard-setup-startup-hook))
+#+end_src
+
 ** Color Theme
 
 #+begin_src emacs-lisp
@@ -184,7 +193,7 @@
 #+begin_src emacs-lisp
   (use-package org
     :ensure org-plus-contrib
-    :hook 
+    :hook
     ((org-mode . visual-line-mode)
      (org-mode . org-indent-mode))
     :config
@@ -454,7 +463,6 @@ sequenceDiagram
 #+end_src
 
 * Future Cusomizations?
-- [[https://github.com/emacs-dashboard/emacs-dashboard][emacs-dashboard]]
 - [[https://github.com/noctuid/general.el][general.el]]
 - [[https://github.com/abo-abo/hydra][hydra]]
 - [[https://github.com/raxod502/straight.el][staight.el]]
@@ -465,7 +473,7 @@ sequenceDiagram
 - [[https://github.com/mhayashi1120/Emacs-langtool][langtool]]
 - [[https://github.com/bnbeckwith/writegood-mode][writegood-mode]]
 - flyspell-correct
-- flyspell-correct-ivy 
+- flyspell-correct-ivy
 - flyspell-lazy
 - flycheck
 - flycheck-popup-tip

@@ -121,13 +121,22 @@
              ([(super w)] . delete-frame)
              ([(super z)] . undo))
 #+end_src
+
 * UI Configuration
 ** Emacs Dashboard
 #+begin_src emacs-lisp
   (use-package dashboard
     :ensure t
     :config
-    (dashboard-setup-startup-hook))
+    (dashboard-setup-startup-hook)
+    (setq
+     dashboard-projects-backend 'projectile
+     dashboard-items '((recents  . 5)
+                       (bookmarks . 5)
+                       (projects . 5)
+                       (agenda . 5)
+                       ;;(registers . 5)
+                       )))
 #+end_src
 
 ** Color Theme
@@ -241,6 +250,12 @@
       (setq drag-stuff-except-modes '(org-mode))
       (drag-stuff-define-keys)
       (drag-stuff-global-mode 1)))
+#+end_src
+
+** Reveal in X
+#+begin_src emacs-lisp
+  (use-package reveal-in-osx-finder
+    :ensure t)
 #+end_src
 
 * Org
@@ -415,6 +430,7 @@ sequenceDiagram
 
 * Development
 ** Projects
+
 #+begin_src emacs-lisp
   (use-package projectile
     :ensure t
@@ -431,6 +447,22 @@ sequenceDiagram
   (use-package counsel-projectile
     :ensure t
     :config (counsel-projectile-mode))
+#+end_src
+
+** Completion
+
+#+begin_src emacs-lisp
+  (use-package company
+    :ensure t
+    :diminish company-mode
+    :bind (("C-SPC" . company-complete-common)
+           :map prog-mode-map
+           ("<tab>" . company-indent-or-complete-common))
+    :config
+    (global-company-mode))
+
+  (use-package company-box
+    :hook (company-mode . company-box-mode))
 #+end_src
 
 ** Languages
@@ -533,7 +565,7 @@ sequenceDiagram
     :ensure t)
   (use-package evil-magit
     :ensure t
-    :after magit)
+    :after (magit evil))
   (use-package diff-hl
     :ensure t
     :hook (dired-mode . diff-hl-dired-mode-unless-remote)
@@ -560,7 +592,7 @@ sequenceDiagram
 #+end_src
 
 * Future Cusomizations?
-- [[https://github.com/noctuid/general.el][general.el]]
+- [[https://github.com/noctuid/general.el][general.eL]]
 - [[https://github.com/abo-abo/hydra][hydra]]
 - [[https://github.com/raxod502/straight.el][staight.el]]
 - [[https://github.com/gilbertw1/better-jumper][better-jumper]]
@@ -607,7 +639,6 @@ sequenceDiagram
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]
 - [[https://github.com/emacsorphanage/osx-trash/][osx-trash]]
 - [[https://github.com/pekingduck/launchctl-el][launchctl-el]]
-- [[https://github.com/xuchunyang/osx-dictionary.el][osx-dictionary.el]]
 - [[https://github.com/kaz-yos/reveal-in-osx-finder][reveal-in-osx-finder]]
-- [[https://github.com/bbatsov/prelude/blob/27652fa3b776122a3c43d1dd258eebd831373be7/core/prelude-macos.el#L60][menu-bar-mode]]
+
 

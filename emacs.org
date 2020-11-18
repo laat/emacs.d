@@ -107,6 +107,20 @@
   (add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
 #+end_src
 
+** OSX
+⌘-c ⌘-v addiction 😅
+#+begin_src emacs-lisp
+  (setq mac-option-modifier 'meta
+        mac-command-modifier 'super)
+  (bind-keys ([(super a)] . mark-whole-buffer)
+             ([(super c)] . kill-ring-save)
+             ([(super l)] . goto-line)
+             ([(super q)] . save-buffers-kill-emacs)
+             ([(super s)] . save-buffer)
+             ([(super v)] . yank)
+             ([(super w)] . delete-frame)
+             ([(super z)] . undo))
+#+end_src
 * UI Configuration
 
 ** Emacs Dashboard
@@ -570,4 +584,3 @@ sequenceDiagram
 - [[https://github.com/xuchunyang/osx-dictionary.el][osx-dictionary.el]]
 - [[https://github.com/kaz-yos/reveal-in-osx-finder][reveal-in-osx-finder]]
 - [[https://github.com/bbatsov/prelude/blob/27652fa3b776122a3c43d1dd258eebd831373be7/core/prelude-macos.el#L60][menu-bar-mode]]
-- [[https://github.com/seagle0128/.emacs.d/blob/643efc9065dcc16fc111d3c251d3ffb4f0753cb5/lisp/init-basic.el#L52-L61][⌘-q]]

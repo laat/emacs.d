@@ -59,7 +59,16 @@
     (setq evil-want-integration t)
     (setq evil-want-keybinding nil)
     :config
-    (evil-mode 1))
+    (evil-mode 1)
+    (define-key
+      evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+    (define-key
+      evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+    (define-key
+      evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+    (define-key
+      evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+    (setq-default evil-cross-lines t))
 
   (use-package evil-collection
     :after evil
@@ -76,7 +85,8 @@
     :ensure t
     :after evil
     :config
-    (define-key evil-normal-state-map (kbd "+") 'er/expand-region))
+    (define-key evil-normal-state-map (kbd "+") 'er/expand-region)
+    (define-key evil-normal-state-map (kbd "-") 'er/contract-region))
 #+end_src
 
 ** save like intellij
@@ -188,6 +198,18 @@
     (counsel-mode 1))
 #+end_src
 
+** Drag Stuff
+
+#+begin_src emacs-lisp
+  (use-package drag-stuff
+    :ensure t
+    :config
+    (progn
+      (setq drag-stuff-except-modes '(org-mode))
+      (drag-stuff-define-keys)
+      (drag-stuff-global-mode 1)))
+#+end_src
+
 * Org
 
 #+begin_src emacs-lisp
@@ -207,6 +229,31 @@
      (evil-org-mode . (lambda ()
                         (evil-org-set-key-theme)))))
 #+end_src
+
+** languagetool
+#+begin_src emacs-lisp
+  (use-package langtool
+    :ensure t
+    :init
+    (setq langtool-default-language "en-US")
+    :config
+    (setq langtool-bin "/usr/local/bin/languagetool"))
+#+end_src
+
+On OSX:
+#+begin_src shell :tangle no
+brew install languagetool
+#+end_src
+
+** writegood
+
+#+begin_src emacs-lisp
+  (use-package writegood-mode
+    :ensure t
+    :hook (org-mode markdown-mode rst-mode asciidoc-mode latex-mode))
+#+end_src
+
+*** TODO keymap =writegood-grade-level= =writegood-reading-ease=
 
 ** org-download
 #+begin_src emacs-lisp
@@ -480,17 +527,12 @@ sequenceDiagram
 - [[https://github.com/jscheid/dtrt-indent][dtrt-indent]]
 - [[https://github.com/hlissner/emacs-so-long/blob/master/so-long.el][so-long.el]]
 - [[https://github.com/hlissner/ws-butler][ws-butler]]
-- [[https://github.com/mhayashi1120/Emacs-langtool][langtool]]
-- [[https://github.com/bnbeckwith/writegood-mode][writegood-mode]]
 - flyspell-correct
 - flyspell-correct-ivy
 - flyspell-lazy
 - flycheck
 - flycheck-popup-tip
-- minimap-mode
-- [[https://github.com/rejeep/drag-stuff.el][drag-stuff]]
 - [[https://github.com/noctuid/link-hint.el][link-hint.el]]
-- [[https://github.com/DarthFennec/highlight-indent-guides][highlight-indent-guides]]
 - [[https://github.com/quelpa/quelpa-use-package][quelpa]]
 - [[https://github.com/magit/orgit][orgit]]
 - [[https://github.com/takaxp/org-tree-slide][org-tree-slide]]

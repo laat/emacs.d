@@ -118,6 +118,20 @@
     :custom ((doom-modeline-height 15)))
 #+end_src
 
+** helpful
+#+begin_src emacs-lisp
+  (use-package helpful
+    :ensure t
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key))
+#+end_src
+
 ** Which Key
 
 #+begin_src emacs-lisp
@@ -461,10 +475,8 @@ sequenceDiagram
 - [[https://github.com/DarthFennec/highlight-indent-guides][highlight-indent-guides]]
 - [[https://github.com/quelpa/quelpa-use-package][quelpa]]
 - [[https://github.com/magit/orgit][orgit]]
-- [[https://github.com/abo-abo/org-download][org-download]]
 - [[https://github.com/takaxp/org-tree-slide][org-tree-slide]]
 - [[https://gitlab.com/oer/org-re-reveal][org-re-reveal]]
-- [[https://github.com/alf/ob-restclient.el][ob-restclient]]
 - [[https://github.com/kawabata/ox-pandoc][ox-pandoc]]
 - [[https://github.com/jkitchin/ox-clip][ox-clip]]
 - [[https://github.com/jkitchin/scimax/blob/master/ox-word.el][ox-word]]

@@ -232,7 +232,6 @@
     (setq which-key-idle-delay 1))
 #+end_src
 
-
 ** Ivy
 
 #+begin_src emacs-lisp
@@ -390,7 +389,6 @@ On OSX use before calling =org-download-clipboard=
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
   (add-to-list 'org-structure-template-alist '("me" . "src mermaid"))
   (add-to-list 'org-structure-template-alist '("http" . "src http"))
-  (add-to-list 'org-structure-template-alist '("rest" . "src restclient"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
 #+end_src

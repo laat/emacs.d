@@ -48,6 +48,28 @@
 #+end_src
 
 * Key Binds
+** General
+
+#+begin_src emacs-lisp
+  (use-package general
+    :ensure t
+    :after evil
+    :config
+    (general-evil-setup)
+    (general-create-definer laat/leader-keys
+      :keymaps '(normal insert visual emacs)
+      :prefix "SPC"
+      :non-normal-prefix "C-c SPC")
+    (general-create-definer laat/local-leader-keys
+      :keymaps '(normal insert visual emacs)
+      :prefix ","
+      :non-normal-prefix "C-,")
+    (laat/leader-keys
+      "t" '(:ignore t :which-key "toggles")
+      "y" '(:ignore t :which-key "helpers")
+      "SPC" 'execute-extended-command))
+#+end_src
+
 ** evil
 
 #+begin_src emacs-lisp
@@ -108,18 +130,22 @@
 #+end_src
 
 ** OSX
+
 ⌘-c ⌘-v addiction 😅
 #+begin_src emacs-lisp
-  (setq mac-option-modifier 'meta
-        mac-command-modifier 'super)
-  (bind-keys ([(super a)] . mark-whole-buffer)
-             ([(super c)] . kill-ring-save)
-             ([(super l)] . goto-line)
-             ([(super q)] . save-buffers-kill-emacs)
-             ([(super s)] . save-buffer)
-             ([(super v)] . yank)
-             ([(super w)] . delete-frame)
-             ([(super z)] . undo))
+  (when (eq system-type 'darwin)
+    (setq
+     mac-right-option-modifier 'none
+     mac-option-modifier 'meta
+     mac-command-modifier 'super)
+    (bind-keys ([(super a)] . mark-whole-buffer)
+               ([(super c)] . kill-ring-save)
+               ([(super l)] . goto-line)
+               ([(super q)] . save-buffers-kill-emacs)
+               ([(super s)] . save-buffer)
+               ([(super v)] . yank)
+               ([(super w)] . delete-frame)
+               ([(super z)] . undo)))
 #+end_src
 
 * UI Configuration
@@ -176,8 +202,6 @@
     :after magit
     :ensure t)
 #+end_src
-
-#+RESULTS:
 
 ** helpful
 #+begin_src emacs-lisp
@@ -298,8 +322,16 @@ brew install languagetool
 #+begin_src emacs-lisp
   (use-package writegood-mode
     :ensure t
-    :hook (org-mode markdown-mode rst-mode asciidoc-mode latex-mode))
+    :hook (org-mode markdown-mode rst-mode asciidoc-mode latex-mode)
+    :general
+    (laat/leader-keys
+      "yg" '(:ignore t :which-key "writegood")
+      "ygg" 'writegood-mode
+      "ygl" 'writegood-grade-level
+      "yge" 'writegood-reading-ease))
 #+end_src
+
+#+RESULTS:
 
 *** TODO keymap =writegood-grade-level= =writegood-reading-ease=
 
@@ -592,48 +624,48 @@ sequenceDiagram
 #+end_src
 
 * Future Cusomizations?
-- [[https://github.com/noctuid/general.el][general.eL]]
-- [[https://github.com/abo-abo/hydra][hydra]]
-- [[https://github.com/raxod502/straight.el][staight.el]]
-- [[https://github.com/gilbertw1/better-jumper][better-jumper]]
-- [[https://github.com/jscheid/dtrt-indent][dtrt-indent]]
-- [[https://github.com/hlissner/emacs-so-long/blob/master/so-long.el][so-long.el]]
-- [[https://github.com/hlissner/ws-butler][ws-butler]]
-- flyspell-correct
-- flyspell-correct-ivy
-- flyspell-lazy
-- flycheck
-- flycheck-popup-tip
-- [[https://github.com/noctuid/link-hint.el][link-hint.el]]
-- [[https://github.com/quelpa/quelpa-use-package][quelpa]]
-- [[https://github.com/magit/orgit][orgit]]
-- [[https://github.com/takaxp/org-tree-slide][org-tree-slide]]
-- [[https://gitlab.com/oer/org-re-reveal][org-re-reveal]]
-- [[https://github.com/kawabata/ox-pandoc][ox-pandoc]]
-- [[https://github.com/jkitchin/ox-clip][ox-clip]]
-- [[https://github.com/jkitchin/scimax/blob/master/ox-word.el][ox-word]]
-- [[https://ox-hugo.scripter.co/][ox-hugo]]
-- [[https://github.com/aspiers/orgmode/blob/master/contrib/lisp/ox-confluence.el][ox-confluence]]
-- [[https://orgmode.org/worg/exporters/beamer/ox-beamer.html][ox-beamer]]
-- [[https://github.com/camdez/goto-last-change.el][goto-last-change.el]]
-- [[https://github.com/benma/visual-regexp-steroids.el/][visual-regexp-steroids.el]]
-- [[https://github.com/jorgenschaefer/typoel/blob/master/typo.el][typo.el]]
-- [[https://www.emacswiki.org/emacs/ParEdit][ParEdit]]
-- [[https://github.com/DanielDe/org-web][org-web]]
-- [[https://github.com/alphapapa/org-protocol-capture-html][org-protocol-capture-html]]
-- [[https://github.com/emacsorphanage/terraform-mode][terraform-mode]]
-- [[https://github.com/chrisbarrett/kubernetes-el][kubernetes-el]]
-- [[https://github.com/iqbalansari/emacs-emojify][emacs-emojify]]
-- [[https://github.com/ffevotte/script2svg][script2svg]]
-- [[https://github.com/prettier/prettier-emacs][prettier]]
-- [[https://polymode.github.io/][polymode]]
-- [[https://github.com/abo-abo/avy][avy]]
-- [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]]
-- [[https://github.com/Fanael/highlight-numbers][highlight-numbers]]
-- [[https://github.com/joewreschnig/auto-minor-mode][auto-minor-mode]]
-- [[https://github.com/emacsmirror/gcmh][gcmh]]
-- org-sidebar
-- [[https://github.com/dakrone/es-mode][es-mode]]
+** [[https://github.com/noctuid/general.el][general.eL]]
+** [[https://github.com/abo-abo/hydra][hydra]]
+** [[https://github.com/raxod502/straight.el][staight.el]]
+** [[https://github.com/gilbertw1/better-jumper][better-jumper]]
+** [[https://github.com/jscheid/dtrt-indent][dtrt-indent]]
+** [[https://github.com/hlissner/emacs-so-long/blob/master/so-long.el][so-long.el]]
+** [[https://github.com/hlissner/ws-butler][ws-butler]]
+** flyspell-correct
+** flyspell-correct-ivy
+** flyspell-lazy
+** flycheck
+** flycheck-popup-tip
+** [[https://github.com/noctuid/link-hint.el][link-hint.el]]
+** [[https://github.com/quelpa/quelpa-use-package][quelpa]]
+** [[https://github.com/magit/orgit][orgit]]
+** [[https://github.com/takaxp/org-tree-slide][org-tree-slide]]
+** [[https://gitlab.com/oer/org-re-reveal][org-re-reveal]]
+** [[https://github.com/kawabata/ox-pandoc][ox-pandoc]]
+** [[https://github.com/jkitchin/ox-clip][ox-clip]]
+** [[https://github.com/jkitchin/scimax/blob/master/ox-word.el][ox-word]]
+** [[https://ox-hugo.scripter.co/][ox-hugo]]
+** [[https://github.com/aspiers/orgmode/blob/master/contrib/lisp/ox-confluence.el][ox-confluence]]
+** [[https://orgmode.org/worg/exporters/beamer/ox-beamer.html][ox-beamer]]
+** [[https://github.com/camdez/goto-last-change.el][goto-last-change.el]]
+** [[https://github.com/benma/visual-regexp-steroids.el/][visual-regexp-steroids.el]]
+** [[https://github.com/jorgenschaefer/typoel/blob/master/typo.el][typo.el]]
+** [[https://www.emacswiki.org/emacs/ParEdit][ParEdit]]
+** [[https://github.com/DanielDe/org-web][org-web]]
+** [[https://github.com/alphapapa/org-protocol-capture-html][org-protocol-capture-html]]
+** [[https://github.com/emacsorphanage/terraform-mode][terraform-mode]]
+** [[https://github.com/chrisbarrett/kubernetes-el][kubernetes-el]]
+** [[https://github.com/iqbalansari/emacs-emojify][emacs-emojify]]
+** [[https://github.com/ffevotte/script2svg][script2svg]]
+** [[https://github.com/prettier/prettier-emacs][prettier]]
+** [[https://polymode.github.io/][polymode]]
+** [[https://github.com/abo-abo/avy][avy]]
+** [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]]
+** [[https://github.com/Fanael/highlight-numbers][highlight-numbers]]
+** [[https://github.com/joewreschnig/auto-minor-mode][auto-minor-mode]]
+** [[https://github.com/emacsmirror/gcmh][gcmh]]
+** org-sidebar
+** [[https://github.com/dakrone/es-mode][es-mode]]
 ** OSX
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

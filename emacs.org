@@ -633,6 +633,7 @@ sequenceDiagram
 - [[https://github.com/joewreschnig/auto-minor-mode][auto-minor-mode]]
 - [[https://github.com/emacsmirror/gcmh][gcmh]]
 - org-sidebar
+- [[https://github.com/dakrone/es-mode][es-mode]]
 ** OSX
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

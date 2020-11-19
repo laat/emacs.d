@@ -19,6 +19,7 @@
     (package-install 'use-package))
 
   (require 'use-package)
+  (use-package diminish :ensure t)
 #+end_src
 
 * Basic UI
@@ -183,6 +184,9 @@
     :ensure t
     :init (doom-modeline-mode 1)
     :custom ((doom-modeline-height 15)))
+
+  (diminish 'subword-mode)
+  (diminish 'visual-line-mode)
 #+end_src
 
 ** Treemacs
@@ -223,10 +227,11 @@
   (use-package which-key
     :ensure t
     :init (which-key-mode)
-    :diminish which-key-mode
+    :diminish
     :config
     (setq which-key-idle-delay 1))
 #+end_src
+
 
 ** Ivy
 
@@ -257,6 +262,7 @@
 
   (use-package counsel
     :ensure t
+    :diminish
     :bind (("C-M-j" . 'counsel-switch-buffer)
            :map minibuffer-local-map
            ("C-r" . 'counsel-minibuffer-history))
@@ -291,10 +297,12 @@
     ((org-mode . visual-line-mode)
      (org-mode . org-indent-mode))
     :config
-    (setq org-ellipsis " ▾"))
+    (setq org-ellipsis " ▾")
+    (diminish 'org-indent-mode))
 
   (use-package evil-org
     :ensure t
+    :diminish
     :after org
     :hook
     ((org-mode . evil-org-mode)
@@ -331,14 +339,20 @@ brew install languagetool
       "yge" 'writegood-reading-ease))
 #+end_src
 
-#+RESULTS:
-
-*** TODO keymap =writegood-grade-level= =writegood-reading-ease=
-
 ** org-download
 #+begin_src emacs-lisp
-  (use-package org-download :ensure t)
+    (use-package org-download
+      :ensure t
+      :hook (dirred-mode . org-download-enable)
+      :general
+      (laat/local-leader-keys
+        :states 'normal
+        :keymaps 'org-mode-map
+        "p" '(:ignore t :which-key "paste")
+        "pi" '(org-download-clipboard :which-key "image"))
+  )
 #+end_src
+
 
 On OSX use before calling =org-download-clipboard=
 #+begin_src shell :tangle no
@@ -466,7 +480,7 @@ sequenceDiagram
 #+begin_src emacs-lisp
   (use-package projectile
     :ensure t
-    :diminish projectile-mode
+    :diminish
     :config (projectile-mode)
     :custom ((projectile-completion-system 'ivy))
     :bind-keymap
@@ -486,7 +500,7 @@ sequenceDiagram
 #+begin_src emacs-lisp
   (use-package company
     :ensure t
-    :diminish company-mode
+    :diminish
     :bind (("C-SPC" . company-complete-common)
            :map prog-mode-map
            ("<tab>" . company-indent-or-complete-common))
@@ -494,6 +508,8 @@ sequenceDiagram
     (global-company-mode))
 
   (use-package company-box
+    :ensure t
+    :diminish
     :hook (company-mode . company-box-mode))
 #+end_src
 

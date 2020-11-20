@@ -48,6 +48,15 @@
   (global-auto-revert-mode 1)
 #+end_src
 
+* Calendar
+
+#+begin_src emacs-lisp
+  (setq
+   calendar-latitude  60.0
+   calendar-longitude  10.7
+   calendar-location-name  "Oslo")
+#+end_src
+
 * Key Binds
 ** General
 
@@ -427,7 +436,7 @@ On OSX use before calling =org-download-clipboard=
 #+end_src
 
 *** mermaid diagrams
-[[https://mermaid-js.github.io/mermaid/#/][mermaid]] can draw nice diagrams that can be displayed inline in emacs
+[[https://mermaid-js.github.io/mermaid/#/][mermaid]] can draw nice diagrams inline in emacs
 
 =C-c C-x C-v org-toggle-inline-images=
 

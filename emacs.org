@@ -1,5 +1,5 @@
 #+title: Laat Emacs Config
-#+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
+#+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes :results output silent
 
 * Package manager
 
@@ -46,15 +46,6 @@
   (setq auto-save-file-name-transforms `((".*" "~/.emacs.d/.saves/" t)))
 
   (global-auto-revert-mode 1)
-#+end_src
-
-* Calendar
-
-#+begin_src emacs-lisp
-  (setq
-   calendar-latitude  60.0
-   calendar-longitude  10.7
-   calendar-location-name  "Oslo")
 #+end_src
 
 * Key Binds
@@ -291,9 +282,32 @@
 #+end_src
 
 ** Reveal in X
+
 #+begin_src emacs-lisp
   (use-package reveal-in-osx-finder
     :ensure t)
+#+end_src
+
+** Bookmarks
+
+#+begin_src emacs-lisp
+  (setq bookmark-save-flag 1) ;; save bookmarks on edit
+
+  (laat/leader-keys
+    "r" '(:ignore t :which-key "bookmarks")
+    "rm" '(bookmark-set :which-key "set bookmark")
+    "rg" '(bookmark-jump :which-key "jump to bookmark")
+    "rl" '(list-bookmarks :which-key "list bookmarks")
+    "rd" '(bookmark-delete :which-key "delete bookmark"))
+#+end_src
+
+** Calendar
+
+#+begin_src emacs-lisp
+  (setq
+   calendar-latitude  60.0
+   calendar-longitude  10.7
+   calendar-location-name  "Oslo")
 #+end_src
 
 * Org
@@ -304,9 +318,19 @@
     :hook
     ((org-mode . visual-line-mode)
      (org-mode . org-indent-mode))
+    :general
+    (laat/leader-keys
+      "c" '(:ignore t :which-key "capture")
+      "cj" '(lambda () (interactive) (org-capture nil "jj")))
     :config
     (setq org-ellipsis " ▾")
-    (diminish 'org-indent-mode))
+    (diminish 'org-indent-mode)
+    (setq org-capture-templates
+          `(("j" "Journal Entries")
+            ("jj" "Journal" entry (file+olp+datetree "~/Dropbox/notes/journal.org")
+             "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+             :clock-in :clock-resume
+             :empty-lines 1))))
 
   (use-package evil-org
     :ensure t
@@ -348,6 +372,7 @@ brew install languagetool
 #+end_src
 
 ** org-download
+
 #+begin_src emacs-lisp
     (use-package org-download
       :ensure t
@@ -356,11 +381,9 @@ brew install languagetool
       (laat/local-leader-keys
         :states 'normal
         :keymaps 'org-mode-map
-        "p" '(:ignore t :which-key "paste")
-        "pi" '(org-download-clipboard :which-key "image"))
-  )
+        "y" '(:ignore t :which-key "yank")
+        "yi" '(org-download-clipboard :which-key "clipboard image")))
 #+end_src
-
 
 On OSX use before calling =org-download-clipboard=
 #+begin_src shell :tangle no
@@ -468,6 +491,23 @@ sequenceDiagram
   sprintf "%s world" x
 #+end_src
 
+** roam
+#+begin_src emacs-lisp
+(use-package org-roam
+      :ensure t
+      :hook
+      (after-init . org-roam-mode)
+      :custom
+      (org-roam-directory "~/Dropbox/notes/roam")
+      :bind (:map org-roam-mode-map
+              (("C-c n l" . org-roam)
+               ("C-c n f" . org-roam-find-file)
+               ("C-c n g" . org-roam-graph))
+              :map org-mode-map
+              (("C-c n i" . org-roam-insert))
+              (("C-c n I" . org-roam-insert-immediate))))
+#+end_src
+
 ** Auto-Tangle init.el
 
 #+begin_src emacs-lisp
@@ -490,6 +530,9 @@ sequenceDiagram
     :diminish
     :config (projectile-mode)
     :custom ((projectile-completion-system 'ivy))
+    :general
+    (laat/leader-keys
+      "'" 'projectile-run-vterm)
     :bind-keymap
     ("C-c p" . projectile-command-map)
     :init
@@ -617,7 +660,11 @@ sequenceDiagram
 
 #+begin_src emacs-lisp
   (use-package magit
-    :ensure t)
+    :ensure t
+    :general
+    (laat/leader-keys
+      "g" '(:ignore t :which-key "git")
+      "gs" '(magit-status :which-key "git status")))
   (use-package evil-magit
     :ensure t
     :after (magit evil))

@@ -764,6 +764,8 @@ sequenceDiagram
 ** [[https://github.com/dakrone/es-mode][es-mode]]
 ** [[https://github.com/darksmile/cheatsheet][cheatsheet]]
 ** https://github.com/tumashu/ivy-posframe
+** https://github.com/raxod502/selectrum
+** https://github.com/conao3/leaf.el
 ** OSX
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

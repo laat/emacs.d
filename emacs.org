@@ -694,7 +694,6 @@ sequenceDiagram
 #+end_src
 
 * Future Cusomizations?
-** [[https://github.com/noctuid/general.el][general.eL]]
 ** [[https://github.com/abo-abo/hydra][hydra]]
 ** [[https://github.com/raxod502/straight.el][staight.el]]
 ** [[https://github.com/gilbertw1/better-jumper][better-jumper]]

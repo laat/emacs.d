@@ -171,7 +171,10 @@
 #+begin_src emacs-lisp
   (use-package doom-themes
     :ensure t
-    :init (load-theme 'doom-one t))
+    :init
+    (load-theme 'doom-one t)
+    ;;(load-theme 'doom-monokai-pro t)
+    )
 #+end_src
 
 ** Mode line
@@ -185,11 +188,20 @@
     :init (doom-modeline-mode 1)
     :custom ((doom-modeline-height 15)))
 
+
   (diminish 'subword-mode)
   (diminish 'visual-line-mode)
 #+end_src
 
+  Git branch in the mode-line is often wrong and making it always show current branch has performance issues. Disabling it, because wrong information is worse than incorrect information.
+
+#+begin_src emacs-lisp
+  (setq-default mode-line-format
+                (delete '(vc-mode vc-mode) mode-line-format))
+#+end_src
+
 ** Treemacs
+
 #+begin_src emacs-lisp
   (use-package treemacs
     :ensure t)
@@ -266,7 +278,9 @@
            :map minibuffer-local-map
            ("C-r" . 'counsel-minibuffer-history))
     :config
-    (counsel-mode 1))
+    (counsel-mode 1)
+    ;; remove the ^ in M-x search
+    (setcdr (assoc 'counsel-M-x ivy-initial-inputs-alist) ""))
 #+end_src
 
 ** Drag Stuff
@@ -320,8 +334,7 @@
      (org-mode . org-indent-mode))
     :general
     (laat/leader-keys
-      "c" '(:ignore t :which-key "capture")
-      "cj" '(lambda () (interactive) (org-capture nil "jj")))
+      "c" '(org-capture :ignore t :which-key "capture"))
     :config
     (setq org-ellipsis " ▾")
     (diminish 'org-indent-mode)
@@ -391,6 +404,7 @@ On OSX use before calling =org-download-clipboard=
 #+end_src
 
 ** nice bullets
+
 #+begin_src emacs-lisp
   (use-package org-bullets
     :ensure t
@@ -584,6 +598,7 @@ sequenceDiagram
 #+end_src
 
 *** JSON
+
 #+begin_src emacs-lisp
   (use-package json-mode
     :ensure t)
@@ -592,6 +607,18 @@ sequenceDiagram
   (use-package counsel-jq
     :ensure t
     :after counsel)
+#+end_src
+
+*** Markdown
+
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown"))
 #+end_src
 
 ** Whitespace
@@ -737,7 +764,6 @@ sequenceDiagram
 ** [[https://github.com/dakrone/es-mode][es-mode]]
 ** [[https://github.com/darksmile/cheatsheet][cheatsheet]]
 ** https://github.com/tumashu/ivy-posframe
-** https://emacs.stackexchange.com/questions/38841/counsel-m-x-always-shows
 ** OSX
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

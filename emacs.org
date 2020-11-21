@@ -738,6 +738,7 @@ sequenceDiagram
 ** [[https://github.com/dakrone/es-mode][es-mode]]
 ** [[https://github.com/darksmile/cheatsheet][cheatsheet]]
 ** https://github.com/tumashu/ivy-posframe
+** https://emacs.stackexchange.com/questions/38841/counsel-m-x-always-shows
 ** OSX
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

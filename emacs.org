@@ -779,6 +779,7 @@ sequenceDiagram
 ** https://github.com/TonCherAmi/org-starless
 ** https://github.com/cadadr/elisp/blob/devel/org-variable-pitch.el
 ** https://chee.xo.snoot.club/notebook/publish.html
+** https://github.com/magit/git-modes
 ** OSX
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

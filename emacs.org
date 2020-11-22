@@ -768,6 +768,10 @@ sequenceDiagram
 ** https://github.com/conao3/leaf.el
 ** http://git.savannah.gnu.org/cgit/emacs.git/tree/lisp/uniquify.el?h=emacs-27
 ** https://salvatore.denaro.nyc/2020/08/capturing-text-from-any-mac-application.html
+** https://github.com/rougier/elegant-emacs
+** https://github.com/TonCherAmi/org-padding
+** https://github.com/TonCherAmi/org-starless
+** https://github.com/cadadr/elisp/blob/devel/org-variable-pitch.el
 ** OSX
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

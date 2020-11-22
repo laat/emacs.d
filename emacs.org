@@ -522,6 +522,12 @@ sequenceDiagram
               (("C-c n I" . org-roam-insert-immediate))))
 #+end_src
 
+** org-yt
+
+#+begin_src emacs-lisp :tangle no
+  (require 'org-yt)
+#+end_src
+
 ** Auto-Tangle init.el
 
 #+begin_src emacs-lisp

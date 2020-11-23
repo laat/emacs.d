@@ -324,6 +324,184 @@
    calendar-location-name  "Oslo")
 #+end_src
 
+* Development
+** Projects
+
+#+begin_src emacs-lisp
+  (use-package projectile
+    :ensure t
+    :diminish
+    :config (projectile-mode)
+    :custom ((projectile-completion-system 'ivy))
+    :general
+    (laat/leader-keys
+      "'" 'projectile-run-vterm)
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :init
+    ;; NOTE: Set this to the folder where you keep your Git repos!
+    (setq projectile-project-search-path '("~/git"))
+    (setq projectile-switch-project-action #'projectile-dired))
+
+  (use-package counsel-projectile
+    :ensure t
+    :config (counsel-projectile-mode))
+#+end_src
+
+** Completion
+
+#+begin_src emacs-lisp
+  (use-package company
+    :ensure t
+    :diminish
+    :bind (("C-SPC" . company-complete-common)
+           :map prog-mode-map
+           ("<tab>" . company-indent-or-complete-common))
+    :config
+    (global-company-mode))
+
+  (use-package company-box
+    :ensure t
+    :diminish
+    :hook (company-mode . company-box-mode))
+#+end_src
+
+** Languages
+*** F#
+
+#+begin_src emacs-lisp
+  (use-package fsharp-mode
+    :defer t
+    :ensure t)
+#+end_src
+
+*** Emacs Lisp
+
+#+begin_src emacs-lisp
+  (use-package aggressive-indent
+    :ensure t
+    :diminish
+    :commands aggressive-indent-mode
+    :init
+    (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
+#+end_src
+
+*** JSON
+
+#+begin_src emacs-lisp
+  (use-package json-mode
+    :ensure t)
+  (use-package json-snatcher
+    :ensure t)
+  (use-package counsel-jq
+    :ensure t
+    :after counsel)
+#+end_src
+
+*** Markdown
+
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown"))
+#+end_src
+
+*** TypeScript
+minimal
+
+#+begin_src emacs-lisp
+(use-package typescript-mode
+  :ensure t
+  :defer t)
+#+end_src
+
+** Whitespace
+
+#+begin_src emacs-lisp
+  (use-package whitespace-cleanup-mode
+    :ensure t
+    :diminish whitespace-cleanup-mode
+    :commands whitespace-cleanup-mode
+    :init
+    (add-hook 'prog-mode-hook 'whitespace-cleanup-mode))
+
+  (setq-default tab-width 2)
+  (setq-default indent-tabs-mode nil)
+
+  (add-hook 'prog-mode-hook
+            (lambda () (setq show-trailing-whitespace t)))
+
+  (use-package whitespace
+    :ensure t
+    :init
+    (add-hook 'prog-mode-hook #'whitespace-mode)
+    (add-hook 'before-save-hook #'whitespace-cleanup)
+    :config
+    (setq whitespace-line-column nil)
+    (setq whitespace-global-modes '(not org-mode))
+    (setq
+     whitespace-style
+     '(face
+       tabs
+       spaces
+       trailing
+       ;; lines
+       ;; space-before-tab
+       ;; newline
+       indentation
+       ;; empty
+       ;; space-after-tab
+       ;; space-mark
+       tab-mark
+       ;; newline-mark
+       )))
+
+  (use-package highlight-indent-guides
+    :ensure t
+    :diminish highlight-indent-guides-mode
+    :hook (prog-mode . highlight-indent-guides-mode)
+    :config
+    (setq highlight-indent-guides-method 'bitmap
+          highlight-indent-guides-bitmap-function 'highlight-indent-guides--bitmap-line
+          highlight-indent-guides-responsive 'top))
+#+end_src
+
+** Unicode Trolls
+
+#+begin_src emacs-lisp
+  (use-package unicode-troll-stopper
+    :ensure t
+    :diminish unicode-troll-stopper-mode
+    :commands unicode-troll-stopper-mode
+    :init
+    (add-hook 'prog-mode-hook 'unicode-troll-stopper-mode))
+#+end_src
+
+** Magit
+
+#+begin_src emacs-lisp
+  (use-package magit
+    :ensure t
+    :general
+    (laat/leader-keys
+      "g" '(:ignore t :which-key "git")
+      "gs" '(magit-status :which-key "git status")))
+  (use-package evil-magit
+    :ensure t
+    :after (magit evil))
+  (use-package diff-hl
+    :ensure t
+    :hook (dired-mode . diff-hl-dired-mode-unless-remote)
+    :hook (magit-post-refresh . diff-hl-magit-post-refresh)
+    :config
+    ;; use margin instead of fringe
+    (diff-hl-margin-mode))
+#+end_src
+
 * Org
 
 #+begin_src emacs-lisp
@@ -334,16 +512,24 @@
      (org-mode . org-indent-mode))
     :general
     (laat/leader-keys
-      "c" '(org-capture :ignore t :which-key "capture"))
+      "c" '(org-capture :which-key "capture"))
     :config
     (setq org-ellipsis " ▾")
     (diminish 'org-indent-mode)
     (setq org-capture-templates
-          `(("j" "Journal Entries")
-            ("jj" "Journal" entry (file+olp+datetree "~/Dropbox/notes/journal.org")
+          `(("j" "Journal" entry (file+olp+datetree "~/Dropbox/notes/journal.org")
              "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
              :clock-in :clock-resume
-             :empty-lines 1))))
+             :empty-lines 1)
+            ("d" "Development" entry (file+headline "~/Dropbox/notes/dev.org" "Captured")
+             "\n** %?\n\n\n\n"
+             :empty-lines 1)
+            ))
+
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (js         . t))))
 
   (use-package evil-org
     :ensure t
@@ -356,6 +542,7 @@
 #+end_src
 
 ** languagetool
+
 #+begin_src emacs-lisp
   (use-package langtool
     :ensure t
@@ -375,7 +562,7 @@ brew install languagetool
 #+begin_src emacs-lisp
   (use-package writegood-mode
     :ensure t
-    :hook (org-mode markdown-mode rst-mode asciidoc-mode latex-mode)
+    ;; :hook (org-mode markdown-mode rst-mode asciidoc-mode latex-mode)
     :general
     (laat/leader-keys
       "yg" '(:ignore t :which-key "writegood")
@@ -440,6 +627,15 @@ On OSX use before calling =org-download-clipboard=
 #+end_src
 
 ** babel
+*** typescript
+
+#+begin_src emacs-lisp
+  (use-package ob-typescript
+    :ensure t
+    :config
+    (add-to-list 'org-babel-load-languages '(typescript . t)))
+#+end_src
+
 *** http
 
 #+begin_src emacs-lisp
@@ -539,175 +735,6 @@ sequenceDiagram
         (org-babel-tangle))))
 
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'laat/org-babel-tangle-config)))
-#+end_src
-
-* Development
-** Projects
-
-#+begin_src emacs-lisp
-  (use-package projectile
-    :ensure t
-    :diminish
-    :config (projectile-mode)
-    :custom ((projectile-completion-system 'ivy))
-    :general
-    (laat/leader-keys
-      "'" 'projectile-run-vterm)
-    :bind-keymap
-    ("C-c p" . projectile-command-map)
-    :init
-    ;; NOTE: Set this to the folder where you keep your Git repos!
-    (setq projectile-project-search-path '("~/git"))
-    (setq projectile-switch-project-action #'projectile-dired))
-
-  (use-package counsel-projectile
-    :ensure t
-    :config (counsel-projectile-mode))
-#+end_src
-
-** Completion
-
-#+begin_src emacs-lisp
-  (use-package company
-    :ensure t
-    :diminish
-    :bind (("C-SPC" . company-complete-common)
-           :map prog-mode-map
-           ("<tab>" . company-indent-or-complete-common))
-    :config
-    (global-company-mode))
-
-  (use-package company-box
-    :ensure t
-    :diminish
-    :hook (company-mode . company-box-mode))
-#+end_src
-
-** Languages
-*** F#
-
-#+begin_src emacs-lisp
-  (use-package fsharp-mode
-    :defer t
-    :ensure t)
-#+end_src
-
-*** Emacs Lisp
-
-#+begin_src emacs-lisp
-  (use-package aggressive-indent
-    :ensure t
-    :diminish
-    :commands aggressive-indent-mode
-    :init
-    (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
-#+end_src
-
-*** JSON
-
-#+begin_src emacs-lisp
-  (use-package json-mode
-    :ensure t)
-  (use-package json-snatcher
-    :ensure t)
-  (use-package counsel-jq
-    :ensure t
-    :after counsel)
-#+end_src
-
-*** Markdown
-
-#+begin_src emacs-lisp
-  (use-package markdown-mode
-    :ensure t
-    :commands (markdown-mode gfm-mode)
-    :mode (("README\\.md\\'" . gfm-mode)
-           ("\\.md\\'" . markdown-mode)
-           ("\\.markdown\\'" . markdown-mode))
-    :init (setq markdown-command "multimarkdown"))
-#+end_src
-
-** Whitespace
-
-#+begin_src emacs-lisp
-  (use-package whitespace-cleanup-mode
-    :ensure t
-    :diminish whitespace-cleanup-mode
-    :commands whitespace-cleanup-mode
-    :init
-    (add-hook 'prog-mode-hook 'whitespace-cleanup-mode))
-
-  (setq-default tab-width 2)
-  (setq-default indent-tabs-mode nil)
-
-  (add-hook 'prog-mode-hook
-            (lambda () (setq show-trailing-whitespace t)))
-
-  (use-package whitespace
-    :ensure t
-    :init
-    (add-hook 'prog-mode-hook #'whitespace-mode)
-    (add-hook 'before-save-hook #'whitespace-cleanup)
-    :config
-    (setq whitespace-line-column nil)
-    (setq whitespace-global-modes '(not org-mode))
-    (setq
-     whitespace-style
-     '(face
-       tabs
-       spaces
-       trailing
-       ;; lines
-       ;; space-before-tab
-       ;; newline
-       indentation
-       ;; empty
-       ;; space-after-tab
-       ;; space-mark
-       tab-mark
-       ;; newline-mark
-       )))
-
-  (use-package highlight-indent-guides
-    :ensure t
-    :diminish highlight-indent-guides-mode
-    :hook (prog-mode . highlight-indent-guides-mode)
-    :config
-    (setq highlight-indent-guides-method 'bitmap
-          highlight-indent-guides-bitmap-function 'highlight-indent-guides--bitmap-line
-          highlight-indent-guides-responsive 'top))
-#+end_src
-
-** Unicode Trolls
-
-#+begin_src emacs-lisp
-  (use-package unicode-troll-stopper
-    :ensure t
-    :diminish unicode-troll-stopper-mode
-    :commands unicode-troll-stopper-mode
-    :init
-    (add-hook 'prog-mode-hook 'unicode-troll-stopper-mode))
-#+end_src
-
-** Magit
-
-#+begin_src emacs-lisp
-  (use-package magit
-    :ensure t
-    :general
-    (laat/leader-keys
-      "g" '(:ignore t :which-key "git")
-      "gs" '(magit-status :which-key "git status")))
-  (use-package evil-magit
-    :ensure t
-    :after (magit evil))
-  (use-package diff-hl
-    :ensure t
-    :hook (dired-mode . diff-hl-dired-mode-unless-remote)
-    :hook (magit-post-refresh . diff-hl-magit-post-refresh)
-    :config
-    ;; use margin instead of fringe
-    (diff-hl-margin-mode))
 #+end_src
 
 * File Management

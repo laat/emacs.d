@@ -71,7 +71,7 @@
       "SPC" 'execute-extended-command))
 #+end_src
 
-** evil
+** Evil
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
@@ -112,7 +112,7 @@
     (define-key evil-normal-state-map (kbd "-") 'er/contract-region))
 #+end_src
 
-** save like intellij
+** Save like intellij
 
 #+begin_src emacs-lisp
   (defadvice switch-to-buffer (before save-buffer-now activate)
@@ -130,7 +130,7 @@
   (add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
 #+end_src
 
-** OSX
+** OS X
 
 ⌘-c ⌘-v addiction 😅
 #+begin_src emacs-lisp
@@ -197,7 +197,10 @@
   (use-package doom-modeline
     :ensure t
     :init (doom-modeline-mode 1)
-    :custom ((doom-modeline-height 15)))
+    :custom
+    ((doom-modeline-height 15)
+     (doom-modeline-minor-modes t)))
+
 
 
   (diminish 'subword-mode)
@@ -231,7 +234,7 @@
     :ensure t)
 #+end_src
 
-** helpful
+** Helpful
 #+begin_src emacs-lisp
   (use-package helpful
     :ensure t
@@ -498,6 +501,7 @@ Set this to the folder where you keep your Git repos!
 #+begin_src emacs-lisp
   (use-package flycheck
     :ensure t
+    :diminish
     :init (global-flycheck-mode))
 #+end_src
 
@@ -561,7 +565,7 @@ minimal
   :defer t)
 #+end_src
 
-** Whitespace
+** White space
 
 #+begin_src emacs-lisp
   (use-package whitespace-cleanup-mode
@@ -745,7 +749,7 @@ On OSX use before calling =org-download-clipboard=
   brew install pngpaste
 #+end_src
 
-** nice bullets
+** Nice bullets
 
 #+begin_src emacs-lisp
   (use-package org-bullets
@@ -756,7 +760,7 @@ On OSX use before calling =org-download-clipboard=
     (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 #+end_src
 
-** visual center
+** Visual center
 
 #+begin_src emacs-lisp
   (defun laat/org-mode-visual-fill ()
@@ -781,8 +785,7 @@ On OSX use before calling =org-download-clipboard=
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
 #+end_src
 
-** babel
-
+** Babel
 *** Emacs lisp
 #+begin_src emacs-lisp
   (defun disable-fylcheck-in-org-src-block ()
@@ -923,6 +926,22 @@ I cannot get it to work, needs investigation
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'laat/org-babel-tangle-config)))
 #+end_src
 
+* Pandoc
+
+#+begin_src emacs-lisp
+  (use-package pandoc-mode
+    :ensure t
+    :config
+    (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
+
+  ;; creates a long export-dispatch
+  ;; SPC and DELETE to scroll up and down
+  ;; C-n and C-P to scroll up and down
+  (use-package ox-pandoc
+    :ensure t
+    :after or g)
+#+end_src
+
 * File Management
 
 #+begin_src emacs-lisp
@@ -953,7 +972,6 @@ I cannot get it to work, needs investigation
 ** [[https://github.com/magit/orgit][orgit]]
 ** [[https://github.com/takaxp/org-tree-slide][org-tree-slide]]
 ** [[https://gitlab.com/oer/org-re-reveal][org-re-reveal]]
-** [[https://github.com/kawabata/ox-pandoc][ox-pandoc]]
 ** [[https://github.com/jkitchin/ox-clip][ox-clip]]
 ** [[https://github.com/jkitchin/scimax/blob/master/ox-word.el][ox-word]]
 ** [[https://ox-hugo.scripter.co/][ox-hugo]]

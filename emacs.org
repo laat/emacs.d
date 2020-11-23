@@ -151,6 +151,7 @@
 
 * UI Configuration
 ** Emacs Dashboard
+
 #+begin_src emacs-lisp
   (use-package dashboard
     :ensure t
@@ -166,7 +167,9 @@
        (agenda . 5)
        (registers . 5))))
 #+end_src
+
 *** exclude stuff I do not want in recents
+
 #+begin_src emacs-lisp
   (add-to-list 'recentf-exclude "\\.emacs\\.d/elpa")
   (add-to-list 'recentf-exclude "\\.emacs\\.d/bookmarks")
@@ -176,16 +179,13 @@
   ;;(run-at-time nil (* 5 60) 'recentf-save-list)
 #+end_src
 
-
 ** Color Theme
 
 #+begin_src emacs-lisp
   (use-package doom-themes
     :ensure t
     :init
-    (load-theme 'doom-one t)
-    ;;(load-theme 'doom-monokai-pro t)
-    )
+    (load-theme 'doom-one t))
 #+end_src
 
 ** Mode line
@@ -299,6 +299,7 @@
 #+begin_src emacs-lisp
   (use-package drag-stuff
     :ensure t
+    :diminish
     :config
     (progn
       (setq drag-stuff-except-modes '(org-mode))
@@ -457,6 +458,7 @@ minimal
 
   (use-package whitespace
     :ensure t
+    :diminish
     :init
     (add-hook 'prog-mode-hook #'whitespace-mode)
     (add-hook 'before-save-hook #'whitespace-cleanup)
@@ -545,6 +547,7 @@ minimal
         :empty-lines 1)
        ))
     :config
+    (diminish 'org-indent-mode)
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((emacs-lisp . t)
@@ -722,19 +725,20 @@ sequenceDiagram
 
 ** roam
 #+begin_src emacs-lisp
-(use-package org-roam
-      :ensure t
-      :hook
-      (after-init . org-roam-mode)
-      :custom
-      (org-roam-directory "~/Dropbox/notes/roam")
-      :bind (:map org-roam-mode-map
-              (("C-c n l" . org-roam)
-               ("C-c n f" . org-roam-find-file)
-               ("C-c n g" . org-roam-graph))
-              :map org-mode-map
-              (("C-c n i" . org-roam-insert))
-              (("C-c n I" . org-roam-insert-immediate))))
+  (use-package org-roam
+    :ensure t
+    :diminish
+    :hook
+    (after-init . org-roam-mode)
+    :custom
+    (org-roam-directory "~/Dropbox/notes/roam")
+    :bind (:map org-roam-mode-map
+                (("C-c n l" . org-roam)
+                 ("C-c n f" . org-roam-find-file)
+                 ("C-c n g" . org-roam-graph))
+                :map org-mode-map
+                (("C-c n i" . org-roam-insert))
+                (("C-c n I" . org-roam-insert-immediate))))
 #+end_src
 
 ** org-yt

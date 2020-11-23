@@ -64,3 +64,4 @@ flycheck_*.el
 /bookmarks
 /org-roam.db
 *.swp
+/forge-database.sqlite

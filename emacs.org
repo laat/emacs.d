@@ -353,13 +353,25 @@ Set this to the folder where you keep your Git repos!
     (projectile-switch-project-action #'projectile-dired)
     :general
     (laat/leader-keys
-      "'" 'projectile-run-vterm)
+      "'" 'projectile-run-vterm
+      "p" 'projectile-command-map)
     :bind-keymap
     ("C-c p" . projectile-command-map))
 
     (use-package counsel-projectile
       :ensure t
       :config (counsel-projectile-mode))
+#+end_src
+** Compilation
+
+[[https://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode][ANSI Coloring in Compilation Mode]]
+#+begin_src emacs-lisp
+(ignore-errors
+  (require 'ansi-color)
+  (defun my-colorize-compilation-buffer ()
+    (when (eq major-mode 'compilation-mode)
+      (ansi-color-apply-on-region compilation-filter-start (point-max))))
+  (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
 #+end_src
 
 ** Completion
@@ -522,6 +534,16 @@ minimal
     :config
     ;; use margin instead of fringe
     (diff-hl-margin-mode))
+#+end_src
+
+*** Forge
+
+Need GPG. [[https://gpgtools.org/][OSX toolkit]]
+
+#+begin_src emacs-lisp
+  (use-package forge
+    :ensure t
+    :after magit)
 #+end_src
 
 * Org
@@ -723,8 +745,11 @@ sequenceDiagram
   sprintf "%s world" x
 #+end_src
 
-** roam
-#+begin_src emacs-lisp
+** TODO roam
+
+I cannot get it to work, needs investigation
+
+#+begin_src emacs-lisp :tangle no
   (use-package org-roam
     :ensure t
     :diminish
@@ -739,6 +764,25 @@ sequenceDiagram
                 :map org-mode-map
                 (("C-c n i" . org-roam-insert))
                 (("C-c n I" . org-roam-insert-immediate))))
+#+end_src
+
+*** server
+#+begin_src emacs-lisp :tangle no
+  (use-package org-roam-server
+    :ensure t
+    :disabled t
+    :config
+    (setq org-roam-server-host "127.0.0.1"
+          org-roam-server-port 8080
+          org-roam-server-authenticate nil
+          org-roam-server-export-inline-images t
+          org-roam-server-serve-files nil
+          org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+          org-roam-server-network-poll t
+          org-roam-server-network-arrows nil
+          org-roam-server-network-label-truncate t
+          org-roam-server-network-label-truncate-length 60
+          org-roam-server-network-label-wrap-length 20))
 #+end_src
 
 ** org-yt

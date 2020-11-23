@@ -782,6 +782,7 @@ sequenceDiagram
 ** https://github.com/magit/git-modes
 ** https://github.com/john2x/jenkinsfile-mode
 ** https://jherrlin.github.io/posts/learn-awk/
+** https://github.com/magit/orgit-forge
 ** OSX
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

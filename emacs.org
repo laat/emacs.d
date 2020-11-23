@@ -430,6 +430,7 @@ Norwegianz
      :states '(normal visual)
      "z=" 'flyspell-correct-at-point))
 
+  ;; M-o opens extra actions like save to local directory
   (use-package flyspell-correct-ivy
     :ensure t
     :after flyspell-correct)
@@ -466,12 +467,12 @@ Set this to the folder where you keep your Git repos!
 
 [[https://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode][ANSI Coloring in Compilation Mode]]
 #+begin_src emacs-lisp
-(ignore-errors
-  (require 'ansi-color)
-  (defun my-colorize-compilation-buffer ()
-    (when (eq major-mode 'compilation-mode)
-      (ansi-color-apply-on-region compilation-filter-start (point-max))))
-  (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
+  (ignore-errors
+    (require 'ansi-color)
+    (defun my-colorize-compilation-buffer ()
+      (when (eq major-mode 'compilation-mode)
+        (ansi-color-apply-on-region compilation-filter-start (point-max))))
+    (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
 #+end_src
 
 ** Completion
@@ -490,6 +491,14 @@ Set this to the folder where you keep your Git repos!
     :ensure t
     :diminish
     :hook (company-mode . company-box-mode))
+#+end_src
+
+** Syntax Checking
+
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :ensure t
+    :init (global-flycheck-mode))
 #+end_src
 
 ** Languages
@@ -773,6 +782,14 @@ On OSX use before calling =org-download-clipboard=
 #+end_src
 
 ** babel
+
+*** Emacs lisp
+#+begin_src emacs-lisp
+  (defun disable-fylcheck-in-org-src-block ()
+    (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+
+  (add-hook 'org-src-mode-hook 'disable-fylcheck-in-org-src-block)
+#+end_src
 *** typescript
 
 #+begin_src emacs-lisp
@@ -922,7 +939,7 @@ I cannot get it to work, needs investigation
     :ensure t)
 #+end_src
 
-* Future Cusomizations?
+* Future Customization?
 ** [[https://github.com/abo-abo/hydra][hydra]]
 ** [[https://github.com/raxod502/straight.el][staight.el]]
 ** [[https://github.com/gilbertw1/better-jumper][better-jumper]]

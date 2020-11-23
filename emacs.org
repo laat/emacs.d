@@ -1,4 +1,4 @@
-#+title: Laat Emacs Config
+#+Title: Laat Emacs Config
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes :results output silent
 
 * Package manager
@@ -202,6 +202,7 @@
 
   (diminish 'subword-mode)
   (diminish 'visual-line-mode)
+  (diminish 'org-indent-mode)
 #+end_src
 
   Git branch in the mode-line is often wrong and making it always show current branch has performance issues. Disabling it, because wrong information is worse than incorrect information.
@@ -300,11 +301,11 @@
   (use-package drag-stuff
     :ensure t
     :diminish
+    :custom
+    (drag-stuff-except-modes '(org-mode))
     :config
-    (progn
-      (setq drag-stuff-except-modes '(org-mode))
-      (drag-stuff-define-keys)
-      (drag-stuff-global-mode 1)))
+    (drag-stuff-define-keys)
+    (drag-stuff-global-mode 1))
 #+end_src
 
 ** Reveal in X
@@ -334,6 +335,105 @@
    calendar-latitude  60.0
    calendar-longitude  10.7
    calendar-location-name  "Oslo")
+#+end_src
+
+** Spellcheck
+*** Norwegian
+
+Emacs does not know that there are multiple written Norwegian languages.
+
+#+begin_src emacs-lisp
+  (delete '("norsk" "nn_NO") ispell-dicts-name2locale-equivs-alist)
+  (add-to-list 'ispell-dicts-name2locale-equivs-alist '("norsk-bokmål" "nb_NO"))
+  (add-to-list 'ispell-dicts-name2locale-equivs-alist '("norsk-nynorsk" "nn_NO"))
+#+end_src
+
+*** OSX hunspell
+
+#+begin_src shell :tangle no
+  brew install hunspell
+  mkdir -p "$HOME/Library/Spelling" # the directory for *.aff and *.dic
+#+end_src
+
+It is important to have the spellcheck files for your LANG. I've tried to make it work without it, but cannot for the life of me get it to work.
+
+#+begin_src emacs-lisp :tangle no :results value replace
+  (getenv "LANG")
+#+end_src
+
+#+RESULTS:
+: en_NO.UTF-8
+
+It's sometimes weird like =en_NO.UTF-8= so set it to something you have downloaded.
+
+#+begin_src emacs-lisp
+  (setenv "LANG" "en_US.UTF-8")
+#+end_src
+
+#+begin_src emacs-lisp
+  (setq ispell-program-name (executable-find "hunspell"))
+#+end_src
+
+*** Hunspell dictionaries
+**** nb_NO
+
+#+begin_src sh :tangle no
+  wget -O nb_NO.aff https://cgit.freedesktop.org/libreoffice/dictionaries/plain/no/nb_NO.aff
+  wget -O nb_NO.dic https://cgit.freedesktop.org/libreoffice/dictionaries/plain/no/nb_NO.dic
+#+end_src
+
+**** nn_NO
+
+#+begin_src sh :tangle no
+  wget -O nn_NO.aff https://cgit.freedesktop.org/libreoffice/dictionaries/plain/no/nn_NO.aff
+  wget -O nn_NO.dic https://cgit.freedesktop.org/libreoffice/dictionaries/plain/no/nn_NO.dic
+#+end_src
+
+**** en_GB
+#+begin_src sh :tangle no
+  wget -O en_GB.aff https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_GB.aff
+  wget -O en_GB.dic https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_GB.dic
+#+end_src
+
+**** en_US
+
+Download en_US from [[http://wordlist.aspell.net/dicts/][aspell.net]] and extract it to ~~/Library/Spelling~
+
+*** Org code blocks
+
+#+begin_src emacs-lisp
+  ;; ignore orgmode blocks
+  (add-to-list 'ispell-skip-region-alist '(":\\(PROPERTIES\\|LOGBOOK\\):" . ":END:"))
+  (add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_SRC" . "#\\+END_SRC"))
+  (add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_EXAMPLE" . "#\\+END_EXAMPLE"))
+#+end_src
+
+*** Flyspell
+
+Norwegianz
+
+#+begin_src emacs-lisp
+  (use-package flyspell
+    :diminish
+    :config
+    (add-hook 'org-mode-hook 'flyspell-mode)
+    (setq flyspell-issue-welcome-flag nil
+          ;; Significantly speeds up flyspell, which would otherwise print
+          ;; messages for every word when checking the entire buffer
+          flyspell-issue-message-flag nil))
+
+  (use-package flyspell-correct
+    :ensure t
+    :after flyspell
+    :general
+    (general-define-key
+     :states '(normal visual)
+     "z=" 'flyspell-correct-at-point))
+
+  (use-package flyspell-correct-ivy
+    :ensure t
+    :after flyspell-correct)
+
 #+end_src
 
 * Development
@@ -543,7 +643,10 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 #+begin_src emacs-lisp
   (use-package forge
     :ensure t
-    :after magit)
+    :after magit
+    :general
+    (laat/leader-keys
+      "gf" '(forge-dispatch :which-key "forge")))
 #+end_src
 
 * Org
@@ -569,7 +672,6 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
         :empty-lines 1)
        ))
     :config
-    (diminish 'org-indent-mode)
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((emacs-lisp . t)
@@ -827,9 +929,6 @@ I cannot get it to work, needs investigation
 ** [[https://github.com/jscheid/dtrt-indent][dtrt-indent]]
 ** [[https://github.com/hlissner/emacs-so-long/blob/master/so-long.el][so-long.el]]
 ** [[https://github.com/hlissner/ws-butler][ws-butler]]
-** flyspell-correct
-** flyspell-correct-ivy
-** flyspell-lazy
 ** flycheck
 ** flycheck-popup-tip
 ** [[https://github.com/noctuid/link-hint.el][link-hint.el]]
@@ -877,7 +976,7 @@ I cannot get it to work, needs investigation
 ** https://github.com/john2x/jenkinsfile-mode
 ** https://jherrlin.github.io/posts/learn-awk/
 ** https://github.com/magit/orgit-forge
-** OSX
+** OS X
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]
 - [[https://github.com/emacsorphanage/osx-trash/][osx-trash]]

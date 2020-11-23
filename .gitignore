@@ -63,3 +63,4 @@ flycheck_*.el
 /.cache/
 /bookmarks
 /org-roam.db
+*.swp

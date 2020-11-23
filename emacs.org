@@ -156,15 +156,26 @@
     :ensure t
     :config
     (dashboard-setup-startup-hook)
-    (setq
-     dashboard-projects-backend 'projectile
-     dashboard-items '((recents  . 5)
-                       (bookmarks . 5)
-                       (projects . 5)
-                       (agenda . 5)
-                       ;;(registers . 5)
-                       )))
+    :custom
+    (dashboard-startup-banner "~/.emacs.d/profile.png")
+    (dashboard-projects-backend 'projectile)
+    (dashboard-items
+     '((recents  . 5)
+       (bookmarks . 5)
+       (projects . 5)
+       (agenda . 5)
+       (registers . 5))))
 #+end_src
+*** exclude stuff I do not want in recents
+#+begin_src emacs-lisp
+  (add-to-list 'recentf-exclude "\\.emacs\\.d/elpa")
+  (add-to-list 'recentf-exclude "\\.emacs\\.d/bookmarks")
+  (add-to-list 'recentf-exclude "\\.emacs\\.d/recentf")
+  (add-to-list 'recentf-exclude "\\.emacs\\.d/ido.last")
+  (add-to-list 'recentf-exclude "\\.emacs\\.d/\\.cache/treemacs-persist")
+  ;;(run-at-time nil (* 5 60) 'recentf-save-list)
+#+end_src
+
 
 ** Color Theme
 
@@ -327,25 +338,27 @@
 * Development
 ** Projects
 
+Set this to the folder where you keep your Git repos!
+
+~M-x customize-option projectile-project-search-path~
+
 #+begin_src emacs-lisp
   (use-package projectile
     :ensure t
     :diminish
     :config (projectile-mode)
-    :custom ((projectile-completion-system 'ivy))
+    :custom
+    (projectile-completion-system 'ivy)
+    (projectile-switch-project-action #'projectile-dired)
     :general
     (laat/leader-keys
       "'" 'projectile-run-vterm)
     :bind-keymap
-    ("C-c p" . projectile-command-map)
-    :init
-    ;; NOTE: Set this to the folder where you keep your Git repos!
-    (setq projectile-project-search-path '("~/git"))
-    (setq projectile-switch-project-action #'projectile-dired))
+    ("C-c p" . projectile-command-map))
 
-  (use-package counsel-projectile
-    :ensure t
-    :config (counsel-projectile-mode))
+    (use-package counsel-projectile
+      :ensure t
+      :config (counsel-projectile-mode))
 #+end_src
 
 ** Completion
@@ -396,6 +409,13 @@
   (use-package counsel-jq
     :ensure t
     :after counsel)
+#+end_src
+
+*** YAML
+
+#+begin_src emacs-lisp
+  (use-package yaml-mode
+    :ensure t)
 #+end_src
 
 *** Markdown
@@ -513,19 +533,18 @@ minimal
     :general
     (laat/leader-keys
       "c" '(org-capture :which-key "capture"))
+    :custom
+    (org-ellipsis " ▾" "a pretty ellipsis")
+    (org-capture-templates
+     `(("j" "Journal" entry (file+olp+datetree "~/Dropbox/notes/journal.org")
+        "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+        :clock-in :clock-resume
+        :empty-lines 1)
+       ("d" "Development" entry (file+headline "~/Dropbox/notes/dev.org" "Captured")
+        "\n** %?\n\n\n\n"
+        :empty-lines 1)
+       ))
     :config
-    (setq org-ellipsis " ▾")
-    (diminish 'org-indent-mode)
-    (setq org-capture-templates
-          `(("j" "Journal" entry (file+olp+datetree "~/Dropbox/notes/journal.org")
-             "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-             :clock-in :clock-resume
-             :empty-lines 1)
-            ("d" "Development" entry (file+headline "~/Dropbox/notes/dev.org" "Captured")
-             "\n** %?\n\n\n\n"
-             :empty-lines 1)
-            ))
-
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((emacs-lisp . t)
@@ -605,12 +624,12 @@ On OSX use before calling =org-download-clipboard=
 
 #+begin_src emacs-lisp
   (defun laat/org-mode-visual-fill ()
-    (setq visual-fill-column-width 100
-          visual-fill-column-center-text t)
     (visual-fill-column-mode 1))
-
   (use-package visual-fill-column
     :ensure t
+    :custom
+    (visual-fill-column-width 100)
+    (visual-fill-column-center-text t)
     :hook (org-mode . laat/org-mode-visual-fill))
 #+end_src
 

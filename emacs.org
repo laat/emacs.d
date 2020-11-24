@@ -1016,6 +1016,7 @@ I cannot get it to work, needs investigation
 ** https://gitlab.com/matsievskiysv/math-preview
 ** https://github.com/astahlman/ob-async
 ** https://github.com/alhassy/ob-latex-as-png
+** https://melpa.org/#/ob-napkin
 ** OS X
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

@@ -1013,6 +1013,7 @@ I cannot get it to work, needs investigation
 ** https://github.com/magit/orgit-forge
 ** https://github.com/hrs/sensible-defaults.el
 ** https://stackoverflow.com/questions/26329117/org-mode-describe-a-chess-position-and-automatically-generate-image-of-chessboa
+** https://gitlab.com/matsievskiysv/math-preview
 ** OS X
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

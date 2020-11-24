@@ -22,6 +22,21 @@
   (use-package diminish :ensure t)
 #+end_src
 
+** Quelpa
+
+#+begin_src emacs-lisp
+(use-package quelpa
+  :ensure t
+  :defer t
+  :custom
+  (quelpa-update-melpa-p nil "Don't update the MELPA git repo."))
+
+(use-package quelpa-use-package
+  :init
+  (setq quelpa-use-package-inhibit-loading-quelpa t)
+  :ensure t)
+#+end_src
+
 * Basic UI
 
 #+begin_src emacs-lisp
@@ -676,19 +691,16 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     :custom
     (org-ellipsis " ▾" "a pretty ellipsis")
     (org-capture-templates
-     `(("j" "Journal" entry (file+olp+datetree "~/Dropbox/notes/journal.org")
+     `(("j" "Journal" entry (file+olp+datetree "~/Dropbox/notes/notes.org")
         "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
         :clock-in :clock-resume
         :empty-lines 1)
-       ("d" "Development" entry (file+headline "~/Dropbox/notes/dev.org" "Captured")
+       ("s" "Simple" entry (file+headline "~/Dropbox/notes/notes.org" "Captured")
         "\n** %?\n\n\n\n"
         :empty-lines 1)
        ))
     :config
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((emacs-lisp . t)
-       (js         . t))))
+    )
 
   (use-package evil-org
     :ensure t
@@ -758,6 +770,14 @@ On OSX use before calling =org-download-clipboard=
     :hook (org-mode . org-bullets-mode)
     :custom
     (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+#+end_src
+
+** Nice tables
+
+#+begin_src emacs-lisp
+  (use-package org-pretty-table
+    :quelpa
+    (org-pretty-table :repo "Fuco1/org-pretty-table" :fetcher github :commit "474ad84a8fe5377d67ab7e491e8e68dac6e37a11"))
 #+end_src
 
 ** Visual center
@@ -867,6 +887,19 @@ sequenceDiagram
   sprintf "%s world" x
 #+end_src
 
+#+begin_src emacs-lisp
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((shell . t)
+     (js . t)
+     (emacs-lisp . t)
+     (fsharp . t)
+     (mermaid . t)
+     (restclient . t)
+     (http . t)
+     (typescript . t)))
+#+end_src
+
 ** TODO roam
 
 I cannot get it to work, needs investigation
@@ -968,7 +1001,6 @@ I cannot get it to work, needs investigation
 ** flycheck
 ** flycheck-popup-tip
 ** [[https://github.com/noctuid/link-hint.el][link-hint.el]]
-** [[https://github.com/quelpa/quelpa-use-package][quelpa]]
 ** [[https://github.com/magit/orgit][orgit]]
 ** [[https://github.com/takaxp/org-tree-slide][org-tree-slide]]
 ** [[https://gitlab.com/oer/org-re-reveal][org-re-reveal]]
@@ -1018,7 +1050,6 @@ I cannot get it to work, needs investigation
 ** https://github.com/alhassy/ob-latex-as-png
 ** https://melpa.org/#/ob-napkin
 ** https://github.com/nikclayton/ob-html-chrome
-** https://github.com/Fuco1/org-pretty-table/blob/master/org-pretty-table.el
 ** https://github.com/alphapapa/burly.el
 ** https://betterexplained.com/articles/adept-method/ capture template
 ** OS X

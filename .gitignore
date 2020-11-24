@@ -65,3 +65,4 @@ flycheck_*.el
 /org-roam.db
 *.swp
 /forge-database.sqlite
+/quelpa/

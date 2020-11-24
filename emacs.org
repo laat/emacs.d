@@ -1018,6 +1018,7 @@ I cannot get it to work, needs investigation
 ** https://github.com/alhassy/ob-latex-as-png
 ** https://melpa.org/#/ob-napkin
 ** https://github.com/nikclayton/ob-html-chrome
+** https://github.com/Fuco1/org-pretty-table/blob/master/org-pretty-table.el
 ** OS X
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

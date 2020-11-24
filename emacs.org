@@ -1020,6 +1020,7 @@ I cannot get it to work, needs investigation
 ** https://github.com/nikclayton/ob-html-chrome
 ** https://github.com/Fuco1/org-pretty-table/blob/master/org-pretty-table.el
 ** https://github.com/alphapapa/burly.el
+** https://betterexplained.com/articles/adept-method/ capture template
 ** OS X
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

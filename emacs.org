@@ -199,6 +199,7 @@
     :config
     (dashboard-setup-startup-hook)
     :custom
+    (dashboard-banner-logo-title "Simplicity is prerequisite for reliability.")
     (dashboard-startup-banner "~/.emacs.d/profile.png")
     (dashboard-projects-backend 'projectile)
     (dashboard-center-content t)

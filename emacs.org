@@ -202,11 +202,13 @@
     (dashboard-startup-banner "~/.emacs.d/profile.png")
     (dashboard-projects-backend 'projectile)
     (dashboard-items
-     '((recents  . 5)
+     '(
+       ;; (recents  . 5)
        (bookmarks . 5)
-       (projects . 5)
-       (agenda . 5)
-       (registers . 5))))
+       ;; (projects . 5)
+       ;; (agenda . 5)
+       ;; (registers . 5)
+       )))
 #+end_src
 
 *** exclude stuff I do not want in recents
@@ -690,6 +692,8 @@ minimal
 #+begin_src emacs-lisp
   (use-package magit
     :ensure t
+    :custom
+    (magit-display-buffer-function #'magit-display-buffer-fullframe-status-topleft-v1)
     :general
     (laat/leader-keys
       "g" '(:ignore t :which-key "git")
@@ -741,7 +745,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     :custom
     (org-image-actual-width nil "allows #+ATTR_ORG: :width 100")
     (org-ellipsis " ▾" "a pretty ellipsis")
-
+    (org-confirm-babel-evaluate nil "C-c C-c on code blocks do not ask")
     (org-capture-templates
      `(("j" "Journal" entry (file+olp+datetree "~/Dropbox/notes/notes.org")
         "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
@@ -766,6 +770,42 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 
 #+begin_src emacs-lisp
   (use-package org-protocol :ensure nil)
+#+end_src
+
+*** Open Magit on OS X
+
+#+begin_src emacs-lisp
+  (add-to-list
+   'org-protocol-protocol-alist
+   '("Open magit status"
+     :protocol "magit"
+     :function laat/protocol-magit
+     :kill-client t))
+
+
+
+
+  (defun laat/protocol-magit (data)
+    "Open magit buffer for repository"
+    (let ((path (plist-get data :repo)))
+      (magit-status-setup-buffer (plist-get data :repo)))
+    nil)
+  ;; location.href = "org-protocol://magit?repo=" + encodeURIComponent("/path/to/git/repo")
+#+end_src
+
+Magit bash script
+
+#+begin_src shell :tangle no
+  #!/usr/bin/env bash
+
+  set -o errexit
+  set -o pipefail
+  set -o nounset
+
+  arg1="${1:-$(pwd)}"
+
+  encoded="$(node -e "console.log(encodeURIComponent(require('path').resolve(process.argv[1])))" $arg1)"
+  open "org-protocol://magit?repo=${encoded}"
 #+end_src
 
 ** languagetool
@@ -854,7 +894,6 @@ On OSX use before calling =org-download-clipboard=
 #+end_src
 
 ** Babel
-
 *** Emacs lisp
 
 #+begin_src emacs-lisp
@@ -964,6 +1003,8 @@ sequenceDiagram
   let x = "hello"
   sprintf "%s world" x
 #+end_src
+
+*** load babel languages
 
 #+begin_src emacs-lisp
   (org-babel-do-load-languages

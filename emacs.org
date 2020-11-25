@@ -741,6 +741,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     :custom
     (org-image-actual-width nil "allows #+ATTR_ORG: :width 100")
     (org-ellipsis " ▾" "a pretty ellipsis")
+
     (org-capture-templates
      `(("j" "Journal" entry (file+olp+datetree "~/Dropbox/notes/notes.org")
         "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
@@ -748,8 +749,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
         :empty-lines 1)
        ("s" "Simple" entry (file+headline "~/Dropbox/notes/notes.org" "Captured")
         "\n** %?\n\n\n\n"
-        :empty-lines 1)
-       )))
+        :empty-lines 1))))
 
   (use-package evil-org
     :ensure t
@@ -760,6 +760,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
      (evil-org-mode . (lambda ()
                         (evil-org-set-key-theme)))))
 #+end_src
+
 
 ** org-protocol
 

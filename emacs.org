@@ -194,11 +194,18 @@
 ** Emacs Dashboard
 
 #+begin_src emacs-lisp
+  (defun laat/switch-to-dashboard ()
+    (interactive)
+    (switch-to-buffer "*dashboard*"))
   (use-package dashboard
     :ensure t
     :config
     (dashboard-setup-startup-hook)
+    :general
+    (laat/leader-keys
+      "d" 'laat/switch-to-dashboard)
     :custom
+    (dashboard-banner-logo-title "Simplicity is prerequisite for reliability.")
     (dashboard-startup-banner "~/.emacs.d/profile.png")
     (dashboard-projects-backend 'projectile)
     (dashboard-center-content t)

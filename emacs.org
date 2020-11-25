@@ -1131,6 +1131,9 @@ too advanced for me yet
 ** https://github.com/nikclayton/ob-html-chrome
 ** https://github.com/alphapapa/burly.el
 ** https://orgmode.org/worg/org-tutorials/org-protocol-custom-handler.html
+** https://github.com/Emiller88/emacs-jest
+** https://github.com/shaneikennedy/npm.el
+** https://github.com/Silex/docker.el/
 ** OS X
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

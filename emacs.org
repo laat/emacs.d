@@ -20,6 +20,11 @@
     (package-install 'use-package))
 
   (require 'use-package)
+#+end_src
+
+** Diminish
+
+#+begin_src emacs-lisp
   (use-package diminish :ensure t)
 #+end_src
 
@@ -477,7 +482,6 @@ Norwegianz
 #+end_src
 
 * Development
-
 ** Basic
 *** Line numbers
 

@@ -201,6 +201,7 @@
     :custom
     (dashboard-startup-banner "~/.emacs.d/profile.png")
     (dashboard-projects-backend 'projectile)
+    (dashboard-center-content t)
     (dashboard-items
      '(
        ;; (recents  . 5)
@@ -782,15 +783,11 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
      :function laat/protocol-magit
      :kill-client t))
 
-
-
-
   (defun laat/protocol-magit (data)
     "Open magit buffer for repository"
     (let ((path (plist-get data :repo)))
       (magit-status-setup-buffer (plist-get data :repo)))
     nil)
-  ;; location.href = "org-protocol://magit?repo=" + encodeURIComponent("/path/to/git/repo")
 #+end_src
 
 Magit bash script

@@ -1,5 +1,6 @@
 #+Title: Laat Emacs Config
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes :results output silent
+#+STARTUP: fold
 
 * Package manager
 
@@ -61,6 +62,10 @@
   (setq auto-save-file-name-transforms `((".*" "~/.emacs.d/.saves/" t)))
 
   (global-auto-revert-mode 1)
+
+  (setq vc-follow-symlinks t) ;; When opening a file, always follow symlinks.
+  (setq sentence-end-double-space nil) ;; This ain't a typewriter
+  (setq confirm-kill-emacs 'y-or-n-p) ;; ask before dying
 #+end_src
 
 * Key Binds
@@ -98,15 +103,31 @@
     (setq evil-want-keybinding nil)
     :config
     (evil-mode 1)
-    (define-key
-      evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
-    (define-key
-      evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
-    (define-key
-      evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
-    (define-key
-      evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
-    (setq-default evil-cross-lines t))
+
+    ;; visual lines
+    (define-key evil-normal-state-map
+      (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+    (define-key evil-normal-state-map
+      (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+    (define-key evil-motion-state-map
+      (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+    (define-key evil-motion-state-map
+      (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+    (setq-default evil-cross-lines t)
+
+    ;; :q kills buffer instead of killing emacs
+    (defun laat/ex-kill-buffer-and-close ()
+      (interactive)
+      (unless (char-equal (elt (buffer-name) 0) ?*)
+        (kill-this-buffer)))
+
+    (defun laat/ex-save-kill-buffer-and-close ()
+      (interactive)
+      (save-buffer)
+      (kill-this-buffer))
+
+    (evil-ex-define-cmd "q[uit]" 'laat/ex-kill-buffer-and-close)
+    (evil-ex-define-cmd "wq" 'laat/ex-save-kill-buffer-and-close))
 
   (use-package evil-collection
     :after evil
@@ -456,6 +477,22 @@ Norwegianz
 #+end_src
 
 * Development
+
+** Basic
+*** Line numbers
+
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+#+end_src
+
+*** Sub words
+Treat =CamelCaseSubWords= as separate words in every programming
+mode.
+
+#+begin_src emacs-lisp
+(add-hook 'prog-mode-hook 'subword-mode)
+#+end_src
+
 ** Projects
 
 Set this to the folder where you keep your Git repos!
@@ -481,6 +518,7 @@ Set this to the folder where you keep your Git repos!
       :ensure t
       :config (counsel-projectile-mode))
 #+end_src
+
 ** Compilation
 
 [[https://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode][ANSI Coloring in Compilation Mode]]
@@ -677,6 +715,14 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
       "gf" '(forge-dispatch :which-key "forge")))
 #+end_src
 
+*** Orgit
+
+#+begin_src emacs-lisp
+  (use-package orgit
+    :ensure t)
+#+end_src
+
+[[orgit:/Users/n637831/git/psapi-typescript-contracts][psapi-typescript-contracts]]
 * Org
 
 #+begin_src emacs-lisp
@@ -689,6 +735,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     (laat/leader-keys
       "c" '(org-capture :which-key "capture"))
     :custom
+    (org-image-actual-width nil "allows #+ATTR_ORG: :width 100")
     (org-ellipsis " ▾" "a pretty ellipsis")
     (org-capture-templates
      `(("j" "Journal" entry (file+olp+datetree "~/Dropbox/notes/notes.org")
@@ -698,9 +745,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
        ("s" "Simple" entry (file+headline "~/Dropbox/notes/notes.org" "Captured")
         "\n** %?\n\n\n\n"
         :empty-lines 1)
-       ))
-    :config
-    )
+       )))
 
   (use-package evil-org
     :ensure t
@@ -710,6 +755,12 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     ((org-mode . evil-org-mode)
      (evil-org-mode . (lambda ()
                         (evil-org-set-key-theme)))))
+#+end_src
+
+** org-protocol
+
+#+begin_src emacs-lisp
+  (use-package org-protocol :ensure nil)
 #+end_src
 
 ** languagetool
@@ -772,14 +823,6 @@ On OSX use before calling =org-download-clipboard=
     (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 #+end_src
 
-** Nice tables
-
-#+begin_src emacs-lisp
-  (use-package org-pretty-table
-    :quelpa
-    (org-pretty-table :repo "Fuco1/org-pretty-table" :fetcher github :commit "474ad84a8fe5377d67ab7e491e8e68dac6e37a11"))
-#+end_src
-
 ** Visual center
 
 #+begin_src emacs-lisp
@@ -806,13 +849,32 @@ On OSX use before calling =org-download-clipboard=
 #+end_src
 
 ** Babel
+
 *** Emacs lisp
+
 #+begin_src emacs-lisp
   (defun disable-fylcheck-in-org-src-block ()
     (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
 
   (add-hook 'org-src-mode-hook 'disable-fylcheck-in-org-src-block)
 #+end_src
+
+*** Async code blocks
+
+=:async= header args
+
+#+begin_src emacs-lisp
+  (use-package ob-async
+    :ensure t
+    :custom
+    (ob-async-no-async-languages-alist '("ipython")))
+#+end_src
+
+this does not block with the =:async= header
+#+begin_src shell :tangle no :async
+  sleep 3s && echo "Done!"
+#+end_src
+
 *** typescript
 
 #+begin_src emacs-lisp
@@ -822,7 +884,7 @@ On OSX use before calling =org-download-clipboard=
     (add-to-list 'org-babel-load-languages '(typescript . t)))
 #+end_src
 
-*** http
+*** HTTP
 
 #+begin_src emacs-lisp
   (use-package ob-http
@@ -836,6 +898,7 @@ On OSX use before calling =org-download-clipboard=
   GET https://httpbin.org/get
   Accept: application/json
 #+End_src
+
 *** REST
 
 #+begin_src emacs-lisp
@@ -852,6 +915,16 @@ On OSX use before calling =org-download-clipboard=
 #+begin_src restclient :tangle no
   GET https://httpbin.org/get
   Accept: application/json
+#+end_src
+
+*** latex-as-png
+
+#+begin_src emacs-lisp
+  (use-package ob-latex-as-png
+    :ensure t)
+
+  ;; Always redisplay images after C-c C-c (org-ctrl-c-ctrl-c)
+  (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
 #+end_src
 
 *** mermaid diagrams
@@ -900,6 +973,12 @@ sequenceDiagram
      (typescript . t)))
 #+end_src
 
+** org-yt
+
+#+begin_src emacs-lisp :tangle no
+  (require 'org-yt)
+#+end_src
+
 ** TODO roam
 
 I cannot get it to work, needs investigation
@@ -921,7 +1000,7 @@ I cannot get it to work, needs investigation
                 (("C-c n I" . org-roam-insert-immediate))))
 #+end_src
 
-*** server
+** TODO roam-server
 #+begin_src emacs-lisp :tangle no
   (use-package org-roam-server
     :ensure t
@@ -939,13 +1018,14 @@ I cannot get it to work, needs investigation
           org-roam-server-network-label-truncate-length 60
           org-roam-server-network-label-wrap-length 20))
 #+end_src
-
-** org-yt
+** TODO org-sidebar
+too advanced for me yet
 
 #+begin_src emacs-lisp :tangle no
-  (require 'org-yt)
+  (use-package org-sidebar
+    :disabled t
+    :ensure t)
 #+end_src
-
 ** Auto-Tangle init.el
 
 #+begin_src emacs-lisp
@@ -1001,7 +1081,6 @@ I cannot get it to work, needs investigation
 ** flycheck
 ** flycheck-popup-tip
 ** [[https://github.com/noctuid/link-hint.el][link-hint.el]]
-** [[https://github.com/magit/orgit][orgit]]
 ** [[https://github.com/takaxp/org-tree-slide][org-tree-slide]]
 ** [[https://gitlab.com/oer/org-re-reveal][org-re-reveal]]
 ** [[https://github.com/jkitchin/ox-clip][ox-clip]]
@@ -1026,7 +1105,6 @@ I cannot get it to work, needs investigation
 ** [[https://github.com/Fanael/highlight-numbers][highlight-numbers]]
 ** [[https://github.com/joewreschnig/auto-minor-mode][auto-minor-mode]]
 ** [[https://github.com/emacsmirror/gcmh][gcmh]]
-** org-sidebar
 ** [[https://github.com/dakrone/es-mode][es-mode]]
 ** [[https://github.com/darksmile/cheatsheet][cheatsheet]]
 ** https://github.com/tumashu/ivy-posframe
@@ -1044,14 +1122,10 @@ I cannot get it to work, needs investigation
 ** https://jherrlin.github.io/posts/learn-awk/
 ** https://github.com/magit/orgit-forge
 ** https://github.com/hrs/sensible-defaults.el
-** https://stackoverflow.com/questions/26329117/org-mode-describe-a-chess-position-and-automatically-generate-image-of-chessboa
 ** https://gitlab.com/matsievskiysv/math-preview
-** https://github.com/astahlman/ob-async
-** https://github.com/alhassy/ob-latex-as-png
 ** https://melpa.org/#/ob-napkin
 ** https://github.com/nikclayton/ob-html-chrome
 ** https://github.com/alphapapa/burly.el
-** https://betterexplained.com/articles/adept-method/ capture template
 ** OS X
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

@@ -55,6 +55,18 @@
   ;;(menu-bar-mode -1)          ; Disable the menu bar
 
   (visual-line-mode 1)        ; Break long lines at word boundaries
+
+  ;; too many characters to type "yes". y is ok
+  (defalias 'yes-or-no-p 'y-or-n-p)
+#+end_src
+
+** Default frame size
+
+#+begin_src emacs-lisp
+  ;;; Nice size for the default window
+  (when (eq system-type 'darwin)
+    (add-to-list 'default-frame-alist '(width . 140))
+    (add-to-list 'default-frame-alist '(height . 120)))
 #+end_src
 
 * Basic Config
@@ -71,6 +83,14 @@
   (setq vc-follow-symlinks t) ;; When opening a file, always follow symlinks.
   (setq sentence-end-double-space nil) ;; This ain't a typewriter
   (setq confirm-kill-emacs 'y-or-n-p) ;; ask before dying
+
+  ;; require a trailing newline
+  (setq require-final-newline t)
+
+  (when (eq system-type 'darwin)
+    (use-package exec-path-from-shell
+      :ensure t
+      :config (exec-path-from-shell-initialize)))
 #+end_src
 
 * Key Binds
@@ -196,6 +216,7 @@
 #+begin_src emacs-lisp
   (use-package dashboard
     :ensure t
+    :diminish (dashboard-mode page-break-lines-mode)
     :config
     (dashboard-setup-startup-hook)
     :custom
@@ -204,13 +225,21 @@
     (dashboard-projects-backend 'projectile)
     (dashboard-center-content t)
     (dashboard-items
-     '(
-       ;; (recents  . 5)
-       (bookmarks . 5)
-       ;; (projects . 5)
-       ;; (agenda . 5)
-       ;; (registers . 5)
-       )))
+     '((bookmarks . 5)
+       (recents  . 5)
+       (projects . 5)
+       (agenda . 5)
+       (registers . 5))))
+#+end_src
+
+*** quick! to dashboard
+
+#+begin_src emacs-lisp
+  (defun laat/switch-to-dashboard ()
+    (interactive)
+    (switch-to-buffer "*dashboard*"))
+  (laat/leader-keys
+    "d" 'laat/switch-to-dashboard)
 #+end_src
 
 *** exclude stuff I do not want in recents
@@ -247,10 +276,7 @@
      (doom-modeline-minor-modes t)))
 
 
-
-  (diminish 'subword-mode)
   (diminish 'visual-line-mode)
-  (diminish 'org-indent-mode)
 #+end_src
 
   Git branch in the mode-line is often wrong and making it always show current branch has performance issues. Disabling it, because wrong information is worse than incorrect information.
@@ -458,13 +484,14 @@ Download en_US from [[http://wordlist.aspell.net/dicts/][aspell.net]] and extrac
 
 *** Flyspell
 
-Norwegianz
-
 #+begin_src emacs-lisp
   (use-package flyspell
     :diminish
+    :general
+    (laat/leader-keys
+      "yf" 'flyspell-mode)
     :config
-    (add-hook 'org-mode-hook 'flyspell-mode)
+    ;;(add-hook 'org-mode-hook 'flyspell-mode)
     (setq flyspell-issue-welcome-flag nil
           ;; Significantly speeds up flyspell, which would otherwise print
           ;; messages for every word when checking the entire buffer
@@ -494,13 +521,62 @@ Norwegianz
 #+end_src
 
 *** Sub words
+
 Treat =CamelCaseSubWords= as separate words in every programming
 mode.
 
-#+begin_src emacs-lisp
-(add-hook 'prog-mode-hook 'subword-mode)
+#+begin_src emacs-lisp :tangle no
+  (use-package subword                    ; Subword/superword editing
+    :defer t
+    :disabled
+    :hook prog-mode
+    :diminish subword-mode)
 #+end_src
 
+*** eldoc
+
+#+begin_src emacs-lisp
+  (use-package eldoc
+    :diminish eldoc-mode
+    :config (add-hook 'prog-mode-hook 'eldoc-mode))
+#+end_src
+
+*** find indent
+
+#+begin_src emacs-lisp
+  (use-package dtrt-indent
+    :diminish
+    :hook (json-mode)
+    :ensure t)
+#+end_src
+
+*** editorconfig
+
+#+begin_src emacs-lisp
+  (use-package editorconfig
+    :ensure t
+    :diminish
+    :config
+    (editorconfig-mode 1))
+#+end_src
+
+*** font lock TODO
+
+#+begin_src emacs-lisp
+  (defun laat/add-watchwords ()
+    (font-lock-add-keywords
+     nil '(("\\<\\(FIXME\\|TODO\\|NOCOMMIT\\|XXX\\)\\>"
+            1 '((:foreground "#d7a3ad") (:weight bold)) t))))
+  (add-hook 'prog-mode-hook 'laat/add-watchwords)
+#+end_src
+
+*** rainbow delimiters
+#+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+    :ensure t
+    :commands rainbow-delimiters-mode
+    :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+#+end_src
 ** Projects
 
 Set this to the folder where you keep your Git repos!
@@ -563,10 +639,60 @@ Set this to the folder where you keep your Git repos!
   (use-package flycheck
     :ensure t
     :diminish
+    :custom
+    (flycheck-check-syntax-automatically
+     '(mode-enabled save)
+     "only check on save and enabling flycheck")
+    :config
+    (setq-default flycheck-disabled-checkers
+                  '(javascript-jshint
+                    javascript-jscs ))
     :init (global-flycheck-mode))
 #+end_src
 
+** yasnippet
+
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :ensure t)
+#+end_src
+
+** lsp-mode
+
+#+begin_src emacs-lisp
+  (setq lsp-keymap-prefix "s-p")
+  (use-package lsp-mode
+    :ensure t
+    :hook ((json-mode . lsp)
+           (yaml-mode . lsp)
+           ;; (fsharp-mode . lsp)
+           (typescript-mode . lsp)
+           (lsp-mode . lsp-enable-which-key-integration))
+    :commands lsp)
+  (use-package lsp-ui
+    :ensure t
+    :commands lsp-ui-mode)
+  (use-package lsp-ivy
+    :ensure t
+    :commands lsp-ivy-workspace-symbol)
+  (use-package lsp-treemacs
+    :ensure t
+    :commands lsp-treemacs-errors-list)
+  (use-package dap-mode
+    :ensure t)
+#+end_src
+
 ** Languages
+
+*** C#
+
+#+begin_src emacs-lisp
+  (use-package csharp-mode
+    :ensure t)
+#+end_src
+
+=M-x lsp-install-server RET csharp RET=
+
 *** F#
 
 #+begin_src emacs-lisp
@@ -574,6 +700,10 @@ Set this to the folder where you keep your Git repos!
     :defer t
     :ensure t)
 #+end_src
+
+**** LSP
+
+=M-x lsp-install-server RET fsac RET=
 
 *** Emacs Lisp
 
@@ -598,12 +728,26 @@ Set this to the folder where you keep your Git repos!
     :after counsel)
 #+end_src
 
+**** LSP
+
+M-x lsp-install-server RET json-ls RET
+
+or
+
+#+begin_src shell
+  npm i -g vscode-json-languageserver
+#+end_src
+
 *** YAML
 
 #+begin_src emacs-lisp
   (use-package yaml-mode
     :ensure t)
 #+end_src
+
+**** LSP
+
+=M-x lsp-install-server RET yamlls RET=
 
 *** Markdown
 
@@ -617,15 +761,33 @@ Set this to the folder where you keep your Git repos!
     :init (setq markdown-command "multimarkdown"))
 #+end_src
 
+*** JavaScript
 *** TypeScript
-minimal
+**** minimal
 
 #+begin_src emacs-lisp
-(use-package typescript-mode
-  :ensure t
-  :defer t)
+  (use-package typescript-mode
+    :ensure t
+    :defer t)
 #+end_src
 
+**** LSP
+
+#+begin_src shell :async :tangle no
+  npm i -g typescript-language-server
+  npm i -g typescript
+#+end_src
+
+*** node_modeules binaries
+
+Need it get flycheck to find local binaries.
+
+#+begin_src emacs-lisp
+  (use-package add-node-modules-path
+    :ensure t
+    :hook (web-mode js-mode typescript-mode))
+#+end_src
+#+end_src
 ** White space
 
 #+begin_src emacs-lisp
@@ -733,40 +895,43 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 #+end_src
 
 [[orgit:/Users/n637831/git/psapi-typescript-contracts][psapi-typescript-contracts]]
+
 * Org
 
 #+begin_src emacs-lisp
-  (use-package org
-    :ensure org-plus-contrib
-    :hook
-    ((org-mode . visual-line-mode)
-     (org-mode . org-indent-mode))
-    :general
-    (laat/leader-keys
-      "c" '(org-capture :which-key "capture"))
-    :custom
-    (org-image-actual-width nil "allows #+ATTR_ORG: :width 100")
-    (org-ellipsis " ▾" "a pretty ellipsis")
-    (org-confirm-babel-evaluate nil "C-c C-c on code blocks do not ask")
-    (org-capture-templates
-     `(("j" "Journal" entry (file+olp+datetree "~/Dropbox/notes/notes.org")
-        "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-        :clock-in :clock-resume
-        :empty-lines 1)
-       ("s" "Simple" entry (file+headline "~/Dropbox/notes/notes.org" "Captured")
-        "\n** %?\n\n\n\n"
-        :empty-lines 1))))
+   (use-package org
+     :ensure org-plus-contrib
+     :hook
+     ((org-mode . visual-line-mode)
+      (org-mode . org-indent-mode))
+     :general
+     (laat/leader-keys
+       "c" '(org-capture :which-key "capture"))
+     :custom
+     (org-image-actual-width nil "allows #+ATTR_ORG: :width 100")
+     (org-ellipsis " ▾" "a pretty ellipsis")
+     (org-confirm-babel-evaluate nil "C-c C-c on code blocks do not ask")
+     (org-capture-templates
+      `(("j" "Journal" entry (file+olp+datetree "~/Dropbox/notes/notes.org")
+         "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+         :clock-in :clock-resume
+         :empty-lines 1)
+        ("s" "Simple" entry (file+headline "~/Dropbox/notes/notes.org" "Inbox")
+         "\n** %?\n\n\n\n"
+         :empty-lines 1))))
 
-  (use-package evil-org
-    :ensure t
-    :diminish
-    :after org
-    :hook
-    ((org-mode . evil-org-mode)
-     (evil-org-mode . (lambda ()
-                        (evil-org-set-key-theme)))))
+   (use-package evil-org
+     :ensure t
+     :diminish
+     :after org
+     :hook
+     ((org-mode . evil-org-mode)
+      (evil-org-mode . (lambda ()
+                         (evil-org-set-key-theme)))))
+
+  (use-package org-indent
+    :diminish)
 #+end_src
-
 
 ** org-protocol
 
@@ -777,32 +942,35 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 *** Open Magit on OS X
 
 #+begin_src emacs-lisp
+  (defun laat/protocol-magit (data)
+    "Open magit buffer for repository"
+    (let ((path (plist-get data :repo)))
+      (magit-status-setup-buffer (plist-get data :repo)))
+    nil)
+
   (add-to-list
    'org-protocol-protocol-alist
    '("Open magit status"
      :protocol "magit"
      :function laat/protocol-magit
      :kill-client t))
-
-  (defun laat/protocol-magit (data)
-    "Open magit buffer for repository"
-    (let ((path (plist-get data :repo)))
-      (magit-status-setup-buffer (plist-get data :repo)))
-    nil)
 #+end_src
 
 Magit bash script
 
 #+begin_src shell :tangle no
   #!/usr/bin/env bash
-
   set -o errexit
   set -o pipefail
   set -o nounset
 
   arg1="${1:-$(pwd)}"
 
-  encoded="$(node -e "console.log(encodeURIComponent(require('path').resolve(process.argv[1])))" $arg1)"
+  encoded="$(node -e "
+  const path = require('path');
+  const location = path.resolve(process.argv[1]);
+  console.log(encodeURIComponent(location))" $arg1)"
+
   open "org-protocol://magit?repo=${encoded}"
 #+end_src
 
@@ -1085,6 +1253,8 @@ too advanced for me yet
 
 * Pandoc
 
+[[elisp:(find-variable 'org-pandoc-menu-entry)][org-pandoc-menu-entry]] has lots of possibilities.
+
 #+begin_src emacs-lisp
   (use-package pandoc-mode
     :ensure t
@@ -1096,7 +1266,15 @@ too advanced for me yet
   ;; C-n and C-P to scroll up and down
   (use-package ox-pandoc
     :ensure t
-    :after or g)
+    :after org
+    :custom
+    (org-pandoc-menu-entry
+     '(
+      (?m "to markdown_strict and open." org-pandoc-export-to-markdown_strict-and-open)
+      (?M "as markdown_strict." org-pandoc-export-as-markdown_strict)
+      (?g "to gfm and open." org-pandoc-export-to-gfm-and-open)
+      (?G "as gfm." org-pandoc-export-as-gfm)
+       )))
 #+end_src
 
 * File Management
@@ -1174,6 +1352,9 @@ too advanced for me yet
 ** https://github.com/Emiller88/emacs-jest
 ** https://github.com/shaneikennedy/npm.el
 ** https://github.com/Silex/docker.el/
+** https://github.com/Trevoke/sqlup-mode.el
+** https://github.com/alex-hhh/emacs-sql-indent
+** https://github.com/kostafey/ejc-sql
 ** OS X
 - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 - [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]

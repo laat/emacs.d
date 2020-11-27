@@ -992,9 +992,6 @@ Need it get flycheck to find local binaries.
     (laat/leader-keys
       "g" '(:ignore t :which-key "git")
       "gs" '(magit-status :which-key "git status")))
-  (use-package evil-magit
-    :ensure t
-    :after (magit evil))
   (use-package diff-hl
     :ensure t
     :hook (dired-mode . diff-hl-dired-mode-unless-remote)

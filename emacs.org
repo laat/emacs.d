@@ -1,6 +1,13 @@
 #+Title: Laat Emacs Config
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes :results output silent
 #+STARTUP: fold
+#+begin_export html
+<center>
+#+end_export
+[[file:profile.png]]
+#+begin_export html
+</center>
+#+end_export
 
 * Package manager
 

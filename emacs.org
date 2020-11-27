@@ -290,9 +290,9 @@
     (dashboard-center-content t)
     (dashboard-items
      '((bookmarks . 5)
+       (agenda . 5)
        (recents  . 5)
        (projects . 5)
-       (agenda . 5)
        (registers . 5))))
 #+end_src
 
@@ -1048,6 +1048,9 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     (org-cycle-separator-lines 0 "compact folding")
     (org-ellipsis "…" "a pretty ellipsis. Alternatives … ⤵ ▼, ↴, ⬎, ⤷, and ⋱.")
     (org-directory "~/Dropbox/notes/")
+    (org-log-done nil "track when TODO -> DONE")
+    (org-log-into-drawer t "log into drawer")
+    (org-todo-keywords '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
     (org-confirm-babel-evaluate nil "C-c C-c on code blocks do not ask")
     (org-capture-templates
      `(("j" "Journal" entry (file+olp+datetree ,(concat org-directory "notes.org"))
@@ -1070,7 +1073,10 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     :hook
     ((org-mode . evil-org-mode)
      (evil-org-mode . (lambda ()
-                        (evil-org-set-key-theme)))))
+                        (evil-org-set-key-theme))))
+    :config
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys))
 
   (use-package org-indent
     :diminish)
@@ -1367,7 +1373,6 @@ sequenceDiagram
   (require 'org-yt)
 #+end_src
 
-
 ** TODO roam
 
 I cannot get it to work, needs investigation
@@ -1454,6 +1459,14 @@ too advanced for me yet
        )))
 #+end_src
 
+* PDF
+#+begin_src emacs-lisp
+  (use-package pdf-tools
+    :ensure t
+    :magic ("%PDF" . pdf-view-mode)
+    :config
+    (pdf-tools-install :no-query))
+#+end_src
 
 * File Management
 

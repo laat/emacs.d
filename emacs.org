@@ -2,9 +2,9 @@
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes :results output silent
 #+STARTUP: fold
 
-#+html: <p align="center">
+#+html: <div align="center">
 [[file:profile.png]]
-#+html: </p>
+#+html: </div>
 
 * Package manager
 

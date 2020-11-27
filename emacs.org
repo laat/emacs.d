@@ -96,7 +96,6 @@
 #+end_src
 
 * Basic Config OS X
-
 ** PATH
 #+begin_src emacs-lisp
   (when (eq system-type 'darwin)
@@ -1025,7 +1024,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     :ensure t)
 #+end_src
 
-[[orgit:/Users/n637831/git/psapi-typescript-contracts][psapi-typescript-contracts]]
+[[orgit:/Users/n637831/.emacs.d][emacs.d git status]]
 
 * Org
 
@@ -1046,6 +1045,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
       "r" '(org-babel-remove-result :which-key "remove result"))
     :custom
     (org-image-actual-width nil "allows #+ATTR_ORG: :width 100")
+    (org-cycle-separator-lines 0 "compact folding")
     (org-ellipsis "…" "a pretty ellipsis. Alternatives … ⤵ ▼, ↴, ⬎, ⤷, and ⋱.")
     (org-directory "~/Dropbox/notes/")
     (org-confirm-babel-evaluate nil "C-c C-c on code blocks do not ask")
@@ -1367,6 +1367,7 @@ sequenceDiagram
   (require 'org-yt)
 #+end_src
 
+
 ** TODO roam
 
 I cannot get it to work, needs investigation
@@ -1453,6 +1454,7 @@ too advanced for me yet
        )))
 #+end_src
 
+
 * File Management
 
 #+begin_src emacs-lisp
@@ -1467,6 +1469,12 @@ too advanced for me yet
 #+begin_src emacs-lisp
   (use-package vterm
     :ensure t)
+#+end_src
+
+* ll
+
+#+begin_src emacs-lisp
+  (setq org-cycle-separator-lines 0)
 #+end_src
 
 * Future Customization?

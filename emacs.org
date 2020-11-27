@@ -1471,12 +1471,6 @@ too advanced for me yet
     :ensure t)
 #+end_src
 
-* ll
-
-#+begin_src emacs-lisp
-  (setq org-cycle-separator-lines 0)
-#+end_src
-
 * Future Customization?
 ** [[https://github.com/raxod502/straight.el][staight.el]]
 ** [[https://github.com/gilbertw1/better-jumper][better-jumper]]

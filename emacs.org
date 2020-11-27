@@ -1482,9 +1482,8 @@ too advanced for me yet
 #+end_src
 
 * Future Customization?
-** [[https://github.com/raxod502/straight.el][staight.el]]
+** [[https://github.com/raxod502/straight.el][straight.el]]
 ** [[https://github.com/gilbertw1/better-jumper][better-jumper]]
-** [[https://github.com/hlissner/emacs-so-long/blob/master/so-long.el][so-long.el]]
 ** [[https://github.com/hlissner/ws-butler][ws-butler]]
 ** flycheck
 ** flycheck-popup-tip
@@ -1518,8 +1517,6 @@ too advanced for me yet
 ** https://github.com/tumashu/ivy-posframe
 ** https://github.com/raxod502/selectrum
 ** https://github.com/conao3/leaf.el
-** http://git.savannah.gnu.org/cgit/emacs.git/tree/lisp/uniquify.el?h=emacs-27
-** https://salvatore.denaro.nyc/2020/08/capturing-text-from-any-mac-application.html
 ** https://github.com/rougier/elegant-emacs
 ** https://github.com/TonCherAmi/org-padding
 ** https://github.com/TonCherAmi/org-starless

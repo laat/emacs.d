@@ -7,6 +7,58 @@
 #+html: </div>
 
 
+* Early Init
+:PROPERTIES:
+:header-args:emacs-lisp: :tangle ./early-init.el :mkdirp yes :results output silent
+:END:
+
+No startup message.
+
+#+begin_src emacs-lisp
+  (setq inhibit-startup-message t)
+#+end_src
+
+Disable visible scrollbar.
+
+#+begin_src emacs-lisp
+  (scroll-bar-mode -1)
+#+end_src
+
+Disable the toolbar on every thing else
+
+#+begin_src emacs-lisp
+  (tool-bar-mode -1)
+#+end_src
+
+Disable tooltips
+
+#+begin_src emacs-lisp
+  (tooltip-mode -1)
+#+end_src
+
+Give some breathing room in the fringes
+
+#+begin_src emacs-lisp
+  (set-fringe-mode 10)
+#+end_src
+
+Disable the menu bar.
+
+#+begin_src emacs-lisp
+  ;;(menu-bar-mode -1)
+#+end_src
+
+
+Default frame size
+
+#+begin_src emacs-lisp
+  ;;; Nice size for the default window
+  (when (eq system-type 'darwin)
+    (add-to-list 'default-frame-alist '(width . 140))
+    (add-to-list 'default-frame-alist '(height . 120)))
+#+end_src
+
+
 * Package manager
 ** Initialize package manager
 
@@ -53,38 +105,6 @@
     :diminish
     :init
     (gcmh-mode 1))
-#+end_src
-
-* Basic UI
-
-#+begin_src emacs-lisp
-  (setq inhibit-startup-message t)
-
-  (scroll-bar-mode -1)        ; Disable visible scrollbar
-  (tool-bar-mode -1)          ; Disable the toolbar
-  (tooltip-mode -1)           ; Disable tooltips
-  (set-fringe-mode 10)        ; Give some breathing room
-  ;;(menu-bar-mode -1)          ; Disable the menu bar
-
-  (visual-line-mode 1)        ; Break long lines at word boundaries
-
-  ;; too many characters to type "yes". y is ok
-  (defalias 'yes-or-no-p 'y-or-n-p)
-#+end_src
-
-** Default frame size
-
-#+begin_src emacs-lisp
-  ;;; Nice size for the default window
-  (when (eq system-type 'darwin)
-    (add-to-list 'default-frame-alist '(width . 140))
-    (add-to-list 'default-frame-alist '(height . 120)))
-#+end_src
-
-** Diminish
-
-#+begin_src emacs-lisp
-  (use-package diminish :ensure t)
 #+end_src
 
 * Basic Config
@@ -184,6 +204,18 @@ Git branch in the mode-line is often wrong and making it always show current bra
   (setq-default mode-line-format (delete '(vc-mode vc-mode) mode-line-format))
 #+end_src
 
+Too many characters to type "yes". y is ok
+
+#+begin_src emacs-lisp
+  (defalias 'yes-or-no-p 'y-or-n-p)
+#+end_src
+
+Break long lines at word boundaries.
+
+#+begin_src emacs-lisp
+  (visual-line-mode 1)
+#+end_src
+
 * GPG
 ** Add json to auth sources
 
@@ -204,8 +236,12 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
   (when (eq system-type 'darwin)
     (use-package exec-path-from-shell
       :ensure t
-      ;; removed -i because -l has correct path on my system
-      :custom (exec-path-from-shell-arguments '("-l"))
+      :init
+      (setq
+       ;; bash has the correct path too (on my system) and is faster
+       exec-path-from-shell-shell-name "bash"
+       ;; removed -i because -l has correct path on my system
+       exec-path-from-shell-arguments '("-l"))
       :config (exec-path-from-shell-initialize)))
 #+end_src
 
@@ -725,6 +761,12 @@ Download en_US from [[http://wordlist.aspell.net/dicts/][aspell.net]] and extrac
   (use-package flyspell-correct-ivy
     :ensure t
     :after flyspell-correct)
+#+end_src
+
+** Diminish
+
+#+begin_src emacs-lisp
+  (use-package diminish :ensure t)
 #+end_src
 
 * Development
@@ -1272,8 +1314,13 @@ Need it get flycheck to find local binaries.
 *** base config
 
 #+begin_src emacs-lisp
-  (use-package org-protocol :ensure nil)
+  (require 'org-protocol)
 #+end_src
+
+*** Chrome Extensoion
+
+- [[http://slumpy.org/blog/2015-07-07-org-capture-chrome-extension/][Org-Capture Chrome Extension]]
+- [[https://github.com/sprig/org-capture-extension][sprig/org-capture-extension]]
 
 *** Text from all OS X Apps
 
@@ -1288,11 +1335,6 @@ open "org-protocol://capture?template=g&body=$encoded"
 #+DOWNLOADED: screenshot @ 2020-11-27 18:29:46
 #+ATTR_ORG: :width 600
 [[file:Org/2020-11-27_18-29-46_screenshot.png]]
-
-*** Chrome Extensoion
-
-- [[http://slumpy.org/blog/2015-07-07-org-capture-chrome-extension/][Org-Capture Chrome Extension]]
-- [[https://github.com/sprig/org-capture-extension][sprig/org-capture-extension]]
 
 *** Open Magit on OS X
 
@@ -1473,24 +1515,6 @@ this does not block with the =:async= header
   Accept: application/json
 #+End_src
 
-*** REST
-
-#+begin_src emacs-lisp
-
-  (use-package restclient
-    :ensure t)
-  (use-package ob-restclient
-    :ensure t
-    :after org
-    :config
-    (add-to-list 'org-babel-load-languages '(restclient . t)))
-#+end_src
-
-#+begin_src restclient :tangle no
-  GET https://httpbin.org/get
-  Accept: application/json
-#+end_src
-
 *** latex-as-png
 
 #+begin_src emacs-lisp
@@ -1557,7 +1581,6 @@ sequenceDiagram
      (http . t)
      (js . t)
      (mermaid . t)
-     (restclient . t)
      (shell . t)
      (sql . t)
      (typescript . t)))

@@ -1053,7 +1053,8 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
      (org-capture-mode . evil-insert-state))
     :bind
     (:map org-mode-map
-          ("C-c C-j" . counsel-org-goto))
+          ("C-c C-j" . counsel-org-goto)
+          ("s-f" . counsel-org-goto))
     :general
     (laat/leader-keys
       "x" '(org-capture :which-key "capture"))
@@ -1377,6 +1378,7 @@ sequenceDiagram
 #+end_src
 
 *** SQL
+
 #+begin_src emacs-lisp
   (use-package ob-sql
     :config
@@ -1385,6 +1387,7 @@ sequenceDiagram
     (add-to-list 'org-babel-tangle-lang-exts '("sql" . "sql"))
     (add-to-list 'org-src-lang-modes (cons "SQL" 'sql)))
 #+end_src
+
 *** load babel languages
 
 #+begin_src emacs-lisp
@@ -1401,10 +1404,17 @@ sequenceDiagram
      (typescript . t)))
 #+end_src
 
+
 ** org-yt
 
-#+begin_src emacs-lisp :tangle no
-  (require 'org-yt)
+#+begin_src org
+  [[yt:PeVQwYUxYEg] ]
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package org-yt
+    :quelpa (org-yt :repo "TobiasZawada/org-yt" :fetcher github
+                    :commit "40cc1ac76d741055cbefa13860d9f070a7ade001"))
 #+end_src
 
 ** Auto-Tangle init.el

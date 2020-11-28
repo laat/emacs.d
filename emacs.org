@@ -440,14 +440,14 @@ Exclude lots of stuff
 
 ** Mode line
 
-
 #+begin_src emacs-lisp
   (use-package all-the-icons
     :ensure t)
 
   (use-package doom-modeline
     :ensure t
-    :init (doom-modeline-mode 1)
+    :init
+    (doom-modeline-mode 1)
     :custom
     ((doom-modeline-height 15)
      (doom-modeline-minor-modes t)))
@@ -455,7 +455,6 @@ Exclude lots of stuff
 
   (diminish 'visual-line-mode)
 #+end_src
-
 
 ** Treemacs
 

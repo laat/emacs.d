@@ -303,6 +303,9 @@
   (defun laat/switch-to-dashboard ()
     (interactive)
     (switch-to-buffer "*dashboard*"))
+  (defun laat/switch-to-mobile-notes ()
+    (interactive)
+    (find-file "~/Dropbox/notes/orgzly/notes.org"))
   (defun laat/switch-to-notes ()
     (interactive)
     (find-file "~/Dropbox/notes/notes.org"))
@@ -315,6 +318,7 @@
   (laat/leader-keys
     "dd" 'laat/switch-to-dashboard
     "dn" 'laat/switch-to-notes
+    "dm" 'laat/switch-to-mobile-notes
     "de" 'laat/switch-to-config
     "da" 'laat/switch-to-agenda-file)
 #+end_src
@@ -763,6 +767,7 @@ Set this to the folder where you keep your Git repos!
     :custom
     (projectile-completion-system 'ivy)
     (projectile-switch-project-action #'projectile-dired)
+    (projectile-ignored-projects '("~/"))
     :general
     (laat/leader-keys
       "'" 'projectile-run-vterm
@@ -1046,23 +1051,28 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     ((org-mode . visual-line-mode)
      (org-mode . org-indent-mode)
      (org-capture-mode . evil-insert-state))
+    :bind
+    (:map org-mode-map
+          ("C-c C-j" . counsel-org-goto))
     :general
     (laat/leader-keys
       "x" '(org-capture :which-key "capture"))
     (laat/local-leader-keys
       :states 'normal
       :keymaps 'org-mode-map
-      "t" '(org-todo :which-key "capture")
+      "j" '(counsel-org-goto :which-key "go to heading")
+      "t" '(org-todo :which-key "task")
       "r" '(org-babel-remove-result :which-key "remove result")
-      "c" '(org-ctrl-c-ctrl-c :which-key "C-c C-c"))
+      "cc" '(org-ctrl-c-ctrl-c :which-key "C-c C-c"))
     :custom
     (org-image-actual-width nil "allows #+ATTR_ORG: :width 100")
     (org-cycle-separator-lines 0 "compact folding")
     (org-ellipsis "…" "a pretty ellipsis. Alternatives … ⤵ ▼, ↴, ⬎, ⤷, and ⋱.")
-    (org-refile-targets '((nil :maxlevel . 9)
-                          ("~/Dropbox/notes/notes.org" :maxlevel . 2)
-                          ("~/Dropbox/notes/orgzly/Inbox.org" :maxlevel . 2)
-                          (org-agenda-files :maxlevel . 9)))
+    (org-refile-targets
+     '((nil :maxlevel . 9)
+       ("~/Dropbox/notes/notes.org" :maxlevel . 2)
+       ("~/Dropbox/notes/orgzly/notes.org" :maxlevel . 2)
+       (org-agenda-files :maxlevel . 9)))
     (org-refile-use-outline-path nil)
     (org-directory "~/Dropbox/notes/")
     (org-log-done nil "track when TODO -> DONE")
@@ -1076,6 +1086,8 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
         "\n** %?\n\n\n\n")
        ("t" "TODO" entry (file+headline ,(concat org-directory "agenda.org") "Tasks")
         "\n** TODO %?\n\n\n\n")
+       ("m" "Mobile TODO" entry (file+headline ,(concat org-directory "orgzly/agenda.org") "Tasks")
+        "\n** TODO %?\n\n\n\n")
        ;; https://salvatore.denaro.nyc/2020/08/capturing-text-from-any-mac-application.html
        ("g" "Protocol Grab" entry (file+headline ,(concat org-directory "notes.org") "Inbox" )
         "* %? \n%i\n" :prepend t :created t )
@@ -1083,7 +1095,10 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
        ("p" "Protocol" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
         "* %?\nCaptured On: %U \n\n [[%:link][%:description]] \n\n#+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n")
        ("L" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
-        "* %?[[%:link][%:description]] \nCaptured On: %U"))))
+        "* %?[[%:link][%:description]] \nCaptured On: %U")))
+    :config
+    ;; https://emacs.stackexchange.com/questions/26923
+    (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers))))
 
   (use-package evil-org
     :ensure t
@@ -1455,65 +1470,4 @@ sequenceDiagram
   (use-package vterm
     :ensure t)
 #+end_src
-
-* Future Customization?
-** [[https://github.com/raxod502/straight.el][straight.el]]
-** [[https://github.com/gilbertw1/better-jumper][better-jumper]]
-** [[https://github.com/hlissner/ws-butler][ws-butler]]
-** flycheck
-** flycheck-popup-tip
-** [[https://github.com/noctuid/link-hint.el][link-hint.el]]
-** [[https://github.com/takaxp/org-tree-slide][org-tree-slide]]
-** [[https://gitlab.com/oer/org-re-reveal][org-re-reveal]]
-** [[https://github.com/jkitchin/ox-clip][ox-clip]]
-** [[https://github.com/jkitchin/scimax/blob/master/ox-word.el][ox-word]]
-** [[https://ox-hugo.scripter.co/][ox-hugo]]
-** [[https://github.com/aspiers/orgmode/blob/master/contrib/lisp/ox-confluence.el][ox-confluence]]
-** [[https://orgmode.org/worg/exporters/beamer/ox-beamer.html][ox-beamer]]
-** [[https://github.com/camdez/goto-last-change.el][goto-last-change.el]]
-** [[https://github.com/benma/visual-regexp-steroids.el/][visual-regexp-steroids.el]]
-** [[https://github.com/jorgenschaefer/typoel/blob/master/typo.el][typo.el]]
-** [[https://www.emacswiki.org/emacs/ParEdit][ParEdit]]
-** [[https://github.com/DanielDe/org-web][org-web]]
-** [[https://github.com/alphapapa/org-protocol-capture-html][org-protocol-capture-html]]
-** [[https://github.com/emacsorphanage/terraform-mode][terraform-mode]]
-** [[https://github.com/chrisbarrett/kubernetes-el][kubernetes-el]]
-** [[https://github.com/iqbalansari/emacs-emojify][emacs-emojify]]
-** [[https://github.com/ffevotte/script2svg][script2svg]]
-** [[https://github.com/prettier/prettier-emacs][prettier]]
-** [[https://polymode.github.io/][polymode]]
-** [[https://github.com/abo-abo/avy][avy]]
-** [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]]
-** [[https://github.com/Fanael/highlight-numbers][highlight-numbers]]
-** [[https://github.com/joewreschnig/auto-minor-mode][auto-minor-mode]]
-** [[https://github.com/emacsmirror/gcmh][gcmh]]
-** [[https://github.com/dakrone/es-mode][es-mode]]
-** [[https://github.com/darksmile/cheatsheet][cheatsheet]]
-** https://github.com/tumashu/ivy-posframe
-** https://github.com/raxod502/selectrum
-** https://github.com/conao3/leaf.el
-** https://github.com/rougier/elegant-emacs
-** https://github.com/TonCherAmi/org-padding
-** https://github.com/TonCherAmi/org-starless
-** https://github.com/cadadr/elisp/blob/devel/org-variable-pitch.el
-** https://chee.xo.snoot.club/notebook/publish.html
-** https://github.com/magit/git-modes
-** https://github.com/john2x/jenkinsfile-mode
-** https://jherrlin.github.io/posts/learn-awk/
-** https://github.com/magit/orgit-forge
-** https://github.com/hrs/sensible-defaults.el
-** https://gitlab.com/matsievskiysv/math-preview
-** https://melpa.org/#/ob-napkin
-** https://github.com/nikclayton/ob-html-chrome
-** https://github.com/alphapapa/burly.el
-** https://orgmode.org/worg/org-tutorials/org-protocol-custom-handler.html
-** https://github.com/Emiller88/emacs-jest
-** https://github.com/Silex/docker.el/
-** OS X
-- [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
-- [[https://github.com/raghavgautam/osx-lib/blob/master/osx-lib.el][osx-lib.el]]
-- [[https://github.com/emacsorphanage/osx-trash/][osx-trash]]
-- [[https://github.com/pekingduck/launchctl-el][launchctl-el]]
-- [[https://github.com/kaz-yos/reveal-in-osx-finder][reveal-in-osx-finder]]
-
 

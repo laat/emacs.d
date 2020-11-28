@@ -1152,6 +1152,7 @@ Need it get flycheck to find local binaries.
     ((org-mode . visual-line-mode)
      (org-mode . org-indent-mode)
      (org-capture-mode . evil-insert-state))
+    :commands (org-mode)
     :general
     (:keymaps
      'org-mode-map
@@ -1504,7 +1505,6 @@ sequenceDiagram
      (fsharp . t)
      (http . t)
      (js . t)
-     (json . t)
      (mermaid . t)
      (restclient . t)
      (shell . t)

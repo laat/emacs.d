@@ -6,6 +6,7 @@
 [[file:profile.png]]
 #+html: </div>
 
+
 * Package manager
 ** Initialize package manager
 
@@ -32,6 +33,7 @@
 #+begin_src emacs-lisp
   (use-package quelpa
     :ensure t
+    :defer t
     :config
     (when (eq system-type 'darwin)
       ;; brew install gnu-tar
@@ -41,6 +43,16 @@
     :ensure t
     :init
     (setq quelpa-use-package-inhibit-loading-quelpa t))
+#+end_src
+
+* GC
+
+#+begin_src emacs-lisp
+  (use-package gcmh
+    :ensure t
+    :diminish
+    :init
+    (gcmh-mode 1))
 #+end_src
 
 * Basic UI
@@ -192,6 +204,8 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
   (when (eq system-type 'darwin)
     (use-package exec-path-from-shell
       :ensure t
+      ;; removed -i because -l has correct path on my system
+      :custom (exec-path-from-shell-arguments '("-l"))
       :config (exec-path-from-shell-initialize)))
 #+end_src
 
@@ -315,6 +329,8 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 ** Save like intellij
 
 #+begin_src emacs-lisp
+  (defadvice find-file (before save-buffer-now activate)
+    (when (and buffer-file-name (buffer-modified-p)) (save-buffer)))
   (defadvice switch-to-buffer (before save-buffer-now activate)
     (when (and buffer-file-name (buffer-modified-p)) (save-buffer)))
   (defadvice other-window (before other-window-now activate)
@@ -460,19 +476,26 @@ Exclude lots of stuff
 
 #+begin_src emacs-lisp
   (use-package treemacs
-    :ensure t)
+    :ensure t
+    :general
+    ("C-c t" 'treemacs))
 
   (use-package treemacs-evil
-    :after evil
-    :ensure t)
+    :ensure t
+    :after (treemacs evil))
 
   (use-package treemacs-projectile
-    :after projectile
-    :ensure t)
+    :ensure t
+    :after (treemacs projectile))
 
   (use-package treemacs-magit
-    :after magit
-    :ensure t)
+    :ensure t
+    :after (treemacs magit))
+
+  (use-package treemacs-all-the-icons
+    :ensure t
+    :after (treemacs all-the-icons))
+
 #+end_src
 
 ** Helpful
@@ -529,6 +552,7 @@ Exclude lots of stuff
 
   (use-package ivy-rich
     :ensure t
+    :defer 3
     :init
     (ivy-rich-mode 1))
 
@@ -939,17 +963,23 @@ Set this to the folder where you keep your Git repos!
            (typescript-mode . lsp)
            (lsp-mode . lsp-enable-which-key-integration))
     :commands lsp)
+
   (use-package lsp-ui
     :ensure t
     :commands lsp-ui-mode)
+
   (use-package lsp-ivy
     :ensure t
     :commands lsp-ivy-workspace-symbol)
+
   (use-package lsp-treemacs
     :ensure t
     :commands lsp-treemacs-errors-list)
+
   (use-package dap-mode
-    :ensure t)
+    :ensure t
+    :hook ((after-init . dap-mode)
+           (dap-mode . dap-ui-mode)))
 #+end_src
 
 ** Languages
@@ -957,6 +987,7 @@ Set this to the folder where you keep your Git repos!
 
 #+begin_src emacs-lisp
   (use-package csharp-mode
+    :mode "\\.cs\\'"
     :ensure t)
 #+end_src
 
@@ -987,14 +1018,16 @@ Set this to the folder where you keep your Git repos!
 
 *** JSON
 
-#+begin_src emacs-lisp
-  (use-package json-mode
-    :ensure t)
   (use-package json-snatcher
     :ensure t)
-  (use-package counsel-jq
-    :ensure t
-    :after counsel)
+#+begin_src emacs-lisp
+    (use-package json-mode
+      :mode "\\.json\\'"
+      :ensure t)
+    (use-package counsel-jq
+      :ensure t
+      :after counsel
+      :commands (counsel-jq))
 #+end_src
 
 **** LSP
@@ -1043,8 +1076,16 @@ or
 **** Npm
 
 #+begin_src emacs-lisp
-(use-package npm
-    :ensure t)
+  (use-package npm
+    :ensure t
+    :commands
+    (npm-update
+     npm-run
+     npm-menu
+     npm-init
+     npm-install-menu
+     npm-mode
+     npm))
 #+end_src
 
 =M-x npm=
@@ -1071,6 +1112,7 @@ or
 #+begin_src emacs-lisp
   (use-package ejc-sql
     :ensure t
+    :defer 2
     :custom
     (clomacs-httpd-default-port 8191)
     (ejc-jdbc-drivers
@@ -1078,10 +1120,13 @@ or
        "oracle" [com.oracle.jdbc/ojdbc8 "19.8.0.0"])))
 
   (use-package sql-indent
-    :ensure t)
+    :ensure t
+    :diminish sqlind-minor-mode
+    :hook (sql-mode . sqlind-minor-mode))
 
   (use-package sqlup-mode
     :ensure t
+    :diminish sqlup-mode
     :hook (sql-mode . sqlup-mode))
 #+end_src
 
@@ -1218,7 +1263,9 @@ Need it get flycheck to find local binaries.
     (evil-org-agenda-set-keys))
 
   (use-package org-indent
-    :diminish)
+    :diminish
+    :after org
+    :commands (org-intent-mode))
 #+end_src
 
 ** org-protocol
@@ -1448,8 +1495,9 @@ this does not block with the =:async= header
 
 #+begin_src emacs-lisp
   (use-package ob-latex-as-png
-    :after org
-    :ensure t)
+    :ensure t
+    :defer 2
+    :after org)
 
   ;; Always redisplay images after C-c C-c (org-ctrl-c-ctrl-c)
   (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
@@ -1586,6 +1634,7 @@ sequenceDiagram
   ;; C-n and C-P to scroll up and down
   (use-package ox-pandoc
     :ensure t
+    :defer 2
     :after org
     :custom
     (org-pandoc-menu-entry
@@ -1610,6 +1659,7 @@ sequenceDiagram
 #+begin_src emacs-lisp
   (use-package all-the-icons-dired
     :ensure t
+    :after (all-the-icons)
     :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 
@@ -1624,3 +1674,4 @@ sequenceDiagram
 
 * Ideas
 - here
+

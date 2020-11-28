@@ -1103,12 +1103,15 @@ Need it get flycheck to find local binaries.
 #+begin_src emacs-lisp
   (use-package magit
     :ensure t
-    :custom
-    (magit-display-buffer-function #'magit-display-buffer-fullframe-status-topleft-v1)
     :general
     (laat/leader-keys
       "g" '(:ignore t :which-key "git")
-      "gs" '(magit-status :which-key "git status")))
+      "gs" '(magit-status :which-key "git status"))
+    :custom
+    (magit-display-buffer-function #'magit-display-buffer-fullframe-status-topleft-v1)
+    :config
+    (add-hook 'git-commit-mode-hook 'evil-insert-state)
+    (add-to-list 'evil-insert-state-modes 'magit-log-edit-mode))
   (use-package diff-hl
     :ensure t
     :hook (dired-mode . diff-hl-dired-mode-unless-remote)

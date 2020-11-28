@@ -7,45 +7,40 @@
 #+html: </div>
 
 * Package manager
+** Initialize package manager
 
-** Use Package
 #+begin_src emacs-lisp
-  ;; NOTE: init.el is now generated from emacs.org.
   (require 'package)
-
-  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                           ("org" . "https://orgmode.org/elpa/")
-                           ("elpa" . "https://elpa.gnu.org/packages/")))
-
+  (setq package-archives
+        '(("melpa" . "https://melpa.org/packages/")
+          ("org" . "https://orgmode.org/elpa/")
+          ("elpa" . "https://elpa.gnu.org/packages/")))
+  (setq package-enable-at-startup nil)
   (package-initialize)
-  (unless package-archive-contents (package-refresh-contents))
-
-  ;; Initialize use-package on non-Linux platforms
-  (unless (package-installed-p 'use-package)
-    (package-install 'use-package))
-
-  (require 'use-package)
 #+end_src
 
-** Diminish
+** Bootstrap use-package
 
 #+begin_src emacs-lisp
-  (use-package diminish :ensure t)
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 #+end_src
 
 ** Quelpa
 
 #+begin_src emacs-lisp
-(use-package quelpa
-  :ensure t
-  :defer t
-  :custom
-  (quelpa-update-melpa-p nil "Don't update the MELPA git repo."))
+  (use-package quelpa
+    :ensure t
+    :config
+    (when (eq system-type 'darwin)
+      ;; brew install gnu-tar
+      (setq-default quelpa-build-tar-executable "/usr/local/bin/gtar")))
 
-(use-package quelpa-use-package
-  :init
-  (setq quelpa-use-package-inhibit-loading-quelpa t)
-  :ensure t)
+  (use-package quelpa-use-package
+    :ensure t
+    :init
+    (setq quelpa-use-package-inhibit-loading-quelpa t))
 #+end_src
 
 * Basic UI
@@ -74,30 +69,119 @@
     (add-to-list 'default-frame-alist '(height . 120)))
 #+end_src
 
+** Diminish
+
+#+begin_src emacs-lisp
+  (use-package diminish :ensure t)
+#+end_src
+
 * Basic Config
+
+Don't delete any backups.
+
+#+BEGIN_SRC emacs-lisp
+  (setq delete-old-versions -1)
+#+END_SRC
+
+Unconditionally make numeric backups for files.
+
+#+BEGIN_SRC emacs-lisp
+  (setq version-control t)
+#+END_SRC
+
+Backup files even if they're under version control.
+
+#+BEGIN_SRC emacs-lisp
+  (setq vc-make-backup-files t)
+#+END_SRC
+
+Place automatically saved files in a single directory.
+
+#+BEGIN_SRC emacs-lisp
+  (setq auto-save-file-name-transforms
+    `((".*" ,(concat user-emacs-directory "auto-save-list/") t)))
+#+END_SRC
+
+Place all backups in a single directory.
+
+#+BEGIN_SRC emacs-lisp
+  (setq backup-directory-alist
+    `((".*" . ,(concat user-emacs-directory "backups"))))
+#+END_SRC
+
+Save the minibuffer history between sessions. Also save the kill-ring and search rings.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'savehist)
+  (savehist-mode 1)
+  (setq history-length 10000)
+  (setq savehist-save-minibuffer-history 1)
+  (setq savehist-additional-variables
+        '(kill-ring
+          search-ring
+          regexp-search-ring
+          register-alist))
+#+END_SRC
+
+Don't create lock files.
+
+#+BEGIN_SRC emacs-lisp
+  (setq create-lockfiles nil)
+#+END_SRC
+
+Put all customizations into a separate file.
 
 #+begin_src emacs-lisp
   (setq custom-file "~/.emacs.d/custom.el")
   (when (file-exists-p custom-file) (load custom-file))
-
-  (setq backup-directory-alist `(("." . "~/.emacs.d/.saves")))
-  (setq auto-save-file-name-transforms `((".*" "~/.emacs.d/.saves/" t)))
-
-  (global-auto-revert-mode 1)
-
-  (setq vc-follow-symlinks t) ;; When opening a file, always follow symlinks.
-  (setq sentence-end-double-space nil) ;; This ain't a typewriter
-  (setq confirm-kill-emacs 'y-or-n-p) ;; ask before dying
-
-  ;; require a trailing newline
-  (setq require-final-newline t)
-
-  (global-so-long-mode 1)
-
 #+end_src
+
+When opening a file, always follow symlinks.
+
+#+begin_src emacs-lisp
+  (setq vc-follow-symlinks t)
+#+end_src
+
+Ask before terminating.
+
+#+begin_src emacs-lisp
+  (setq confirm-kill-emacs 'y-or-n-p)
+#+end_src
+
+This ain't a typewriter.
+
+#+begin_src emacs-lisp
+  (setq sentence-end-double-space nil)
+#+end_src
+
+Auto revert buffers if they are changed on disk.
+
+#+begin_src emacs-lisp
+  (global-auto-revert-mode 1)
+#+end_src
+
+Performance mitigations for files with long lines.
+
+#+begin_src emacs-lisp
+  (global-so-long-mode 1)
+#+end_src
+
+* GPG
+** Add json to auth sources
+
+#+begin_src emacs-lisp
+(dolist (file '("~/.authinfo.json" "~/.authinfo.json.gpg"))
+  ((lambda ()
+     (when (file-exists-p file) (add-to-list 'auth-sources file)))))
+#+end_src
+
+** OS X
+
+Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 
 * Basic Config OS X
 ** PATH
+
 #+begin_src emacs-lisp
   (when (eq system-type 'darwin)
     (use-package exec-path-from-shell
@@ -117,17 +201,6 @@
       :ensure t
       :config
       (setq delete-by-moving-to-trash t)))
-#+end_src
-
-** After macro
-
-#+begin_src emacs-lisp
-;; from <https://github.com/bling/dotemacs/>
-(defmacro after (feature &rest body)
-  "After FEATURE is loaded, evaluate BODY."
-  (declare (indent defun))
-  `(eval-after-load ,feature
-     '(progn ,@body)))
 #+end_src
 
 * Key Binds
@@ -216,6 +289,8 @@
 #+begin_src emacs-lisp
   (use-package hydra
     :after evil
+    :ensure t)
+  (use-package use-package-hydra
     :ensure t)
 #+end_src
 
@@ -328,6 +403,20 @@
 
 *** exclude stuff I do not want in recents
 
+
+** Recent files
+
+Enable and save lots.
+
+#+begin_src emacs-lisp
+  (recentf-mode 1)
+  (setq
+   recentf-max-saved-items 1000
+   recentf-max-menu-items 50)
+#+end_src
+
+Exclude lots of stuff
+
 #+begin_src emacs-lisp
   (add-to-list 'recentf-exclude "\\.emacs\\.d/elpa")
   (add-to-list 'recentf-exclude "\\.emacs\\.d/bookmarks")
@@ -336,7 +425,6 @@
   (add-to-list 'recentf-exclude "\\.emacs\\.d/\\.cache/treemacs-persist")
   (add-to-list 'recentf-exclude "\\.emacs\\.d/\\.cache/treemacs-persist")
   (add-to-list 'recentf-exclude "/Applications/Emacs\\.app")
-  ;;(run-at-time nil (* 5 60) 'recentf-save-list)
 #+end_src
 
 ** Color Theme
@@ -587,12 +675,14 @@ Download en_US from [[http://wordlist.aspell.net/dicts/][aspell.net]] and extrac
   (defun laat/english ()
     (interactive)
     (ispell-change-dictionary "english"))
+
   (use-package flyspell
     :diminish
     :general
     (laat/leader-keys
       "yf" '(:ignore t :which-key "spell check")
-      "yff" 'flyspell-mode
+      "yft" '(flyspell-mode :which-key "flyspell text mode")
+      "yfp" '(flyspell-prog-mode :which-key "flyspell prog mode")
       "yfm" '(laat/english :which-key "english")
       "yfn" '(laat/bokmål :which-key "bokmål")
       "yfb" '(laat/nynorsk :which-key "nynorsk"))
@@ -705,6 +795,8 @@ mode.
 
   (setq-default tab-width 2)
   (setq-default indent-tabs-mode nil)
+
+  (setq require-final-newline t)
 
   (add-hook 'prog-mode-hook
             (lambda () (setq show-trailing-whitespace t)))
@@ -843,6 +935,7 @@ Set this to the folder where you keep your Git repos!
   (setq lsp-keymap-prefix "s-p")
   (use-package lsp-mode
     :ensure t
+    :after yasnippet
     :hook ((json-mode . lsp)
            (yaml-mode . lsp)
            ;; (fsharp-mode . lsp)
@@ -961,6 +1054,8 @@ or
 
 *** TypeScript
 
+**** basic
+
 #+begin_src emacs-lisp
   (use-package typescript-mode
     :ensure t
@@ -1025,7 +1120,6 @@ Need it get flycheck to find local binaries.
 
 *** Forge
 
-Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 
 #+begin_src emacs-lisp
   (use-package forge
@@ -1046,7 +1140,6 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 [[orgit:/Users/n637831/.emacs.d][emacs.d git status]]
 
 * Org
-
 ** Base Config
 
 #+begin_src emacs-lisp
@@ -1127,7 +1220,6 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 #+end_src
 
 ** org-protocol
-
 *** base config
 
 #+begin_src emacs-lisp
@@ -1275,6 +1367,7 @@ On OSX use before calling =org-download-clipboard=
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
   (add-to-list 'org-structure-template-alist '("sql" . "src sql"))
   (add-to-list 'org-structure-template-alist '("js" . "src js"))
+  (add-to-list 'org-structure-template-alist '("json" . "src json"))
 #+end_src
 
 ** Babel
@@ -1404,14 +1497,15 @@ sequenceDiagram
 #+begin_src emacs-lisp
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((shell . t)
-     (js . t)
-     (emacs-lisp . t)
+   '((emacs-lisp . t)
      (fsharp . t)
-     (sql . t)
+     (http . t)
+     (js . t)
+     (json . t)
      (mermaid . t)
      (restclient . t)
-     (http . t)
+     (shell . t)
+     (sql . t)
      (typescript . t)))
 #+end_src
 
@@ -1424,8 +1518,11 @@ sequenceDiagram
 
 #+begin_src emacs-lisp
   (use-package org-yt
-    :quelpa (org-yt :repo "TobiasZawada/org-yt" :fetcher github
-                    :commit "40cc1ac76d741055cbefa13860d9f070a7ade001"))
+    :quelpa
+    (org-yt
+     :fetcher github
+     :repo "TobiasZawada/org-yt"
+     :commit "40cc1ac76d741055cbefa13860d9f070a7ade001"))
 #+end_src
 
 ** Auto-Tangle init.el
@@ -1441,7 +1538,66 @@ sequenceDiagram
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'laat/org-babel-tangle-config)))
 #+end_src
 
-* Pandoc
+* Apps
+** Spotify
+*** Setup
+
+#+begin_src emacs-lisp
+  (use-package oauth2 :ensure t)
+  (use-package spotify
+    :if (auth-source-search :host "spotify" :user "laat")
+    :ensure nil
+    :quelpa
+    (spotify.el
+     :fetcher github
+     :repo "danielfm/spotify.el"
+     :commit "f32bb17c6d0c83100724037dd003dc2372cf79b9")
+    :hydra
+    (hydra-spotify
+     (:hint nil) "
+  ^Search^                  ^Control^               ^Manage^
+  ^^^^^^^^-----------------------------------------------------------------
+  _t_: Track               _SPC_: Play/Pause        _+_: Volume up
+  _m_: My Playlists        _n_  : Next Track        _-_: Volume down
+  _f_: Featured Playlists  _p_  : Previous Track    _x_: Mute
+  _u_: User Playlists      _r_  : Repeat            _d_: Device
+  ^^                       _s_  : Shuffle           _q_: Quit
+  "
+     ("t" spotify-track-search :exit t)
+     ("m" spotify-my-playlists :exit t)
+     ("f" spotify-featured-playlists :exit t)
+     ("u" spotify-user-playlists :exit t)
+     ("SPC" spotify-toggle-play :exit nil)
+     ("n" spotify-next-track :exit nil)
+     ("p" spotify-previous-track :exit nil)
+     ("r" spotify-toggle-repeat :exit nil)
+     ("s" spotify-toggle-shuffle :exit nil)
+     ("+" spotify-volume-up :exit nil)
+     ("-" spotify-volume-down :exit nil)
+     ("x" spotify-volume-mute-unmute :exit nil)
+     ("d" spotify-select-device :exit nil)
+     ("q" quit-window "quit" :color blue))
+    :general
+    (laat/leader-keys
+      "s" '(hydra-spotify/body :which-key "spotofy"))
+    :config
+    (setq
+     spotify-creds (nth 0 (auth-source-search :host "spotify" :user "laat"))
+     spotify-oauth2-client-id (plist-get spotify-creds :client_id)
+     spotify-oauth2-client-secret (plist-get spotify-creds :client_secret)
+     spotify-transport 'connect))
+#+end_src
+
+*** Credentials
+
+Add this to =.authinfo.json.gpg=
+
+#+begin_src json
+  [{ "machine": "spotify", "login": "laat", "client_id": "....", "client_secret": "..."}]
+#+end_src
+
+
+** Pandoc
 
 [[elisp:(find-variable 'org-pandoc-menu-entry)][org-pandoc-menu-entry]] has lots of possibilities.
 
@@ -1465,7 +1621,7 @@ sequenceDiagram
        (?G "as gfm." org-pandoc-export-as-gfm))))
 #+end_src
 
-* PDF
+** PDF
 
 #+begin_src emacs-lisp
   (use-package pdf-tools

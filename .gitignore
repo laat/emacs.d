@@ -68,3 +68,4 @@ flycheck_*.el
 /quelpa/
 /.dap-breakpoints
 /.lsp-session-v1
+/history

@@ -1039,7 +1039,8 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
       :states 'normal
       :keymaps 'org-mode-map
       "t" '(org-todo :which-key "capture")
-      "r" '(org-babel-remove-result :which-key "remove result"))
+      "r" '(org-babel-remove-result :which-key "remove result")
+      "c" '(org-ctrl-c-ctrl-c :which-key "C-c C-c"))
     :custom
     (org-image-actual-width nil "allows #+ATTR_ORG: :width 100")
     (org-cycle-separator-lines 0 "compact folding")

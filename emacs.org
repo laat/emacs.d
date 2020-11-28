@@ -296,14 +296,26 @@
        (registers . 5))))
 #+end_src
 
-*** quick! to dashboard
+*** quick! to important stuff
 
 #+begin_src emacs-lisp
   (defun laat/switch-to-dashboard ()
     (interactive)
     (switch-to-buffer "*dashboard*"))
+  (defun laat/switch-to-notes ()
+    (interactive)
+    (find-file "~/Dropbox/notes/notes.org"))
+  (defun laat/switch-to-agenda-file ()
+    (interactive)
+    (find-file "~/Dropbox/notes/agenda.org"))
+  (defun laat/switch-to-config ()
+    (interactive)
+    (find-file "~/.emacs.d/emacs.org"))
   (laat/leader-keys
-    "d" 'laat/switch-to-dashboard)
+    "dd" 'laat/switch-to-dashboard
+    "dn" 'laat/switch-to-notes
+    "de" 'laat/switch-to-config
+    "da" 'laat/switch-to-agenda-file)
 #+end_src
 
 *** exclude stuff I do not want in recents
@@ -438,7 +450,8 @@ Git branch in the mode-line is often wrong and making it always show current bra
     :config
     (counsel-mode 1)
     ;; remove the ^ in M-x search
-    (setcdr (assoc 'counsel-M-x ivy-initial-inputs-alist) ""))
+    (setcdr (assoc 'counsel-M-x ivy-initial-inputs-alist) "")
+    (setcdr (assoc 'org-refile ivy-initial-inputs-alist) ""))
 #+end_src
 
 ** Drag Stuff
@@ -1045,6 +1058,10 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     (org-image-actual-width nil "allows #+ATTR_ORG: :width 100")
     (org-cycle-separator-lines 0 "compact folding")
     (org-ellipsis "…" "a pretty ellipsis. Alternatives … ⤵ ▼, ↴, ⬎, ⤷, and ⋱.")
+    (org-refile-targets '((nil :maxlevel . 9)
+                          ("~/Dropbox/notes/notes.org" :maxlevel . 2)
+                          (org-agenda-files :maxlevel . 9)))
+    (org-refile-use-outline-path nil)
     (org-directory "~/Dropbox/notes/")
     (org-log-done nil "track when TODO -> DONE")
     (org-log-into-drawer t "log into drawer")
@@ -1055,6 +1072,8 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
         "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n")
        ("s" "Simple" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
         "\n** %?\n\n\n\n")
+       ("t" "TODO" entry (file+headline ,(concat org-directory "agenda.org") "Tasks")
+        "\n** TODO %?\n\n\n\n")
        ;; https://salvatore.denaro.nyc/2020/08/capturing-text-from-any-mac-application.html
        ("g" "Protocol Grab" entry (file+headline ,(concat org-directory "notes.org") "Inbox" )
         "* %? \n%i\n" :prepend t :created t )
@@ -1371,53 +1390,6 @@ sequenceDiagram
   (require 'org-yt)
 #+end_src
 
-** TODO roam
-
-I cannot get it to work, needs investigation
-
-#+begin_src emacs-lisp :tangle no
-  (use-package org-roam
-    :ensure t
-    :diminish
-    :hook
-    (after-init . org-roam-mode)
-    :custom
-    (org-roam-directory "~/Dropbox/notes/roam")
-    :bind (:map org-roam-mode-map
-                (("C-c n l" . org-roam)
-                 ("C-c n f" . org-roam-find-file)
-                 ("C-c n g" . org-roam-graph))
-                :map org-mode-map
-                (("C-c n i" . org-roam-insert))
-                (("C-c n I" . org-roam-insert-immediate))))
-#+end_src
-
-** TODO roam-server
-#+begin_src emacs-lisp :tangle no
-  (use-package org-roam-server
-    :ensure t
-    :disabled t
-    :config
-    (setq org-roam-server-host "127.0.0.1"
-          org-roam-server-port 8080
-          org-roam-server-authenticate nil
-          org-roam-server-export-inline-images t
-          org-roam-server-serve-files nil
-          org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-          org-roam-server-network-poll t
-          org-roam-server-network-arrows nil
-          org-roam-server-network-label-truncate t
-          org-roam-server-network-label-truncate-length 60
-          org-roam-server-network-label-wrap-length 20))
-#+end_src
-** TODO org-sidebar
-too advanced for me yet
-
-#+begin_src emacs-lisp :tangle no
-  (use-package org-sidebar
-    :disabled t
-    :ensure t)
-#+end_src
 ** Auto-Tangle init.el
 
 #+begin_src emacs-lisp

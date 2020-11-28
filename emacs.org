@@ -8,6 +8,7 @@
 
 * Package manager
 
+** Use Package
 #+begin_src emacs-lisp
   ;; NOTE: init.el is now generated from emacs.org.
   (require 'package)
@@ -162,6 +163,7 @@
     :init
     (setq evil-want-integration t)
     (setq evil-want-keybinding nil)
+    (setq evil-collection-want-unimpaired-p nil)
     :config
     (evil-mode 1)
 
@@ -261,17 +263,18 @@
      mac-option-modifier 'meta
      mac-command-modifier 'super)
     (bind-keys
-     ([(super a)] . mark-whole-buffer)
-     ([(super c)] . kill-ring-save)
-     ([(super l)] . goto-line)
-     ([(super q)] . save-buffers-kill-emacs)
-     ([(super s)] . save-buffer)
-     ([(super v)] . yank)
-     ([(super w)] . delete-frame)
-     ([(super z)] . undo)
-     ([(super 48)] . laat/text-scale-zero)
-     ([(super +)] . text-scale-increase)
-     ([(super -)] . text-scale-decrease)))
+     ((kbd "s-a") . mark-whole-buffer)
+     ((kbd "s-c") . kill-ring-save)
+     ((kbd "s-l") . goto-line)
+     ((kbd "s-q") . save-buffers-kill-emacs)
+     ((kbd "s-s") . save-buffer)
+     ((kbd "s-f") . swiper)
+     ((kbd "s-v") . yank)
+     ((kbd "s-w") . delete-frame)
+     ((kbd "s-z") . undo)
+     ((kbd "s-0") . laat/text-scale-zero)
+     ((kbd "s-+") . text-scale-increase)
+     ((kbd "s--") . text-scale-decrease)))
 #+end_src
 
 * UI Configuration
@@ -1043,6 +1046,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 [[orgit:/Users/n637831/.emacs.d][emacs.d git status]]
 
 * Org
+** Base Config
 
 #+begin_src emacs-lisp
   (use-package org
@@ -1051,13 +1055,17 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     ((org-mode . visual-line-mode)
      (org-mode . org-indent-mode)
      (org-capture-mode . evil-insert-state))
-    :bind
-    (:map org-mode-map
-          ("C-c C-j" . counsel-org-goto)
-          ("s-f" . counsel-org-goto))
     :general
+    (:keymaps
+     'org-mode-map
+     "C-c C-j" 'counsel-org-goto
+     "s-f" 'counsel-org-goto
+     ;; C-j and C-k walks up the treee
+     [remap outline-forward-same-level] 'org-element-forward
+     [remap outline-backward-same-level] 'org-backward-element)
     (laat/leader-keys
-      "x" '(org-capture :which-key "capture"))
+      "x" '(org-capture :which-key "capture")
+      "a" '(org-agenda :which-key "agenda"))
     (laat/local-leader-keys
       :states 'normal
       :keymaps 'org-mode-map
@@ -1118,6 +1126,8 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 #+end_src
 
 ** org-protocol
+
+*** base config
 
 #+begin_src emacs-lisp
   (use-package org-protocol :ensure nil)
@@ -1474,6 +1484,7 @@ sequenceDiagram
 #+end_src
 
 * Terminals
+
 ** vterm
 
 #+begin_src emacs-lisp

@@ -1148,14 +1148,13 @@ Need it get flycheck to find local binaries.
     ((org-mode . visual-line-mode)
      (org-mode . org-indent-mode)
      (org-capture-mode . evil-insert-state))
-    :commands (org-mode)
     :general
-    (:keymaps
-     'org-mode-map
+    (general-define-key
+     :keymaps 'org-mode-map
      "C-c C-j" 'counsel-org-goto
      "s-f" 'counsel-org-goto
      ;; C-j and C-k walks up the treee
-     [remap outline-forward-same-level] 'org-element-forward
+     [remap outline-forward-same-level] 'org-forward-element
      [remap outline-backward-same-level] 'org-backward-element)
     (laat/leader-keys
       "x" '(org-capture :which-key "capture")
@@ -1167,6 +1166,9 @@ Need it get flycheck to find local binaries.
       "t" '(org-todo :which-key "task")
       "r" '(org-babel-remove-result :which-key "remove result")
       "cc" '(org-ctrl-c-ctrl-c :which-key "C-c C-c"))
+    :config
+    ;; https://emacs.stackexchange.com/questions/26923
+    (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
     :custom
     (org-image-actual-width nil "allows #+ATTR_ORG: :width 100")
     (org-cycle-separator-lines 0 "compact folding")
@@ -1198,10 +1200,7 @@ Need it get flycheck to find local binaries.
        ("p" "Protocol" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
         "* %?\nCaptured On: %U \n\n [[%:link][%:description]] \n\n#+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n")
        ("L" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
-        "* %?[[%:link][%:description]] \nCaptured On: %U")))
-    :config
-    ;; https://emacs.stackexchange.com/questions/26923
-    (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers))))
+        "* %?[[%:link][%:description]] \nCaptured On: %U"))))
 
   (use-package evil-org
     :ensure t

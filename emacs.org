@@ -293,7 +293,8 @@
        (agenda . 5)
        (recents  . 5)
        (projects . 5)
-       (registers . 5))))
+       ;; (registers . 5)
+       )))
 #+end_src
 
 *** quick! to important stuff
@@ -1060,6 +1061,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     (org-ellipsis "…" "a pretty ellipsis. Alternatives … ⤵ ▼, ↴, ⬎, ⤷, and ⋱.")
     (org-refile-targets '((nil :maxlevel . 9)
                           ("~/Dropbox/notes/notes.org" :maxlevel . 2)
+                          ("~/Dropbox/notes/orgzly/Inbox.org" :maxlevel . 2)
                           (org-agenda-files :maxlevel . 9)))
     (org-refile-use-outline-path nil)
     (org-directory "~/Dropbox/notes/")

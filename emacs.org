@@ -1046,6 +1046,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 [[orgit:/Users/n637831/.emacs.d][emacs.d git status]]
 
 * Org
+
 ** Base Config
 
 #+begin_src emacs-lisp
@@ -1458,15 +1459,14 @@ sequenceDiagram
     :after org
     :custom
     (org-pandoc-menu-entry
-     '(
-      (?m "to markdown_strict and open." org-pandoc-export-to-markdown_strict-and-open)
-      (?M "as markdown_strict." org-pandoc-export-as-markdown_strict)
-      (?g "to gfm and open." org-pandoc-export-to-gfm-and-open)
-      (?G "as gfm." org-pandoc-export-as-gfm)
-       )))
+     '((?m "to markdown_strict and open." org-pandoc-export-to-markdown_strict-and-open)
+       (?M "as markdown_strict." org-pandoc-export-as-markdown_strict)
+       (?g "to gfm and open." org-pandoc-export-to-gfm-and-open)
+       (?G "as gfm." org-pandoc-export-as-gfm))))
 #+end_src
 
 * PDF
+
 #+begin_src emacs-lisp
   (use-package pdf-tools
     :ensure t

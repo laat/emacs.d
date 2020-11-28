@@ -166,6 +166,12 @@ Performance mitigations for files with long lines.
   (global-so-long-mode 1)
 #+end_src
 
+Git branch in the mode-line is often wrong and making it always show current branch has performance issues. Disabling it, because wrong information is worse than incorrect information.
+
+#+begin_src emacs-lisp
+  (setq-default mode-line-format (delete '(vc-mode vc-mode) mode-line-format))
+#+end_src
+
 * GPG
 ** Add json to auth sources
 
@@ -401,9 +407,6 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     "da" 'laat/switch-to-agenda-file)
 #+end_src
 
-*** exclude stuff I do not want in recents
-
-
 ** Recent files
 
 Enable and save lots.
@@ -432,11 +435,11 @@ Exclude lots of stuff
 #+begin_src emacs-lisp
   (use-package doom-themes
     :ensure t
-    :init
-    (load-theme 'doom-one t))
+    :init (load-theme 'doom-one t))
 #+end_src
 
 ** Mode line
+
 
 #+begin_src emacs-lisp
   (use-package all-the-icons
@@ -453,12 +456,6 @@ Exclude lots of stuff
   (diminish 'visual-line-mode)
 #+end_src
 
-Git branch in the mode-line is often wrong and making it always show current branch has performance issues. Disabling it, because wrong information is worse than incorrect information.
-
-#+begin_src emacs-lisp
-  (setq-default
-   mode-line-format (delete '(vc-mode vc-mode) mode-line-format))
-#+end_src
 
 ** Treemacs
 

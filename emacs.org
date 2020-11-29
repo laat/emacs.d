@@ -238,7 +238,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
       :ensure t
       :init
       (setq
-       ;; bash has the correct path too (on my system) and is faster
+       ;; bash has the correct path (on my system) and is faster
        exec-path-from-shell-shell-name "bash"
        ;; removed -i because -l has correct path on my system
        exec-path-from-shell-arguments '("-l"))
@@ -433,7 +433,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
        )))
 #+end_src
 
-*** quick! to important stuff
+** Quick! to important stuff
 
 #+begin_src emacs-lisp
   (defun laat/switch-to-dashboard ()
@@ -623,7 +623,8 @@ Exclude lots of stuff
 
 #+begin_src emacs-lisp
   (use-package reveal-in-osx-finder
-    :ensure t)
+    :ensure t
+    :commands (reveal-in-osx-finder))
 #+end_src
 
 ** Bookmarks

@@ -70,3 +70,4 @@ flycheck_*.el
 /.lsp-session-v1
 /history
 /early-init.el
+/url/

@@ -1807,5 +1807,5 @@ sequenceDiagram
 #+end_src
 
 * Ideas
-- here
+- https://github.com/lepisma/rogue
 

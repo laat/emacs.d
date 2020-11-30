@@ -271,7 +271,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     (general-create-definer laat/leader-keys
       :keymaps '(normal insert visual emacs)
       :prefix "SPC"
-      :non-normal-prefix "C-c SPC")
+      :global-prefix "M-SPC")
     (general-create-definer laat/local-leader-keys
       :keymaps '(normal insert visual emacs)
       :prefix ","
@@ -279,6 +279,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     (laat/leader-keys
       "t" '(:ignore t :which-key "toggles")
       "y" '(:ignore t :which-key "helpers")
+      "f" '(:ignore t :which-key "quick access")
       "SPC" 'execute-extended-command))
 #+end_src
 
@@ -433,12 +434,18 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
        )))
 #+end_src
 
-** Quick! to important stuff
+** Quickly to important stuff
 
 #+begin_src emacs-lisp
   (defun laat/switch-to-dashboard ()
     (interactive)
     (switch-to-buffer "*dashboard*"))
+  (defun laat/switch-to-scratch ()
+    (interactive)
+    (switch-to-buffer "*scratch*"))
+  (defun laat/switch-to-messages ()
+    (interactive)
+    (switch-to-buffer "*Messages*"))
   (defun laat/switch-to-mobile-notes ()
     (interactive)
     (find-file "~/Dropbox/notes/orgzly/notes.org"))
@@ -452,11 +459,13 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     (interactive)
     (find-file "~/.emacs.d/emacs.org"))
   (laat/leader-keys
-    "dd" 'laat/switch-to-dashboard
-    "dn" 'laat/switch-to-notes
-    "dm" 'laat/switch-to-mobile-notes
-    "de" 'laat/switch-to-config
-    "da" 'laat/switch-to-agenda-file)
+    "fd" '(laat/switch-to-dashboard :which-key "dashboard")
+    "fs" '(laat/switch-to-scratch :which-key "scratch")
+    "fn" '(laat/switch-to-notes :which-key "notes")
+    "fb" '(laat/switch-to-mobile-notes :which-key "mobile notes")
+    "fm" '(laat/switch-to-messages :which-key "mobile notes")
+    "fe" '(laat/switch-to-config :which-key "emacs config")
+    "fa" '(laat/switch-to-agenda-file :which-key "agenda file"))
 #+end_src
 
 ** Recent files
@@ -1532,6 +1541,7 @@ On OSX use before calling =org-download-clipboard=
   (require 'org-tempo)
 
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+  (add-to-list 'org-structure-template-alist '("fs" . "src fsharp"))
   (add-to-list 'org-structure-template-alist '("me" . "src mermaid"))
   (add-to-list 'org-structure-template-alist '("http" . "src http"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
@@ -1721,21 +1731,26 @@ sequenceDiagram
       "sp" '(spotify-previous :which-key "previous")
       "sq" '(spotify-quit :which-key "quit")))
 #+end_src
+
 ** elfeed
 
 #+begin_src emacs-lisp
   (use-package elfeed
     :ensure   t
     :commands elfeed
+    :general
+    (laat/leader-keys
+      "fr" 'elfeed)
     :custom
     (elfeed-feeds
-     '("http://planet.emacsen.org/atom.xml"     ;; Emacs RSS
+     '("https://planet.emacslife.com/atom.xml"
+       "http://planet.emacsen.org/atom.xml"
        "http://sachachua.com/blog/category/emacs-news/feed"
-       "http://endlessparentheses.com/atom.xml" ;; Emacs Blog
-       "http://www.masteringemacs.org/feed/"    ;; Emacs Blog
+       "http://endlessparentheses.com/atom.xml"
+       "http://www.masteringemacs.org/feed/"
        "http://emacs-fu.blogspot.com/feeds/posts/default"
-       "http://emacsredux.com/atom.xml"         ;; Emacs Blog
-       "http://www.lunaryorn.com/feed.atom"     ;; Emacs Blog
+       "http://emacsredux.com/atom.xml"
+       "http://www.lunaryorn.com/feed.atom"
        )))
 #+end_src
 

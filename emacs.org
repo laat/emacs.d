@@ -97,7 +97,7 @@ Default frame size
     (setq quelpa-use-package-inhibit-loading-quelpa t))
 #+end_src
 
-* GC
+* Garbage Collection
 
 #+begin_src emacs-lisp
   (use-package gcmh
@@ -216,19 +216,6 @@ Break long lines at word boundaries.
   (visual-line-mode 1)
 #+end_src
 
-* GPG
-** Add json to auth sources
-
-#+begin_src emacs-lisp
-(dolist (file '("~/.authinfo.json" "~/.authinfo.json.gpg"))
-  ((lambda ()
-     (when (file-exists-p file) (add-to-list 'auth-sources file)))))
-#+end_src
-
-** OS X
-
-Need GPG. [[https://gpgtools.org/][OSX toolkit]]
-
 * Basic Config OS X
 ** PATH
 
@@ -258,6 +245,19 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
       :config
       (setq delete-by-moving-to-trash t)))
 #+end_src
+
+* GPG
+** Add json to auth sources
+
+#+begin_src emacs-lisp
+(dolist (file '("~/.authinfo.json" "~/.authinfo.json.gpg"))
+  ((lambda ()
+     (when (file-exists-p file) (add-to-list 'auth-sources file)))))
+#+end_src
+
+** OS X
+
+Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 
 * Key Binds
 ** General
@@ -482,6 +482,72 @@ Exclude lots of stuff
   (add-to-list 'recentf-exclude "/Applications/Emacs\\.app")
 #+end_src
 
+** Winner
+
+#+begin_src emacs-lisp
+    (defun laat/hydra-move-splitter-left (arg)
+      "Move window splitter left."
+      (interactive "p")
+      (if (let ((windmove-wrap-around))
+            (windmove-find-other-window 'right))
+          (shrink-window-horizontally arg)
+        (enlarge-window-horizontally arg)))
+
+    (defun laat/hydra-move-splitter-right (arg)
+      "Move window splitter right."
+      (interactive "p")
+      (if (let ((windmove-wrap-around))
+            (windmove-find-other-window 'right))
+          (enlarge-window-horizontally arg)
+        (shrink-window-horizontally arg)))
+
+    (defun laat/hydra-move-splitter-up (arg)
+      "Move window splitter up."
+      (interactive "p")
+      (if (let ((windmove-wrap-around))
+            (windmove-find-other-window 'up))
+          (enlarge-window arg)
+        (shrink-window arg)))
+
+    (defun laat/hydra-move-splitter-down (arg)
+      "Move window splitter down."
+      (interactive "p")
+      (if (let ((windmove-wrap-around))
+            (windmove-find-other-window 'up))
+          (shrink-window arg)
+        (enlarge-window arg)))
+
+  (use-package winner
+    :ensure t
+    :commands (winner-undo winner-redo)
+    :config (winner-mode 1)
+    :hydra
+    (laat/window-hydra
+     (:color red)
+     "window"
+     ("h" laat/hydra-move-splitter-left)
+     ("j" laat/hydra-move-splitter-down)
+     ("k" laat/hydra-move-splitter-up)
+     ("l" laat/hydra-move-splitter-right)
+     ("o" delete-other-windows "delete others" :exit t)
+     ("d" delete-window "delete this" :exit t)
+     ("=" balance-windows "balance" :exit t)
+     ("v" (lambda ()
+            (interactive)
+            (split-window-below)
+            (windmove-down))
+      "split below" :exit t)
+     ("s" (lambda ()
+            (interactive)
+            (split-window-right)
+            (windmove-right)) "split right" :exit t )
+     ("u" winner-undo "undo")
+     ("r" winner-redo "redo"))
+    :general
+    (laat/leader-keys
+      "w" 'laat/window-hydra/body))
+#+end_src
+
 ** Color Theme
 
 #+begin_src emacs-lisp
@@ -619,7 +685,7 @@ Exclude lots of stuff
     (drag-stuff-global-mode 1))
 #+end_src
 
-** Reveal in X
+** Reveal in Finder
 
 #+begin_src emacs-lisp
   (use-package reveal-in-osx-finder
@@ -1061,8 +1127,6 @@ Set this to the folder where you keep your Git repos!
 
 *** JSON
 
-  (use-package json-snatcher
-    :ensure t)
 #+begin_src emacs-lisp
     (use-package json-mode
       :mode "\\.json\\'"
@@ -1087,7 +1151,8 @@ or
 
 #+begin_src emacs-lisp
   (use-package yaml-mode
-    :ensure t)
+    :ensure t
+    :mode ("\\.yaml\\'" "\\.yml\\'"))
 #+end_src
 
 **** LSP
@@ -1133,8 +1198,17 @@ or
 
 =M-x npm=
 
-*** TypeScript
+**** node_modeules binaries
 
+Need it get flycheck to find local binaries.
+
+#+begin_src emacs-lisp
+  (use-package add-node-modules-path
+    :ensure t
+    :hook (web-mode js-mode typescript-mode))
+#+end_src
+
+*** TypeScript
 **** basic
 
 #+begin_src emacs-lisp
@@ -1148,6 +1222,17 @@ or
 #+begin_src shell :async :tangle no
   npm i -g typescript-language-server
   npm i -g typescript
+#+end_src
+
+*** SSH
+
+#+begin_src emacs-lisp
+(use-package ssh-config-mode
+  :ensure t
+  :mode (("/\\.ssh/config\\'"     . ssh-config-mode)
+         ("/sshd?_config\\'"      . ssh-config-mode)
+         ("/known_hosts\\'"       . ssh-known-hosts-mode)
+         ("/authorized_keys2?\\'" . ssh-authorized-keys-mode)))
 #+end_src
 
 *** SQL
@@ -1171,16 +1256,6 @@ or
     :ensure t
     :diminish sqlup-mode
     :hook (sql-mode . sqlup-mode))
-#+end_src
-
-*** node_modeules binaries
-
-Need it get flycheck to find local binaries.
-
-#+begin_src emacs-lisp
-  (use-package add-node-modules-path
-    :ensure t
-    :hook (web-mode js-mode typescript-mode))
 #+end_src
 
 ** Magit
@@ -1464,6 +1539,8 @@ On OSX use before calling =org-download-clipboard=
   (add-to-list 'org-structure-template-alist '("sql" . "src sql"))
   (add-to-list 'org-structure-template-alist '("js" . "src js"))
   (add-to-list 'org-structure-template-alist '("json" . "src json"))
+  (add-to-list 'org-structure-template-alist '("md" . "src markdown"))
+  (add-to-list 'org-structure-template-alist '("typescript" . "src typescript"))
 #+end_src
 
 ** Babel
@@ -1628,6 +1705,7 @@ sequenceDiagram
 
 * Apps
 ** Spotify
+
 #+begin_src emacs-lisp
   (use-package spotify
     :ensure t
@@ -1643,6 +1721,7 @@ sequenceDiagram
       "sp" '(spotify-previous :which-key "previous")
       "sq" '(spotify-quit :which-key "quit")))
 #+end_src
+
 ** Pandoc
 
 [[elisp:(find-variable 'org-pandoc-menu-entry)][org-pandoc-menu-entry]] has lots of possibilities.
@@ -1659,7 +1738,7 @@ sequenceDiagram
   (use-package ox-pandoc
     :ensure t
     :defer 2
-    :after org
+    :after ox
     :custom
     (org-pandoc-menu-entry
      '((?m "to markdown_strict and open." org-pandoc-export-to-markdown_strict-and-open)
@@ -1688,7 +1767,6 @@ sequenceDiagram
 #+end_src
 
 * Terminals
-
 ** vterm
 
 #+begin_src emacs-lisp

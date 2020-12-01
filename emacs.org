@@ -455,6 +455,9 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
   (defun laat/switch-to-agenda-file ()
     (interactive)
     (find-file "~/Dropbox/notes/agenda.org"))
+  (defun laat/switch-to-journal ()
+    (interactive)
+    (find-file "~/Dropbox/notes/34.org"))
   (defun laat/switch-to-config ()
     (interactive)
     (find-file "~/.emacs.d/emacs.org"))
@@ -465,6 +468,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     "fb" '(laat/switch-to-mobile-notes :which-key "mobile notes")
     "fm" '(laat/switch-to-messages :which-key "mobile notes")
     "fe" '(laat/switch-to-config :which-key "emacs config")
+    "fj" '(laat/switch-to-journal :which-key "journal")
     "fa" '(laat/switch-to-agenda-file :which-key "agenda file"))
 #+end_src
 
@@ -1360,13 +1364,15 @@ Need it get flycheck to find local binaries.
     (org-todo-keywords '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
     (org-confirm-babel-evaluate nil "C-c C-c on code blocks do not ask")
     (org-capture-templates
-     `(("j" "Journal" entry (file+olp+datetree ,(concat org-directory "notes.org"))
+     `(("j" "Journal" entry (file+olp+datetree ,(concat org-directory "34.org"))
         "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n")
        ("s" "Simple" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
         "\n** %?\n\n\n\n")
-       ("t" "TODO" entry (file+headline ,(concat org-directory "agenda.org") "Tasks")
+       ("w" "TODO Work" entry (file+headline ,(concat org-directory "agenda.org") "Work Tasks")
         "\n** TODO %?\n\n\n\n")
-       ("m" "Mobile TODO" entry (file+headline ,(concat org-directory "orgzly/agenda.org") "Tasks")
+       ("l" "TODO Life" entry (file+headline ,(concat org-directory "agenda.org") "Life Tasks")
+        "\n** TODO %?\n\n\n\n")
+       ("m" "Mobile TODO" entry (file+headline ,(concat org-directory "orgzly/agenda.org") "Agenda på telefonen")
         "\n** TODO %?\n\n\n\n")
        ;; https://salvatore.denaro.nyc/2020/08/capturing-text-from-any-mac-application.html
        ("g" "Protocol Grab" entry (file+headline ,(concat org-directory "notes.org") "Inbox" )

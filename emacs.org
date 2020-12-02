@@ -296,6 +296,8 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     (setq evil-collection-want-unimpaired-p nil)
     :config
     (evil-mode 1)
+    ;; C-w d deletes window
+    (define-key evil-window-map "d" 'delete-window)
 
     ;; visual lines
     (define-key evil-normal-state-map
@@ -318,7 +320,6 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
       (interactive)
       (save-buffer)
       (kill-this-buffer))
-
     (evil-ex-define-cmd "q[uit]" 'laat/ex-kill-buffer-and-close)
     (evil-ex-define-cmd "wq" 'laat/ex-save-kill-buffer-and-close))
 
@@ -462,6 +463,8 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     (interactive)
     (find-file "~/.emacs.d/emacs.org"))
   (laat/leader-keys
+    "ff" 'find-file
+    "fp" 'projectile-find-file
     "fd" '(laat/switch-to-dashboard :which-key "dashboard")
     "fs" '(laat/switch-to-scratch :which-key "scratch")
     "fn" '(laat/switch-to-notes :which-key "notes")
@@ -1240,12 +1243,12 @@ Need it get flycheck to find local binaries.
 *** SSH
 
 #+begin_src emacs-lisp
-(use-package ssh-config-mode
-  :ensure t
-  :mode (("/\\.ssh/config\\'"     . ssh-config-mode)
-         ("/sshd?_config\\'"      . ssh-config-mode)
-         ("/known_hosts\\'"       . ssh-known-hosts-mode)
-         ("/authorized_keys2?\\'" . ssh-authorized-keys-mode)))
+  (use-package ssh-config-mode
+    :ensure t
+    :mode (("/\\.ssh/config\\'"     . ssh-config-mode)
+           ("/sshd?_config\\'"      . ssh-config-mode)
+           ("/known_hosts\\'"       . ssh-known-hosts-mode)
+           ("/authorized_keys2?\\'" . ssh-authorized-keys-mode)))
 #+end_src
 
 *** SQL
@@ -1260,15 +1263,15 @@ Need it get flycheck to find local binaries.
      '("mysql" [mysql/mysql-connector-java "8.0.22"]
        "oracle" [com.oracle.jdbc/ojdbc8 "19.8.0.0"])))
 
-  (use-package sql-indent
-    :ensure t
-    :diminish sqlind-minor-mode
-    :hook (sql-mode . sqlind-minor-mode))
+(use-package sql-indent
+  :ensure t
+  :diminish sqlind-minor-mode
+  :hook (sql-mode . sqlind-minor-mode))
 
-  (use-package sqlup-mode
-    :ensure t
-    :diminish sqlup-mode
-    :hook (sql-mode . sqlup-mode))
+(use-package sqlup-mode
+  :ensure t
+  :diminish sqlup-mode
+  :hook (sql-mode . sqlup-mode))
 #+end_src
 
 ** Magit
@@ -1325,7 +1328,7 @@ Need it get flycheck to find local binaries.
     :ensure org-plus-contrib
     :hook
     ((org-mode . visual-line-mode)
-     (org-mode . org-indent-mode)
+   (org-mode . org-indent-mode)
      (org-capture-mode . evil-insert-state))
     :general
     (general-define-key
@@ -1383,22 +1386,22 @@ Need it get flycheck to find local binaries.
        ("L" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
         "* %?[[%:link][%:description]] \nCaptured On: %U"))))
 
-  (use-package evil-org
-    :ensure t
-    :diminish
-    :after org
-    :hook
-    ((org-mode . evil-org-mode)
-     (evil-org-mode . (lambda ()
-                        (evil-org-set-key-theme))))
-    :config
-    (require 'evil-org-agenda)
-    (evil-org-agenda-set-keys))
+(use-package evil-org
+  :ensure t
+  :diminish
+  :after org
+  :hook
+  ((org-mode . evil-org-mode)
+   (evil-org-mode . (lambda ()
+                      (evil-org-set-key-theme))))
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
 
-  (use-package org-indent
-    :diminish
-    :after org
-    :commands (org-intent-mode))
+(use-package org-indent
+  :diminish
+  :after org
+  :commands (org-intent-mode))
 #+end_src
 
 ** org-protocol
@@ -1418,9 +1421,9 @@ Need it get flycheck to find local binaries.
 Automator.app (builtin) and ⌘-s is your friend. Remember =pass input=
 
 #+begin_src sh
-data="$@"
-encoded=$(python -c "import sys, urllib; print urllib.quote(' '.join(sys.argv[1:]), safe='')" "${data[@]}")
-open "org-protocol://capture?template=g&body=$encoded"
+  data="$@"
+  encoded=$(python -c "import sys, urllib; print urllib.quote(' '.join(sys.argv[1:]), safe='')" "${data[@]}")
+  open "org-protocol://capture?template=g&body=$encoded"
 #+end_src
 
 #+DOWNLOADED: screenshot @ 2020-11-27 18:29:46
@@ -1454,10 +1457,11 @@ Magit bash script
 
   arg1="${1:-$(pwd)}"
 
-  encoded="$(node -e "
-  const path = require('path');
-  const location = path.resolve(process.argv[1]);
-  console.log(encodeURIComponent(location))" $arg1)"
+  encoded=$(python -c "
+  import sys
+  import os
+  import urllib
+  print urllib.quote(os.path.abspath(sys.argv[1]), safe='')" "${arg1}")
 
   open "org-protocol://magit?repo=${encoded}"
 #+end_src
@@ -1814,5 +1818,6 @@ sequenceDiagram
 #+end_src
 
 * Ideas
-- https://github.com/lepisma/rogue
+** here
+** https://github.com/lepisma/rogue
 

@@ -1547,6 +1547,7 @@ On OSX use before calling =org-download-clipboard=
   (require 'org-tempo)
 
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+  (add-to-list 'org-structure-template-alist '("org" . "src org"))
   (add-to-list 'org-structure-template-alist '("fs" . "src fsharp"))
   (add-to-list 'org-structure-template-alist '("me" . "src mermaid"))
   (add-to-list 'org-structure-template-alist '("http" . "src http"))

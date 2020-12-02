@@ -587,7 +587,7 @@ Exclude lots of stuff
      (doom-modeline-minor-modes t)))
 
 
-  (diminish 'visual-line-mode)
+  ;; (diminish 'visual-line-mode)
 #+end_src
 
 ** Treemacs

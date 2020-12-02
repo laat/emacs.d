@@ -501,37 +501,37 @@ Exclude lots of stuff
 ** Winner
 
 #+begin_src emacs-lisp
-    (defun laat/hydra-move-splitter-left (arg)
-      "Move window splitter left."
-      (interactive "p")
-      (if (let ((windmove-wrap-around))
-            (windmove-find-other-window 'right))
-          (shrink-window-horizontally arg)
-        (enlarge-window-horizontally arg)))
+  (defun laat/hydra-move-splitter-left (arg)
+    "Move window splitter left."
+    (interactive "p")
+    (if (let ((windmove-wrap-around))
+          (windmove-find-other-window 'right))
+        (shrink-window-horizontally arg)
+      (enlarge-window-horizontally arg)))
 
-    (defun laat/hydra-move-splitter-right (arg)
-      "Move window splitter right."
-      (interactive "p")
-      (if (let ((windmove-wrap-around))
-            (windmove-find-other-window 'right))
-          (enlarge-window-horizontally arg)
-        (shrink-window-horizontally arg)))
+  (defun laat/hydra-move-splitter-right (arg)
+    "Move window splitter right."
+    (interactive "p")
+    (if (let ((windmove-wrap-around))
+          (windmove-find-other-window 'right))
+        (enlarge-window-horizontally arg)
+      (shrink-window-horizontally arg)))
 
-    (defun laat/hydra-move-splitter-up (arg)
-      "Move window splitter up."
-      (interactive "p")
-      (if (let ((windmove-wrap-around))
-            (windmove-find-other-window 'up))
-          (enlarge-window arg)
-        (shrink-window arg)))
+  (defun laat/hydra-move-splitter-up (arg)
+    "Move window splitter up."
+    (interactive "p")
+    (if (let ((windmove-wrap-around))
+          (windmove-find-other-window 'up))
+        (enlarge-window arg)
+      (shrink-window arg)))
 
-    (defun laat/hydra-move-splitter-down (arg)
-      "Move window splitter down."
-      (interactive "p")
-      (if (let ((windmove-wrap-around))
-            (windmove-find-other-window 'up))
-          (shrink-window arg)
-        (enlarge-window arg)))
+  (defun laat/hydra-move-splitter-down (arg)
+    "Move window splitter down."
+    (interactive "p")
+    (if (let ((windmove-wrap-around))
+          (windmove-find-other-window 'up))
+        (shrink-window arg)
+      (enlarge-window arg)))
 
   (use-package winner
     :ensure t
@@ -1263,15 +1263,15 @@ Need it get flycheck to find local binaries.
      '("mysql" [mysql/mysql-connector-java "8.0.22"]
        "oracle" [com.oracle.jdbc/ojdbc8 "19.8.0.0"])))
 
-(use-package sql-indent
-  :ensure t
-  :diminish sqlind-minor-mode
-  :hook (sql-mode . sqlind-minor-mode))
+  (use-package sql-indent
+    :ensure t
+    :diminish sqlind-minor-mode
+    :hook (sql-mode . sqlind-minor-mode))
 
-(use-package sqlup-mode
-  :ensure t
-  :diminish sqlup-mode
-  :hook (sql-mode . sqlup-mode))
+  (use-package sqlup-mode
+    :ensure t
+    :diminish sqlup-mode
+    :hook (sql-mode . sqlup-mode))
 #+end_src
 
 ** Magit
@@ -1315,7 +1315,7 @@ Need it get flycheck to find local binaries.
 #+begin_src emacs-lisp
   (defun laat/insert-kbd (key)
     "Ask for a key then insert its description. Will work on both
-  org-mode and any mode that accepts plain html."
+    org-mode and any mode that accepts plain html."
     (let* ((orgp (derived-mode-p 'org-mode))
            (tag (if orgp "~%s~" "<kbd>%s</kbd>")))
       (if (null (equal key "\C-m"))
@@ -1328,7 +1328,7 @@ Need it get flycheck to find local binaries.
     :ensure org-plus-contrib
     :hook
     ((org-mode . visual-line-mode)
-   (org-mode . org-indent-mode)
+     (org-mode . org-indent-mode)
      (org-capture-mode . evil-insert-state))
     :general
     (general-define-key
@@ -1386,22 +1386,22 @@ Need it get flycheck to find local binaries.
        ("L" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
         "* %?[[%:link][%:description]] \nCaptured On: %U"))))
 
-(use-package evil-org
-  :ensure t
-  :diminish
-  :after org
-  :hook
-  ((org-mode . evil-org-mode)
-   (evil-org-mode . (lambda ()
-                      (evil-org-set-key-theme))))
-  :config
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
+  (use-package evil-org
+    :ensure t
+    :diminish
+    :after org
+    :hook
+    ((org-mode . evil-org-mode)
+     (evil-org-mode . (lambda ()
+                        (evil-org-set-key-theme))))
+    :config
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys))
 
-(use-package org-indent
-  :diminish
-  :after org
-  :commands (org-intent-mode))
+  (use-package org-indent
+    :diminish
+    :after org
+    :commands (org-intent-mode))
 #+end_src
 
 ** org-protocol

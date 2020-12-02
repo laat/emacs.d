@@ -1415,7 +1415,7 @@ Need it get flycheck to find local binaries.
 
 *** Text from all OS X Apps
 
-Automator.app (builtin) and ⌘-s is your friend. Remember =pass imputt=
+Automator.app (builtin) and ⌘-s is your friend. Remember =pass input=
 
 #+begin_src sh
 data="$@"

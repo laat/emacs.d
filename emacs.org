@@ -280,7 +280,15 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
       "t" '(:ignore t :which-key "toggles")
       "y" '(:ignore t :which-key "helpers")
       "f" '(:ignore t :which-key "quick access")
-      "SPC" 'execute-extended-command))
+      "SPC" 'execute-extended-command)
+    (laat/leader-keys
+      "r" '(:ignore t :which-key "bookmarks")
+      "rf" '(counsel-recentf :which-key "recent files")
+      "fr" '(counsel-recentf :which-key "recent files")
+      "rm" '(bookmark-set :which-key "set bookmark")
+      "rg" '(bookmark-jump :which-key "jump to bookmark")
+      "rl" '(list-bookmarks :which-key "list bookmarks")
+      "rd" '(bookmark-delete :which-key "delete bookmark")))
 #+end_src
 
 ** Evil
@@ -714,12 +722,6 @@ Exclude lots of stuff
 #+begin_src emacs-lisp
   (setq bookmark-save-flag 1) ;; save bookmarks on edit
 
-  (laat/leader-keys
-    "r" '(:ignore t :which-key "bookmarks")
-    "rm" '(bookmark-set :which-key "set bookmark")
-    "rg" '(bookmark-jump :which-key "jump to bookmark")
-    "rl" '(list-bookmarks :which-key "list bookmarks")
-    "rd" '(bookmark-delete :which-key "delete bookmark"))
 #+end_src
 
 ** Calendar
@@ -1758,7 +1760,7 @@ sequenceDiagram
     :commands elfeed
     :general
     (laat/leader-keys
-      "fr" 'elfeed)
+      "fl" 'elfeed)
     :custom
     (elfeed-feeds
      '("https://planet.emacslife.com/atom.xml"

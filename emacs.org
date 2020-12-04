@@ -1123,7 +1123,9 @@ Set this to the folder where you keep your Git repos!
 #+begin_src emacs-lisp
   (use-package fsharp-mode
     :defer t
-    :ensure t)
+    :ensure t
+    :custom
+    (inferior-fsharp-program "dotnet fsi --readline-"))
 #+end_src
 
 **** LSP
@@ -1188,6 +1190,11 @@ or
 #+end_src
 
 *** JavaScript
+
+**** paranthesis
+#+begin_src emacs-lisp
+  (add-hook 'js-mode-hook 'electric-pair-local-mode)
+#+end_src
 **** jest
 
 #+begin_src emacs-lisp

@@ -1829,4 +1829,7 @@ sequenceDiagram
 * Ideas
 ** here
 ** https://github.com/lepisma/rogue
-
+** https://github.com/deb0ch/emacs-winum
+** smex
+** undo-fu
+** https://github.com/purcell/elisp-slime-nav

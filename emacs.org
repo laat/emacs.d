@@ -304,6 +304,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     (setq evil-collection-want-unimpaired-p nil)
     :config
     (evil-mode 1)
+    (evil-set-undo-system 'undo-fu)
     ;; C-w d deletes window
     (define-key evil-window-map "d" 'delete-window)
 
@@ -348,6 +349,9 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     :config
     (define-key evil-normal-state-map (kbd "+") 'er/expand-region)
     (define-key evil-normal-state-map (kbd "-") 'er/contract-region))
+
+  (use-package undo-fu
+    :ensure t)
 #+end_src
 
 ** Hydra
@@ -694,6 +698,16 @@ Exclude lots of stuff
     ;; remove the ^ in M-x search
     (setcdr (assoc 'counsel-M-x ivy-initial-inputs-alist) "")
     (setcdr (assoc 'org-refile ivy-initial-inputs-alist) ""))
+
+#+end_src
+
+** smex
+
+=M-x= with recent first
+
+#+begin_src emacs-lisp
+  (use-package smex
+    :ensure t)
 #+end_src
 
 ** Drag Stuff
@@ -1827,9 +1841,7 @@ sequenceDiagram
 #+end_src
 
 * Ideas
-** here
 ** https://github.com/lepisma/rogue
 ** https://github.com/deb0ch/emacs-winum
-** smex
-** undo-fu
 ** https://github.com/purcell/elisp-slime-nav
+

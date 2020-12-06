@@ -1823,6 +1823,16 @@ sequenceDiagram
     (pdf-tools-install :no-query))
 #+end_src
 
+** Epub reader
+
+#+begin_src emacs-lisp
+  (use-package nov
+    :ensure t
+    :mode ("\\.epub\\'" . nov-mode)
+    :custom
+    (nov-text-width 80))
+#+end_src
+
 * File Management
 
 #+begin_src emacs-lisp

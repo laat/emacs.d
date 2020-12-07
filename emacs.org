@@ -332,9 +332,15 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     (evil-ex-define-cmd "q[uit]" 'laat/ex-kill-buffer-and-close)
     (evil-ex-define-cmd "wq" 'laat/ex-save-kill-buffer-and-close))
 
-  (use-package evil-collection
-    :after evil
+  (use-package evil-matchit
     :ensure t
+    :after evil
+    :config
+    (global-evil-matchit-mode 1))
+
+  (use-package evil-collection
+    :ensure t
+    :after evil
     :config
     (evil-collection-init))
 

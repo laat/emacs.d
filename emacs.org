@@ -338,10 +338,24 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     :config
     (evil-collection-init))
 
+  (use-package evil-visualstar
+    :ensure t
+    :after evil
+    :config
+    (global-evil-visualstar-mode t)
+    (setq evil-visualstar/persistent t))
+
   (use-package evil-surround
     :ensure t
     :after evil
     :config (global-evil-surround-mode 1))
+
+  (use-package evil-numbers
+    :ensure t
+    :after evil
+    :config
+    (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
+    (define-key evil-normal-state-map (kbd "C-S-a") 'evil-numbers/dec-at-pt))
 
   (use-package expand-region
     :ensure t
@@ -1833,6 +1847,14 @@ sequenceDiagram
     (nov-text-width 80))
 #+end_src
 
+** Hackernews
+
+#+begin_src emacs-lisp
+    (use-package hackernews
+      :ensure t
+      :commands hackernews)
+#+end_src
+
 * File Management
 
 #+begin_src emacs-lisp
@@ -1854,4 +1876,5 @@ sequenceDiagram
 ** https://github.com/lepisma/rogue
 ** https://github.com/deb0ch/emacs-winum
 ** https://github.com/purcell/elisp-slime-nav
+** https://melpa.org/#/ytdl
 

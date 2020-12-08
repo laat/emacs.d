@@ -360,7 +360,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     :ensure t
     :after evil
     :config
-    (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
+    (define-key evil-normal-state-map (kbd "C-a") 'ev  il-numbers/inc-at-pt)
     (define-key evil-normal-state-map (kbd "C-S-a") 'evil-numbers/dec-at-pt))
 
   (use-package expand-region
@@ -369,6 +369,11 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     :config
     (define-key evil-normal-state-map (kbd "+") 'er/expand-region)
     (define-key evil-normal-state-map (kbd "-") 'er/contract-region))
+
+  (use-package evil-lion
+    :ensure t
+    :config
+    (evil-lion-mode))
 
   (use-package undo-fu
     :ensure t)
@@ -436,7 +441,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
      ((kbd "s-q") . save-buffers-kill-emacs)
      ((kbd "s-s") . save-buffer)
      ((kbd "s-f") . swiper)
-     ((kbd "s-v") . yank)
+     ((kbd "s-v") . evil-paste-after)
      ((kbd "s-w") . delete-frame)
      ((kbd "s-z") . undo)
      ((kbd "s-0") . laat/text-scale-zero)

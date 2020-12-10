@@ -302,6 +302,10 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     (setq evil-want-integration t)
     (setq evil-want-keybinding nil)
     (setq evil-collection-want-unimpaired-p nil)
+    :general
+    (general-define-key
+     :keymaps '(insert)
+     "<s-backspace>" 'evil-delete-backward-word)
     :config
     (evil-mode 1)
     (evil-set-undo-system 'undo-fu)
@@ -317,6 +321,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
       (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
     (define-key evil-motion-state-map
       (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+
     (setq-default evil-cross-lines t)
 
     ;; :q kills buffer instead of killing emacs
@@ -1607,6 +1612,7 @@ On OSX use before calling =org-download-clipboard=
 #+begin_src emacs-lisp
   (require 'org-tempo)
 
+  (add-to-list 'org-structure-template-alist '("'" . "quote"))
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
   (add-to-list 'org-structure-template-alist '("org" . "src org"))
   (add-to-list 'org-structure-template-alist '("fs" . "src fsharp"))
@@ -1755,7 +1761,25 @@ sequenceDiagram
     (org-yt
      :fetcher github
      :repo "TobiasZawada/org-yt"
-     :commit "40cc1ac76d741055cbefa13860d9f070a7ade001"))
+     :commit "40cc1ac76d741055cbefa13860d9f070a7ade001")
+    :config
+    ;; https://endlessparentheses.com/embedding-youtube-videos-with-org-mode-links.html
+    (setq
+     yt-iframe-format
+     ;; You may want to change your width and height.
+     (concat "<iframe width=\"440\""
+             " height=\"335\""
+             " src=\"https://www.youtube.com/embed/%s\""
+             " frameborder=\"0\""
+             " allowfullscreen>%s</iframe>"))
+    (org-add-link-type
+     "yt"
+     (lambda (handle)
+       (browse-url (concat "https://www.youtube.com/embed/" handle)))
+     (lambda (path desc backend)
+       (cl-case backend
+         (html (format yt-iframe-format path (or desc "")))
+         (latex (format "\href{%s}{%s}" path (or desc "video")))))))
 #+end_src
 
 ** Auto-Tangle init.el
@@ -1782,6 +1806,7 @@ sequenceDiagram
 [[orgit:/Users/n637831/.emacs.d][emacs.d git status]]
 
 ** PDF
+
 #+begin_src emacs-lisp
   (use-package org-noter
     :ensure t)
@@ -1797,6 +1822,7 @@ sequenceDiagram
     (with-eval-after-load 'pdf-annot
       (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
 #+end_src
+
 * Apps
 ** Spotify
 

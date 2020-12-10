@@ -360,7 +360,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     :ensure t
     :after evil
     :config
-    (define-key evil-normal-state-map (kbd "C-a") 'ev  il-numbers/inc-at-pt)
+    (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
     (define-key evil-normal-state-map (kbd "C-S-a") 'evil-numbers/dec-at-pt))
 
   (use-package expand-region
@@ -1149,6 +1149,15 @@ Set this to the folder where you keep your Git repos!
 #+end_src
 
 ** Languages
+
+*** Dockerfile
+
+#+begin_src emacs-lisp
+(use-package dockerfile-mode
+  :mode "Dockerfile\\'"
+  :ensure t)
+#+end_src
+
 *** C#
 
 #+begin_src emacs-lisp
@@ -1671,7 +1680,7 @@ this does not block with the =:async= header
     :after org)
 
   ;; Always redisplay images after C-c C-c (org-ctrl-c-ctrl-c)
-  (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
+  ;; (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
 #+end_src
 
 *** mermaid diagrams
@@ -1772,6 +1781,22 @@ sequenceDiagram
 
 [[orgit:/Users/n637831/.emacs.d][emacs.d git status]]
 
+** PDF
+#+begin_src emacs-lisp
+  (use-package org-noter
+    :ensure t)
+
+  (use-package org-pdftools
+    :ensure t
+    :hook (org-mode . org-pdftools-setup-link))
+
+  (use-package org-noter-pdftools
+    :ensure t
+    :after org-noter
+    :config
+    (with-eval-after-load 'pdf-annot
+      (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
+#+end_src
 * Apps
 ** Spotify
 

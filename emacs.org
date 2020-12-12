@@ -119,7 +119,6 @@ Create local packages in =~/emacs.d/lisp/=
 * Basic Config
 
 Don't delete any backups.
-
 #+BEGIN_SRC emacs-lisp
   (setq delete-old-versions -1)
 #+END_SRC
@@ -543,6 +542,7 @@ Exclude lots of stuff
   (add-to-list 'recentf-exclude "\\.emacs\\.d/elpa")
   (add-to-list 'recentf-exclude "\\.emacs\\.d/bookmarks")
   (add-to-list 'recentf-exclude "\\.emacs\\.d/recentf")
+  (add-to-list 'recentf-exclude "\\.elfeed/index")
   (add-to-list 'recentf-exclude "\\.emacs\\.d/ido.last")
   (add-to-list 'recentf-exclude "\\.emacs\\.d/\\.cache/treemacs-persist")
   (add-to-list 'recentf-exclude "\\.emacs\\.d/\\.cache/treemacs-persist")
@@ -939,7 +939,7 @@ mode.
 #+begin_src emacs-lisp
   (use-package dtrt-indent
     :diminish
-    :hook (json-mode)
+    :hook ((json-mode . dtrt-indent-mode))
     :ensure t)
 #+end_src
 
@@ -1102,7 +1102,6 @@ Set this to the folder where you keep your Git repos!
 
   (use-package company-box
     :ensure t
-    :after company
     :diminish
     :hook (company-mode . company-box-mode))
 #+end_src
@@ -1164,7 +1163,6 @@ Set this to the folder where you keep your Git repos!
 #+end_src
 
 ** Languages
-
 *** Dockerfile
 
 #+begin_src emacs-lisp
@@ -1438,6 +1436,8 @@ Need it get flycheck to find local binaries.
     (org-log-into-drawer t "log into drawer")
     (org-todo-keywords '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
     (org-confirm-babel-evaluate nil "C-c C-c on code blocks do not ask")
+    (org-edit-src-auto-save-idle-delay 5)
+    (org-src-ask-before-returning-to-edit-buffer nil)
     (org-capture-templates
      `(("j" "Journal" entry (file+olp+datetree ,(concat org-directory "34.org"))
         "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n")
@@ -1757,7 +1757,6 @@ sequenceDiagram
      (mermaid . t)
      (shell . t)
      (sql . t)
-     ;;(less-css . t)
      (typescript . t)))
 #+end_src
 

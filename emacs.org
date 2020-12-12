@@ -454,7 +454,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
      ((kbd "s-q") . save-buffers-kill-emacs)
      ((kbd "s-s") . save-buffer)
      ((kbd "s-f") . swiper)
-     ((kbd "s-v") . evil-paste-after)
+     ((kbd "s-v") . evil-paste-after) ;; TODO insert mode brfore
      ((kbd "s-w") . delete-frame)
      ((kbd "s-z") . undo)
      ((kbd "s-0") . laat/text-scale-zero)

@@ -45,7 +45,8 @@ Give some breathing room in the fringes
 Disable the menu bar.
 
 #+begin_src emacs-lisp
-  ;;(menu-bar-mode -1)
+  (when (not (eq system-type 'darwin))
+    (menu-bar-mode -1))
 #+end_src
 
 
@@ -95,6 +96,14 @@ Default frame size
     :ensure t
     :init
     (setq quelpa-use-package-inhibit-loading-quelpa t))
+#+end_src
+
+** User local packages
+
+Create local packages in =~/emacs.d/lisp/=
+
+#+begin_src emacs-lisp
+  (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 #+end_src
 
 * Garbage Collection
@@ -1093,6 +1102,7 @@ Set this to the folder where you keep your Git repos!
 
   (use-package company-box
     :ensure t
+    :after company
     :diminish
     :hook (company-mode . company-box-mode))
 #+end_src
@@ -1618,6 +1628,8 @@ On OSX use before calling =org-download-clipboard=
   (add-to-list 'org-structure-template-alist '("fs" . "src fsharp"))
   (add-to-list 'org-structure-template-alist '("me" . "src mermaid"))
   (add-to-list 'org-structure-template-alist '("http" . "src http"))
+  (add-to-list 'org-structure-template-alist '("less" . "src less"))
+  (add-to-list 'org-structure-template-alist '("css" . "src css"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
   (add-to-list 'org-structure-template-alist '("sql" . "src sql"))
@@ -1745,6 +1757,7 @@ sequenceDiagram
      (mermaid . t)
      (shell . t)
      (sql . t)
+     ;;(less-css . t)
      (typescript . t)))
 #+end_src
 

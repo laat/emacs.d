@@ -1410,7 +1410,8 @@ Need it get flycheck to find local binaries.
      [remap outline-backward-same-level] 'org-backward-element)
     (laat/leader-keys
       "x" '(org-capture :which-key "capture")
-      "a" '(org-agenda :which-key "agenda"))
+      "a" '(org-agenda :which-key "agenda")
+      "tl" '(org-toggle-link-display :which-key "toggle links"))
     (laat/local-leader-keys
       :states 'normal
       :keymaps 'org-mode-map

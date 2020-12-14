@@ -1352,6 +1352,8 @@ Need it get flycheck to find local binaries.
     :general
     (laat/leader-keys
       "g" '(:ignore t :which-key "git")
+      "gg" '(magit-dispatch :which-key "magit dispatch")
+      "gf" '(magit-file-dispatch :which-key "magit file dispatch")
       "gs" '(magit-status :which-key "git status"))
     :custom
     (magit-display-buffer-function #'magit-display-buffer-fullframe-status-topleft-v1)

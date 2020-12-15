@@ -1381,7 +1381,7 @@ Need it get flycheck to find local binaries.
     :after magit
     :general
     (laat/leader-keys
-      "gf" '(forge-dispatch :which-key "forge")))
+      "gh" '(forge-dispatch :which-key "forge")))
 #+end_src
 
 * Org

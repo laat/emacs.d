@@ -1424,6 +1424,7 @@ Need it get flycheck to find local binaries.
       "r" '(org-babel-remove-result :which-key "remove result")
       "cc" '(org-ctrl-c-ctrl-c :which-key "C-c C-c"))
     :config
+    (bind-key "C-c C-c" 'org-edit-src-exit org-src-mode-map)
     ;; https://emacs.stackexchange.com/questions/26923
     (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
     (add-hook 'org-capture-mode-hook #'org-id-get-create)
@@ -1775,29 +1776,32 @@ sequenceDiagram
 
 #+begin_src emacs-lisp
   (use-package org-yt
-    :quelpa
-    (org-yt
-     :fetcher github
-     :repo "TobiasZawada/org-yt"
-     :commit "40cc1ac76d741055cbefa13860d9f070a7ade001")
+    :quelpa (org-yt :fetcher github :repo "TobiasZawada/org-yt"
+                    :commit "40cc1ac76d741055cbefa13860d9f070a7ade001")
     :config
-    ;; https://endlessparentheses.com/embedding-youtube-videos-with-org-mode-links.html
-    (setq
-     yt-iframe-format
-     ;; You may want to change your width and height.
-     (concat "<iframe width=\"440\""
-             " height=\"335\""
-             " src=\"https://www.youtube.com/embed/%s\""
-             " frameborder=\"0\""
-             " allowfullscreen>%s</iframe>"))
-    (org-add-link-type
+    (setq laat/yt-iframe-format
+          (concat "<iframe width=\"440\""
+                  " height=\"335\""
+                  " src=\"https://www.youtube.com/embed/%s\""
+                  " frameborder=\"0\""
+                  " allowfullscreen>%s</iframe>")
+          laat/yt-markdown-format
+          (concat "[![%s](https://img.youtube.com/vi/%s/0.jpg)]"
+                  "(https://www.youtube.com/watch?v=%s)"))
+
+    (defun laat/org-yt-export (link description format)
+      (pcase format
+        (`html (format laat/yt-iframe-format link (or description "")))
+        (`latex (format "\href{%s}{%s}" path (or description "video")))
+        (`md (format laat/yt-markdown-format (or description "youtube video")link link))))
+
+    (defun laat/org-yt-follow (handle)
+      (browse-url (concat "https://www.youtube.com/embed/" handle)))
+
+    (org-link-set-parameters
      "yt"
-     (lambda (handle)
-       (browse-url (concat "https://www.youtube.com/embed/" handle)))
-     (lambda (path desc backend)
-       (cl-case backend
-         (html (format yt-iframe-format path (or desc "")))
-         (latex (format "\href{%s}{%s}" path (or desc "video")))))))
+     :follow #'laat/org-yt-follow
+     :export #'laat/org-yt-export))
 #+end_src
 
 ** Auto-Tangle init.el
@@ -1880,31 +1884,6 @@ sequenceDiagram
        "http://emacsredux.com/atom.xml"
        "http://www.lunaryorn.com/feed.atom"
        )))
-#+end_src
-
-** Pandoc
-
-[[elisp:(find-variable 'org-pandoc-menu-entry)][org-pandoc-menu-entry]] has lots of possibilities.
-
-#+begin_src emacs-lisp
-  (use-package pandoc-mode
-    :ensure t
-    :config
-    (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
-
-  ;; creates a long export-dispatch
-  ;; SPC and DELETE to scroll up and down
-  ;; C-n and C-P to scroll up and down
-  (use-package ox-pandoc
-    :ensure t
-    :defer 2
-    :after ox
-    :custom
-    (org-pandoc-menu-entry
-     '((?m "to markdown_strict and open." org-pandoc-export-to-markdown_strict-and-open)
-       (?M "as markdown_strict." org-pandoc-export-as-markdown_strict)
-       (?g "to gfm and open." org-pandoc-export-to-gfm-and-open)
-       (?G "as gfm." org-pandoc-export-as-gfm))))
 #+end_src
 
 ** PDF

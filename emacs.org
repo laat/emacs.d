@@ -447,14 +447,16 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
      mac-right-option-modifier 'none
      mac-option-modifier 'meta
      mac-command-modifier 'super)
+    (define-key evil-insert-state-map (kbd "s-v") 'yank)
     (bind-keys
      ((kbd "s-a") . mark-whole-buffer)
      ((kbd "s-c") . kill-ring-save)
      ((kbd "s-l") . goto-line)
+     ((kbd "s-P") . execute-extended-command)
      ((kbd "s-q") . save-buffers-kill-emacs)
      ((kbd "s-s") . save-buffer)
      ((kbd "s-f") . swiper)
-     ((kbd "s-v") . evil-paste-after) ;; TODO insert mode brfore
+     ((kbd "s-v") . evil-paste-after)
      ((kbd "s-w") . delete-frame)
      ((kbd "s-z") . undo)
      ((kbd "s-0") . laat/text-scale-zero)
@@ -1424,6 +1426,7 @@ Need it get flycheck to find local binaries.
     :config
     ;; https://emacs.stackexchange.com/questions/26923
     (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
+    (add-hook 'org-capture-mode-hook #'org-id-get-create)
     :custom
     (org-image-actual-width nil "allows #+ATTR_ORG: :width 100")
     (org-cycle-separator-lines 0 "compact folding")

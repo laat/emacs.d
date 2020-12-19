@@ -1916,11 +1916,25 @@ sequenceDiagram
 
 * File Management
 
+** Icons
+
 #+begin_src emacs-lisp
   (use-package all-the-icons-dired
     :ensure t
     :after (all-the-icons)
     :hook (dired-mode . all-the-icons-dired-mode))
+#+end_src
+
+** Sort folders first OS X
+
+Needs =brew install coreutils=
+
+#+begin_src emacs-lisp
+
+  (when (eq system-type 'darwin)
+    (setq insert-directory-program "gls"
+          dired-listing-switches "-al --group-directories-first"
+          dired-use-ls-dired t))
 #+end_src
 
 * Terminals

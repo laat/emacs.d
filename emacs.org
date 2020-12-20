@@ -457,6 +457,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
      ((kbd "s-s") . save-buffer)
      ((kbd "s-f") . swiper)
      ((kbd "s-v") . evil-paste-after)
+     ((kbd "s-x") . execute-extended-command)
      ((kbd "s-w") . delete-frame)
      ((kbd "s-z") . undo)
      ((kbd "s-0") . laat/text-scale-zero)

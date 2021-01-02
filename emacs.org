@@ -1462,9 +1462,9 @@ Need it get flycheck to find local binaries.
         "* %? \n%i\n" :prepend t :created t )
        ;; org-capture Chrome Extension
        ("p" "Protocol" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
-        "* %?\nCaptured On: %U \n\n [[%:link][%:description]] \n\n#+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n")
+        "* %?\nCaptured On: %U \n\n[[%:link][%:description]] \n\n#+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n")
        ("L" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
-        "* %?[[%:link][%:description]] \nCaptured On: %U"))))
+        "* %?\nCaptured On: %U \n\n[[%:link][%:description]]"))))
 
   (use-package evil-org
     :ensure t
@@ -1951,4 +1951,3 @@ Needs =brew install coreutils=
 ** https://github.com/deb0ch/emacs-winum
 ** https://github.com/purcell/elisp-slime-nav
 ** https://melpa.org/#/ytdl
-

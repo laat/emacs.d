@@ -188,7 +188,7 @@ Ask before terminating.
   (setq confirm-kill-emacs 'y-or-n-p)
 #+end_src
 
-This ain't a typewriter.
+Not a typewriter.
 
 #+begin_src emacs-lisp
   (setq sentence-end-double-space nil)
@@ -212,7 +212,7 @@ Git branch in the mode-line is often wrong and making it always show current bra
   (setq-default mode-line-format (delete '(vc-mode vc-mode) mode-line-format))
 #+end_src
 
-Too many characters to type "yes". y is ok
+Too many characters to type "yes". y is OK.
 
 #+begin_src emacs-lisp
   (defalias 'yes-or-no-p 'y-or-n-p)
@@ -222,6 +222,18 @@ Break long lines at word boundaries.
 
 #+begin_src emacs-lisp
   (visual-line-mode 1)
+#+end_src
+
+Don't add a string to kill-ring if it duplicates the last one.
+
+#+begin_src emacs-lisp
+  (setq kill-do-not-save-duplicates t)
+#+end_src
+
+Return to last cursor position when opening a file.
+
+#+begin_src emacs-lisp
+  (save-place-mode +1)
 #+end_src
 
 * Basic Config OS X
@@ -1133,44 +1145,19 @@ Set this to the folder where you keep your Git repos!
     :ensure t)
 #+end_src
 
-** lsp-mode
-
-#+begin_src emacs-lisp
-  (setq lsp-keymap-prefix "s-p")
-  (use-package lsp-mode
-    :ensure t
-    :after yasnippet
-    :hook ((json-mode . lsp)
-           (yaml-mode . lsp)
-           ;; (fsharp-mode . lsp)
-           (typescript-mode . lsp)
-           (lsp-mode . lsp-enable-which-key-integration))
-    :commands lsp)
-
-  (use-package lsp-ui
-    :ensure t
-    :commands lsp-ui-mode)
-
-  (use-package lsp-ivy
-    :ensure t
-    :commands lsp-ivy-workspace-symbol)
-
-  (use-package lsp-treemacs
-    :ensure t
-    :commands lsp-treemacs-errors-list)
-
-  (use-package dap-mode
-    :ensure t
-    :hook ((after-init . dap-mode)
-           (dap-mode . dap-ui-mode)))
-#+end_src
-
 ** Languages
 *** Dockerfile
 
 #+begin_src emacs-lisp
 (use-package dockerfile-mode
   :mode "Dockerfile\\'"
+  :ensure t)
+#+end_src
+*** Docker Compose
+
+#+begin_src emacs-lisp
+(use-package docker-compose-mode
+  :mode "docker-compose[^/]*\\.yml\\'"
   :ensure t)
 #+end_src
 
@@ -1384,6 +1371,10 @@ Need it get flycheck to find local binaries.
       "gh" '(forge-dispatch :which-key "forge")))
 #+end_src
 
+** Docker
+#+begin_src emacs-lisp
+  (use-package docker :ensure t)
+#+end_src
 * Org
 ** Base Config
 
@@ -1430,6 +1421,8 @@ Need it get flycheck to find local binaries.
     (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
     (add-hook 'org-capture-mode-hook #'org-id-get-create)
     :custom
+    (org-catch-invisible-edits 'smart)
+    (org-ctrl-k-protect-subtree t)
     (org-image-actual-width nil "allows #+ATTR_ORG: :width 100")
     (org-cycle-separator-lines 0 "compact folding")
     (org-ellipsis "…" "a pretty ellipsis. Alternatives … ⤵ ▼, ↴, ⬎, ⤷, and ⋱.")
@@ -1515,9 +1508,8 @@ Automator.app (builtin) and ⌘-s is your friend. Remember =pass input=
 #+begin_src emacs-lisp
   (defun laat/protocol-magit (data)
     "Open magit buffer for repository"
-    (let ((path (plist-get data :repo)))
-      (magit-status-setup-buffer (plist-get data :repo)))
-    nil)
+    (magit-status-setup-buffer (plist-get data :repo))
+    (select-frame-set-input-focus (selected-frame)))
 
   (add-to-list
    'org-protocol-protocol-alist
@@ -1543,7 +1535,13 @@ Magit bash script
   import urllib
   print urllib.quote(os.path.abspath(sys.argv[1]), safe='')" "${arg1}")
 
-  open "org-protocol://magit?repo=${encoded}"
+  proto="org-protocol://magit?repo=${encoded}"
+
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+      open "${proto}"
+  else
+      emacsclient "${proto}"
+  fi
 #+end_src
 
 ** languagetool

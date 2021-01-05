@@ -74,3 +74,4 @@ flycheck_*.el
 /nov-places
 /smex-items
 /hackernews/
+/var/

@@ -1457,7 +1457,10 @@ Need it get flycheck to find local binaries.
        ("p" "Protocol" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
         "* %?\nCaptured On: %U \n\n[[%:link][%:description]] \n\n#+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n")
        ("L" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
-        "* %?\nCaptured On: %U \n\n[[%:link][%:description]]"))))
+        "* %?\nCaptured On: %U \n\n[[%:link][%:description]]")
+       ;; work
+       ("n" "NRK Program" entry (file+headline ,(concat org-directory "notes.org") "NRK Programmer")
+        "* %? \nWhen: %U \n\n"))))
 
   (use-package evil-org
     :ensure t
@@ -1476,7 +1479,16 @@ Need it get flycheck to find local binaries.
     :after org
     :commands (org-intent-mode))
 #+end_src
+** htmlize syntax highlight
+Syntax highlihgt exported html
+#+begin_src emacs-lisp
+(use-package htmlize :ensure t)
+#+end_src
 
+to set a background color
+#+begin_src org
+#+HTML_HEAD: <style>pre.src {background-color: #303030; color: #e5e5e5;}</style>
+#+end_src
 ** org-protocol
 *** base config
 

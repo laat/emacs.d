@@ -355,7 +355,13 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
       (save-buffer)
       (kill-this-buffer))
     (evil-ex-define-cmd "q[uit]" 'laat/ex-kill-buffer-and-close)
-    (evil-ex-define-cmd "wq" 'laat/ex-save-kill-buffer-and-close))
+    (evil-ex-define-cmd "wq" 'laat/ex-save-kill-buffer-and-close)
+
+    ;; https://github.com/Somelauw/evil-org-mode/issues/93#issuecomment-950306532
+    (fset 'evil-redirect-digit-argument 'ignore) ;; before evil-org loaded
+    (add-to-list 'evil-digit-bound-motions 'evil-org-beginning-of-line)
+    (evil-define-key 'motion 'evil-org-mode
+      (kbd "0") 'evil-org-beginning-of-line))
 
   (use-package evil-matchit
     :ensure t

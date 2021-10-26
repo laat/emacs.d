@@ -662,6 +662,9 @@ Exclude lots of stuff
   ;; (diminish 'visual-line-mode)
 #+end_src
 
+Installint fonts:
+M-x all-the-icons-install-fonts
+
 ** Treemacs
 
 #+begin_src emacs-lisp

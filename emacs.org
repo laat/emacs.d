@@ -81,6 +81,11 @@ Default frame size
   (package-install 'use-package))
 #+end_src
 
+** Ensure system packages
+#+begin_src emacs-lisp
+(use-package use-package-ensure-system-package
+  :ensure t)
+#+end_src
 ** Quelpa
 
 #+begin_src emacs-lisp
@@ -240,16 +245,16 @@ Return to last cursor position when opening a file.
 ** PATH
 
 #+begin_src emacs-lisp
-  (when (eq system-type 'darwin)
-    (use-package exec-path-from-shell
-      :ensure t
-      :init
-      (setq
-       ;; bash has the correct path (on my system) and is faster
-       exec-path-from-shell-shell-name "bash"
-       ;; removed -i because -l has correct path on my system
-       exec-path-from-shell-arguments '("-l"))
-      :config (exec-path-from-shell-initialize)))
+  (use-package exec-path-from-shell
+    :ensure t
+    :if (memq window-system '(mac ns darwin))
+    :init
+    (setq
+     ;; bash has the correct path (on my system) and is faster
+     exec-path-from-shell-shell-name "bash"
+     ;; removed -i because -l has correct path on my system
+     exec-path-from-shell-arguments '("-l"))
+    :config (exec-path-from-shell-initialize))
 #+end_src
 
 ** Trash
@@ -259,11 +264,12 @@ Return to last cursor position when opening a file.
 #+end_src
 
 #+begin_src emacs-lisp
-  (when (eq system-type 'darwin)
-    (use-package osx-trash
-      :ensure t
-      :config
-      (setq delete-by-moving-to-trash t)))
+  (use-package osx-trash
+    :ensure t
+    :ensure-system-package trash
+    :if (memq window-system '(mac ns darwin))
+    :config
+    (setq delete-by-moving-to-trash t))
 #+end_src
 
 * GPG
@@ -1206,7 +1212,7 @@ Set this to the folder where you keep your Git repos!
   (use-package parinfer-rust-mode
     :disabled
     :ensure t
-    ;; :diminish parinfer-rust-mode
+    :diminish parinfer-rust-mode
     :hook emacs-lisp-mode clojure-mode scheme-mode common-lisp-mode
     :init
     (setq parinfer-rust-auto-download t)
@@ -1445,9 +1451,11 @@ Need it get flycheck to find local binaries.
 #+end_src
 
 ** Docker
+
 #+begin_src emacs-lisp
   (use-package docker :ensure t)
 #+end_src
+
 * Org
 ** Base Config
 

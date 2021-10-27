@@ -1072,6 +1072,20 @@ mode.
       "ci" '(evilnc-toggle-invert-comment-line-by-line :which-key "toggle invert")))
 #+end_src
 
+*** Parinfer
+
+#+begin_src emacs-lisp
+  (use-package parinfer-rust-mode
+    :ensure t
+    ;; :diminish parinfer-rust-mode
+    :hook emacs-lisp-mode clojure-mode scheme-mode common-lisp-mode
+    :init
+    (setq parinfer-rust-auto-download t)
+    (setq parinfer-rust-preferred-mode 'smart)
+    (laat/leader-keys
+      "tp" '(parinfer-rust-toggle-paren-mode :which-key "toggle parinfer mode")))
+#+end_src
+
 ** Projects
 
 Set this to the folder where you keep your Git repos!

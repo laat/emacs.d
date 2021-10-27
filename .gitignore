@@ -76,3 +76,4 @@ flycheck_*.el
 /hackernews/
 /var/
 places
+/parinfer-rust/

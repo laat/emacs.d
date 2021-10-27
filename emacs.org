@@ -1135,6 +1135,7 @@ Set this to the folder where you keep your Git repos!
     :ensure t
     :diminish
     :hook (company-mode . company-box-mode))
+
 #+end_src
 
 ** Syntax Checking
@@ -1161,8 +1162,8 @@ Set this to the folder where you keep your Git repos!
     :ensure t)
 #+end_src
 
-** Lispish
-
+** Languages
+*** Lispish
 *** lispy
 #+begin_src emacs-lisp
   (use-package lispy
@@ -1232,7 +1233,6 @@ Set this to the folder where you keep your Git repos!
            aggressive-indent-mode))
 #+end_src
 
-** Languages
 *** Dockerfile
 
 #+begin_src emacs-lisp
@@ -1559,7 +1559,9 @@ Need it get flycheck to find local binaries.
     :diminish
     :after org
     :commands (org-intent-mode))
+
 #+end_src
+
 ** htmlize syntax highlight
 Syntax highlihgt exported html
 #+begin_src emacs-lisp

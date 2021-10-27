@@ -1164,7 +1164,7 @@ Set this to the folder where you keep your Git repos!
 
 ** Languages
 *** Lispish
-*** lispy
+**** lispy
 #+begin_src emacs-lisp
   (use-package lispy
     :ensure t
@@ -1177,7 +1177,7 @@ Set this to the folder where you keep your Git repos!
     (lispy-eval-display-style 'overlay))
 #+end_src
 
-*** lispyville
+**** lispyville
 #+begin_src emacs-lisp
   (use-package lispyville
     :ensure t
@@ -1207,7 +1207,7 @@ Set this to the folder where you keep your Git repos!
 #+end_src
 
 
-*** Parinfer
+**** Parinfer
 
 #+begin_src emacs-lisp
   (use-package parinfer-rust-mode
@@ -1222,7 +1222,7 @@ Set this to the folder where you keep your Git repos!
       "tp" '(parinfer-rust-toggle-paren-mode :which-key "toggle parinfer mode")))
 #+end_src
 
-*** Aggressive indent
+**** Aggressive indent
 
 #+begin_src emacs-lisp
   (use-package aggressive-indent
@@ -1240,6 +1240,7 @@ Set this to the folder where you keep your Git repos!
   :mode "Dockerfile\\'"
   :ensure t)
 #+end_src
+
 *** Docker Compose
 
 #+begin_src emacs-lisp

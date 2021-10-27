@@ -1236,9 +1236,9 @@ Set this to the folder where you keep your Git repos!
 *** Dockerfile
 
 #+begin_src emacs-lisp
-(use-package dockerfile-mode
-  :mode "Dockerfile\\'"
-  :ensure t)
+  (use-package dockerfile-mode
+    :mode "Dockerfile\\'"
+    :ensure t)
 #+end_src
 
 *** Docker Compose

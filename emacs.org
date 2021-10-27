@@ -1072,19 +1072,6 @@ mode.
       "ci" '(evilnc-toggle-invert-comment-line-by-line :which-key "toggle invert")))
 #+end_src
 
-*** Parinfer
-
-#+begin_src emacs-lisp
-  (use-package parinfer-rust-mode
-    :ensure t
-    ;; :diminish parinfer-rust-mode
-    :hook emacs-lisp-mode clojure-mode scheme-mode common-lisp-mode
-    :init
-    (setq parinfer-rust-auto-download t)
-    (setq parinfer-rust-preferred-mode 'smart)
-    (laat/leader-keys
-      "tp" '(parinfer-rust-toggle-paren-mode :which-key "toggle parinfer mode")))
-#+end_src
 
 ** Projects
 
@@ -1168,6 +1155,77 @@ Set this to the folder where you keep your Git repos!
     :ensure t)
 #+end_src
 
+** Lispish
+
+*** lispy
+#+begin_src emacs-lisp
+  (use-package lispy
+    :ensure t
+    :defer t
+    :diminish lispy-mode
+    :hook ((clojure-mode cider-repl-mode emacs-lisp-mode lisp-mode) .
+           lispy-mode)
+    :custom
+    (lispy-compat '(edebug cider magit-blame-mode))
+    (lispy-eval-display-style 'overlay))
+#+end_src
+
+*** lispyville
+#+begin_src emacs-lisp
+  (use-package lispyville
+    :ensure t
+    :diminish lispyville-mode
+    :hook ((clojure-mode cider-repl-mode emacs-lisp-mode lisp-mode lispy-mode) .
+           lispyville-mode)
+    :general
+    (laat/leader-keys
+      :states 'normal
+      :keymaps 'lispyville-mode-map
+      "cc" '(lispyville-comment-or-uncomment-line :which-key "comment line")
+      "cC" '(lispyville-comment-or-uncomment :which-key "comment"))
+    (laat/leader-keys
+      :states 'visual
+      :keymaps 'lispyville-mode-map
+      "cc" '(lispyville-comment-or-uncomment-line :which-key "comment line")
+      "cC" '(lispyville-comment-or-uncomment :which-key "comment"))
+    :config
+    (lispyville-set-key-theme
+     '(operators
+       c-w
+       additional
+       additional-wrap
+       additional-insert
+       text-objects
+       slurp/barf-cp)))
+#+end_src
+
+
+*** Parinfer
+
+#+begin_src emacs-lisp
+  (use-package parinfer-rust-mode
+    :disabled
+    :ensure t
+    ;; :diminish parinfer-rust-mode
+    :hook emacs-lisp-mode clojure-mode scheme-mode common-lisp-mode
+    :init
+    (setq parinfer-rust-auto-download t)
+    (setq parinfer-rust-preferred-mode 'smart)
+    (laat/leader-keys
+      "tp" '(parinfer-rust-toggle-paren-mode :which-key "toggle parinfer mode")))
+#+end_src
+
+*** Aggressive indent
+
+#+begin_src emacs-lisp
+  (use-package aggressive-indent
+    :ensure t
+    :diminish
+    :commands aggressive-indent-mode
+    :hook ((clojure-mode cider-repl-mode emacs-lisp-mode lisp-mode lispy-mode) .
+           aggressive-indent-mode))
+#+end_src
+
 ** Languages
 *** Dockerfile
 
@@ -1210,14 +1268,6 @@ Set this to the folder where you keep your Git repos!
 
 *** Emacs Lisp
 
-#+begin_src emacs-lisp
-  (use-package aggressive-indent
-    :ensure t
-    :diminish
-    :commands aggressive-indent-mode
-    :init
-    (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
-#+end_src
 
 *** JSON
 

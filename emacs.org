@@ -1273,8 +1273,31 @@ Set this to the folder where you keep your Git repos!
 
 =M-x lsp-install-server RET fsac RET=
 
-*** Emacs Lisp
+*** Clojure
 
+#+begin_src emacs-lisp
+  (use-package clojure-mode
+    :ensure t
+    :mode (("\\.clj\\'" . clojure-mode)
+           ("\\.edn\\'" . clojure-mode))
+    :init
+    ;; (add-hook 'clojure-mode-hook #'yas-minor-mode)
+    ;; (add-hook 'clojure-mode-hook #'lispy-mode)
+    ;; (add-hook 'clojure-mode-hook #'lispyville-mode)
+    ;; (add-hook 'clojure-mode-hook #'linum-mode)
+    ;; (add-hook 'clojure-mode-hook #'subword-mode)
+    ;; (add-hook 'clojure-mode-hook #'smartparens-mode)
+    ;; (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
+    ;; (add-hook 'clojure-mode-hook #'eldoc-mode)
+    ;; (add-hook 'clojure-mode-hook #'idle-highlight-mode)
+    )
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package cider
+    :ensure t
+    :hook ((clojure-mode) . cider-mode))
+#+end_src
 
 *** JSON
 

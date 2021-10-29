@@ -1651,8 +1651,8 @@ Magit bash script
   encoded=$(python -c "
   import sys
   import os
-  import urllib
-  print urllib.quote(os.path.abspath(sys.argv[1]), safe='')" "${arg1}")
+  import urllib.parse
+  print(urllib.parse.quote(os.path.abspath(sys.argv[1]), safe=''))" "${arg1}")
 
   proto="org-protocol://magit?repo=${encoded}"
 

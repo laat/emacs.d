@@ -77,3 +77,4 @@ flycheck_*.el
 /var/
 places
 /parinfer-rust/
+/cider-history

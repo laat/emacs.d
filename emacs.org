@@ -1082,13 +1082,25 @@ mode.
 ** LSP
 
 #+begin_src emacs-lisp
-(use-package lsp-mode
-  :commands lsp
-  :init
-  (setq lsp-prefer-flymake nil))
+  (use-package lsp-mode
+    :ensure t
+    :commands lsp
+    :diminish lsp-lens-mode
+    :hook ((clojure-mode . lsp)
+           (clojurec-mode . lsp)
+           (clojurescript-mode . lsp))
+    :init
+    (setq lsp-prefer-flymake nil)
 
-(use-package company-lsp
-  :commands company-lsp)
+    :bind
+    (:map lsp-mode-map
+          ("s-." . lsp-execute-code-action))
+    :custom
+    (lsp-ui-doc-show-with-cursor nil))
+
+  (use-package lsp-ui
+    :ensure t
+    :commands lsp-ui-mode)
 #+end_src
 
 ** Projects
@@ -1177,23 +1189,26 @@ Set this to the folder where you keep your Git repos!
 ** Languages
 *** Lispish
 **** lispy
+
 #+begin_src emacs-lisp
   (use-package lispy
     :ensure t
-    :disabled
     :defer t
     :diminish lispy-mode
     :hook ((clojure-mode cider-repl-mode emacs-lisp-mode lisp-mode) .
            lispy-mode)
     :custom
+    (lispy-key-theme '(lispy c-digits))
     (lispy-compat '(edebug cider magit-blame-mode))
     (lispy-eval-display-style 'overlay))
 #+end_src
 
 **** lispyville
+
 #+begin_src emacs-lisp
   (use-package lispyville
     :ensure t
+    :after lispy
     :diminish lispyville-mode
     :hook ((clojure-mode cider-repl-mode emacs-lisp-mode lisp-mode lispy-mode) .
            lispyville-mode)
@@ -1227,7 +1242,7 @@ Set this to the folder where you keep your Git repos!
     :disabled
     :ensure t
     :diminish parinfer-rust-mode
-    :hook emacs-lisp-mode clojure-mode scheme-mode common-lisp-mode
+    :hook emacs-lisp-mode scheme-mode common-lisp-mode
     :init
     (setq parinfer-rust-auto-download t)
     (setq parinfer-rust-preferred-mode 'smart)
@@ -1240,11 +1255,9 @@ Set this to the folder where you keep your Git repos!
 #+begin_src emacs-lisp
   (use-package aggressive-indent
     :ensure t
-    :disabled
     :diminish
     :commands aggressive-indent-mode
-    :hook ((clojure-mode cider-repl-mode emacs-lisp-mode lisp-mode lispy-mode) .
-           aggressive-indent-mode))
+    :hook ((emacs-lisp-mode lisp-mode) . aggressive-indent-mode))
 #+end_src
 
 *** Dockerfile
@@ -1293,24 +1306,19 @@ Set this to the folder where you keep your Git repos!
   (use-package clojure-mode
     :ensure t
     :mode (("\\.clj\\'" . clojure-mode)
-           ("\\.edn\\'" . clojure-mode))
-    :init
-    (add-hook 'clojure-mode-hook #'lsp-mode)
-    ;; (add-hook 'clojure-mode-hook #'lispy-mode)
-    ;; (add-hook 'clojure-mode-hook #'lispyville-mode)
-    ;; (add-hook 'clojure-mode-hook #'linum-mode)
-    ;; (add-hook 'clojure-mode-hook #'subword-mode)
-    ;; (add-hook 'clojure-mode-hook #'smartparens-mode)
-    ;; (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
-    ;; (add-hook 'clojure-mode-hook #'eldoc-mode)
-    ;; (add-hook 'clojure-mode-hook #'idle-highlight-mode)
-    )
+           ("\\.edn\\'" . clojure-mode)))
 #+end_src
 
 #+begin_src emacs-lisp
   (use-package cider
     :ensure t
-    :hook ((clojure-mode) . cider-mode))
+    :hook ((clojure-mode) . cider-mode)
+    :config
+    (setq
+     ;; cider-show-error-buffer nil
+     cider-repl-history-file (concat user-emacs-directory "cider-history")
+     ;; cider-repl-display-help-banner nil
+     ))
 #+end_src
 
 *** JSON

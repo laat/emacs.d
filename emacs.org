@@ -67,7 +67,6 @@ Default frame size
   (require 'package)
   (setq package-archives
         '(("melpa" . "https://melpa.org/packages/")
-          ("org" . "https://orgmode.org/elpa/")
           ("elpa" . "https://elpa.gnu.org/packages/")))
   (setq package-enable-at-startup nil)
   (package-initialize)
@@ -1310,6 +1309,11 @@ Set this to the folder where you keep your Git repos!
 #+end_src
 
 #+begin_src emacs-lisp
+  (use-package clojure-snippets
+    :ensure t)
+#+end_src
+
+#+begin_src emacs-lisp
   (use-package cider
     :ensure t
     :hook ((clojure-mode) . cider-mode)
@@ -1499,7 +1503,9 @@ Need it get flycheck to find local binaries.
 ** Docker
 
 #+begin_src emacs-lisp
-  (use-package docker :ensure t)
+  (use-package docker
+    :ensure t
+    :bind ("C-c d" . docker))
 #+end_src
 
 * Org
@@ -1518,6 +1524,7 @@ Need it get flycheck to find local binaries.
         (forward-char (if orgp -1 -6)))))
 
   (use-package org
+    :pin elpa
     :ensure org-plus-contrib
     :hook
     ((org-mode . visual-line-mode)
@@ -2084,7 +2091,30 @@ Needs =brew install coreutils=
   (use-package vterm
     :ensure t)
 #+end_src
+* Startup Timing
+#+begin_src emacs-lisp
+  (use-package esup
+    :ensure t)
+#+end_src
 
+#+begin_src emacs-lisp :tangle no
+;; Use a hook so the message doesn't get clobbered by other messages.
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "Emacs ready in %s with %d garbage collections."
+                     (format "%.2f seconds"
+                             (float-time
+                              (time-subtract after-init-time before-init-time)))
+                     gcs-done)))
+#+end_src
+
+#+begin_src shell
+# -q ignores personal Emacs files but loads the site files.
+emacs -q --eval='(message "%s" (emacs-init-time))'
+
+;; For macOS users:
+open -n /Applications/Emacs.app --args -q --eval='(message "%s" (emacs-init-time))'
+#+end_src
 * Ideas
 ** https://github.com/lepisma/rogue
 ** https://github.com/deb0ch/emacs-winum

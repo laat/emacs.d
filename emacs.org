@@ -111,6 +111,16 @@ Create local packages in =~/emacs.d/lisp/=
   (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 #+end_src
 
+** after
+
+#+begin_src emacs-lisp
+(defmacro after (feature &rest body)
+  "After FEATURE is loaded, evaluate BODY."
+  (declare (indent defun))
+  `(eval-after-load ,feature
+     '(progn ,@body)))
+#+end_src
+
 * Garbage Collection
 
 #+begin_src emacs-lisp
@@ -1619,7 +1629,7 @@ Need it get flycheck to find local binaries.
 ** htmlize syntax highlight
 Syntax highlihgt exported html
 #+begin_src emacs-lisp
-(use-package htmlize :ensure t)
+  (use-package htmlize :ensure t)
 #+end_src
 
 to set a background color
@@ -1970,10 +1980,11 @@ sequenceDiagram
 #+begin_src emacs-lisp
   (use-package orgit
     :after org
-    :ensure t)
+    :ensure t
+    :defer t)
 #+end_src
 
-[[orgit:/Users/n637831/.emacs.d][emacs.d git status]]
+[[orgit:~/.emacs.d][emacs.d git status]]
 
 ** PDF
 
@@ -1987,6 +1998,7 @@ sequenceDiagram
 
   (use-package org-noter-pdftools
     :ensure t
+    :defer t
     :after org-noter
     :config
     (with-eval-after-load 'pdf-annot
@@ -2090,12 +2102,15 @@ Needs =brew install coreutils=
 
 #+begin_src emacs-lisp
   (use-package vterm
-    :ensure t)
+    :ensure t
+    :defer t)
 #+end_src
 * Startup Timing
+
 #+begin_src emacs-lisp
-  (use-package esup
-    :ensure t)
+   (use-package esup
+     :init (setq esup-depth 0)
+     :ensure t)
 #+end_src
 
 #+begin_src emacs-lisp :tangle no

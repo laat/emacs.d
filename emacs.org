@@ -1689,7 +1689,7 @@ Magit bash script
 
   arg1="${1:-$(pwd)}"
 
-  encoded=$(python -c "
+  encoded=$(python3 -c "
   import sys
   import os
   import urllib.parse

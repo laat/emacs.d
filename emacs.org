@@ -260,6 +260,7 @@ Return to last cursor position when opening a file.
     :if (memq window-system '(mac ns darwin))
     :init
     (setq
+     ;; exec-path-from-shell-debug t
      ;; bash has the correct path (on my system) and is faster
      exec-path-from-shell-shell-name "bash"
      ;; removed -i because -l has correct path on my system
@@ -2105,6 +2106,7 @@ Needs =brew install coreutils=
     :ensure t
     :defer t)
 #+end_src
+
 * Startup Timing
 
 #+begin_src emacs-lisp
@@ -2131,6 +2133,7 @@ emacs -q --eval='(message "%s" (emacs-init-time))'
 ;; For macOS users:
 open -n /Applications/Emacs.app --args -q --eval='(message "%s" (emacs-init-time))'
 #+end_src
+
 * Ideas
 ** https://github.com/lepisma/rogue
 ** https://github.com/deb0ch/emacs-winum

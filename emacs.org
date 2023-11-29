@@ -59,6 +59,10 @@ Default frame size
     (add-to-list 'default-frame-alist '(height . 120)))
 #+end_src
 
+Frame title
+#+begin_src emacs-lisp
+  (setq frame-title-format "%b")
+#+end_src
 
 * Package manager
 ** Initialize package manager
@@ -1101,7 +1105,8 @@ mode.
     :diminish lsp-lens-mode
     :hook ((clojure-mode . lsp)
            (clojurec-mode . lsp)
-           (clojurescript-mode . lsp))
+           (clojurescript-mode . lsp)
+           (lsp-mode . lsp-enable-which-key-integration))
     :init
     (setq lsp-prefer-flymake nil)
 
@@ -1196,7 +1201,10 @@ Set this to the folder where you keep your Git repos!
 
 #+begin_src emacs-lisp
   (use-package yasnippet
-    :ensure t)
+    :ensure t
+    :config
+    (yas-global-mode t)
+    :diminish yas-minor-mode)
 #+end_src
 
 ** Languages
@@ -1314,7 +1322,9 @@ Set this to the folder where you keep your Git repos!
   (use-package clojure-mode
     :ensure t
     :mode (("\\.clj\\'" . clojure-mode)
-           ("\\.edn\\'" . clojure-mode)))
+           ("\\.edn\\'" . clojure-mode))
+    :config
+    (setq clojure-toplevel-inside-comment-form t))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1330,7 +1340,8 @@ Set this to the folder where you keep your Git repos!
     (setq
      ;; cider-show-error-buffer nil
      cider-repl-history-file (concat user-emacs-directory "cider-history")
-     ;; cider-repl-display-help-banner nil
+     cider-repl-display-help-banner nil
+     cider-font-lock-dynamically nil
      ))
 #+end_src
 

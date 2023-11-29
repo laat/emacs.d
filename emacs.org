@@ -667,6 +667,8 @@ Exclude lots of stuff
   (use-package all-the-icons
     :ensure t)
 
+  (use-package nerd-icons
+    :ensure t)
   (use-package doom-modeline
     :ensure t
     :init
@@ -680,7 +682,7 @@ Exclude lots of stuff
 #+end_src
 
 Installint fonts:
-M-x all-the-icons-install-fonts
+M-x nerd-the-icons-install-fonts
 
 ** Treemacs
 
@@ -1227,22 +1229,17 @@ Set this to the folder where you keep your Git repos!
     (laat/leader-keys
       :states 'normal
       :keymaps 'lispyville-mode-map
-      "cc" '(lispyville-comment-or-uncomment-line :which-key "comment line")
-      "cC" '(lispyville-comment-or-uncomment :which-key "comment"))
+      "cc" '(lispyville-comment-or-uncomment-line :which-key "comment line"))
     (laat/leader-keys
       :states 'visual
       :keymaps 'lispyville-mode-map
-      "cc" '(lispyville-comment-or-uncomment-line :which-key "comment line")
-      "cC" '(lispyville-comment-or-uncomment :which-key "comment"))
+      "cc" '(lispyville-comment-or-uncomment-line :which-key "comment line"))
     :config
     (lispyville-set-key-theme
      '(operators
        c-w
        additional
-       additional-wrap
-       additional-insert
-       text-objects
-       slurp/barf-cp)))
+       additional-movement)))
 #+end_src
 
 
@@ -1268,7 +1265,7 @@ Set this to the folder where you keep your Git repos!
     :ensure t
     :diminish
     :commands aggressive-indent-mode
-    :hook ((emacs-lisp-mode lisp-mode) . aggressive-indent-mode))
+    :hook ((emacs-lisp-mode lisp-mode clojure-mode) . aggressive-indent-mode))
 #+end_src
 
 *** Dockerfile

@@ -290,11 +290,14 @@ Return to last cursor position when opening a file.
 ** Keychain
 
 #+begin_src emacs-lisp
+
   (eval-after-load 'auth-source
     '(when (member window-system '(mac ns))
        (add-to-list 'auth-sources 'macos-keychain-internet)
        (add-to-list 'auth-sources 'macos-keychain-generic)))
+
 #+end_src
+
 * GPG
 ** Add json to auth sources
 

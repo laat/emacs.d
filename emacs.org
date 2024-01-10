@@ -1883,8 +1883,3 @@ emacs -q --eval='(message "%s" (emacs-init-time))'
 open -n /Applications/Emacs.app --args -q --eval='(message "%s" (emacs-init-time))'
 #+end_src
 
-* Ideas
-** https://github.com/lepisma/rogue
-** https://github.com/deb0ch/emacs-winum
-** https://github.com/purcell/elisp-slime-nav
-** https://melpa.org/#/ytdl

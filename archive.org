@@ -325,3 +325,8 @@ Need it get flycheck to find local binaries.
     :bind ("C-c d" . docker))
 #+end_src
 
+** Ideas
+*** https://github.com/lepisma/rogue
+*** https://github.com/deb0ch/emacs-winum
+*** https://github.com/purcell/elisp-slime-nav
+*** https://melpa.org/#/ytdl

@@ -1096,7 +1096,10 @@ mode.
 #+end_src
 
 
-*** treesit
+
+
+** Tree Sitter
+
 #+begin_src emacs-lisp
   (use-package treesit-auto
     :ensure t
@@ -1106,31 +1109,9 @@ mode.
     (treesit-auto-add-to-auto-mode-alist 'all)
     (global-treesit-auto-mode))
 #+end_src
-** LSP
 
-#+begin_src emacs-lisp
-  (use-package lsp-mode
-    :ensure t
-    :commands lsp
-    :diminish lsp-lens-mode
-    :hook ((clojure-mode . lsp)
-           (clojurec-mode . lsp)
-           (clojurescript-mode . lsp)
-           (lsp-mode . lsp-enable-which-key-integration))
-    :init
-    (setq lsp-prefer-flymake nil)
-
-    :bind
-    (:map lsp-mode-map
-          ("s-." . lsp-execute-code-action))
-    :custom
-    (lsp-ui-doc-show-with-cursor nil))
-
-  (use-package lsp-ui
-    :ensure t
-    :commands lsp-ui-mode)
-#+end_src
 ** Copilot
+
 #+begin_src emacs-lisp
   (use-package copilot
     :quelpa (copilot :fetcher github
@@ -1147,6 +1128,7 @@ mode.
     (laat/leader-keys
       "tc" '(copilot-mode :which-key "copilot-mode")))
 #+end_src
+
 ** Projects
 
 Set this to the folder where you keep your Git repos!
@@ -1175,6 +1157,8 @@ Set this to the folder where you keep your Git repos!
 #+end_src
 
 ** Compilation
+#+end_src
+
 
 [[https://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode][ANSI Coloring in Compilation Mode]]
 #+begin_src emacs-lisp
@@ -1206,23 +1190,6 @@ Set this to the folder where you keep your Git repos!
 
 #+end_src
 
-** Syntax Checking
-
-#+begin_src emacs-lisp
-  (use-package flycheck
-    :ensure t
-    :diminish
-    :custom
-    (flycheck-check-syntax-automatically
-     '(mode-enabled save)
-     "only check on save and enabling flycheck")
-    :config
-    (setq-default flycheck-disabled-checkers
-                  '(javascript-jshint
-                    javascript-jscs ))
-    :init (global-flycheck-mode))
-#+end_src
-
 ** yasnippet
 
 #+begin_src emacs-lisp
@@ -1231,282 +1198,6 @@ Set this to the folder where you keep your Git repos!
     :config
     (yas-global-mode t)
     :diminish yas-minor-mode)
-#+end_src
-
-** Languages
-*** Lispish
-**** lispy
-
-#+begin_src emacs-lisp
-  (use-package lispy
-    :ensure t
-    :defer t
-    :diminish lispy-mode
-    :hook ((clojure-mode cider-repl-mode emacs-lisp-mode lisp-mode) .
-           lispy-mode)
-    :custom
-    (lispy-key-theme '(lispy c-digits))
-    (lispy-compat '(edebug cider magit-blame-mode))
-    (lispy-eval-display-style 'overlay))
-#+end_src
-
-**** lispyville
-
-#+begin_src emacs-lisp
-  (use-package lispyville
-    :ensure t
-    :after lispy
-    :diminish lispyville-mode
-    :hook ((clojure-mode cider-repl-mode emacs-lisp-mode lisp-mode lispy-mode) .
-           lispyville-mode)
-    :general
-    (laat/leader-keys
-      :states 'normal
-      :keymaps 'lispyville-mode-map
-      "cc" '(lispyville-comment-or-uncomment-line :which-key "comment line"))
-    (laat/leader-keys
-      :states 'visual
-      :keymaps 'lispyville-mode-map
-      "cc" '(lispyville-comment-or-uncomment-line :which-key "comment line"))
-    :config
-    (lispyville-set-key-theme
-     '(operators
-       c-w
-       additional
-       additional-movement)))
-#+end_src
-
-
-**** Parinfer
-
-#+begin_src emacs-lisp
-  (use-package parinfer-rust-mode
-    :disabled
-    :ensure t
-    :diminish parinfer-rust-mode
-    :hook emacs-lisp-mode scheme-mode common-lisp-mode
-    :init
-    (setq parinfer-rust-auto-download t)
-    (setq parinfer-rust-preferred-mode 'smart)
-    (laat/leader-keys
-      "tp" '(parinfer-rust-toggle-paren-mode :which-key "toggle parinfer mode")))
-#+end_src
-
-**** Aggressive indent
-
-#+begin_src emacs-lisp
-  (use-package aggressive-indent
-    :ensure t
-    :diminish
-    :commands aggressive-indent-mode
-    :hook ((emacs-lisp-mode lisp-mode clojure-mode) . aggressive-indent-mode))
-#+end_src
-
-*** Dockerfile
-
-#+begin_src emacs-lisp
-  (use-package dockerfile-mode
-    :mode "Dockerfile\\'"
-    :ensure t)
-#+end_src
-
-*** Docker Compose
-
-#+begin_src emacs-lisp
-(use-package docker-compose-mode
-  :mode "docker-compose[^/]*\\.yml\\'"
-  :ensure t)
-#+end_src
-
-*** C#
-
-#+begin_src emacs-lisp
-  (use-package csharp-mode
-    :mode "\\.cs\\'"
-    :ensure t)
-#+end_src
-
-=M-x lsp-install-server RET csharp RET=
-
-*** F#
-
-#+begin_src emacs-lisp
-  (use-package fsharp-mode
-    :defer t
-    :ensure t
-    :custom
-    (inferior-fsharp-program "dotnet fsi --readline-"))
-#+end_src
-
-**** LSP
-
-=M-x lsp-install-server RET fsac RET=
-
-*** Clojure
-
-#+begin_src emacs-lisp
-  (use-package clojure-mode
-    :ensure t
-    :mode (("\\.clj\\'" . clojure-mode)
-           ("\\.edn\\'" . clojure-mode))
-    :config
-    (setq clojure-toplevel-inside-comment-form t))
-#+end_src
-
-#+begin_src emacs-lisp
-  (use-package clojure-snippets
-    :ensure t)
-#+end_src
-
-#+begin_src emacs-lisp
-  (use-package cider
-    :ensure t
-    :hook ((clojure-mode) . cider-mode)
-    :config
-    (setq
-     ;; cider-show-error-buffer nil
-     cider-repl-history-file (concat user-emacs-directory "cider-history")
-     cider-repl-display-help-banner nil
-     cider-font-lock-dynamically nil
-     ))
-#+end_src
-
-*** JSON
-
-#+begin_src emacs-lisp
-    (use-package json-mode
-      :mode "\\.json\\'"
-      :ensure t)
-    (use-package counsel-jq
-      :ensure t
-      :after counsel
-      :commands (counsel-jq))
-#+end_src
-
-**** LSP
-
-M-x lsp-install-server RET json-ls RET
-
-or
-
-#+begin_src shell
-  npm i -g vscode-json-languageserver
-#+end_src
-
-*** YAML
-
-#+begin_src emacs-lisp
-  (use-package yaml-mode
-    :ensure t
-    :mode ("\\.yaml\\'" "\\.yml\\'"))
-#+end_src
-
-**** LSP
-
-=M-x lsp-install-server RET yamlls RET=
-
-*** Markdown
-
-#+begin_src emacs-lisp
-  (use-package markdown-mode
-    :ensure t
-    :commands (markdown-mode gfm-mode)
-    :mode (("README\\.md\\'" . gfm-mode)
-           ("\\.md\\'" . markdown-mode)
-           ("\\.markdown\\'" . markdown-mode))
-    :init (setq markdown-command "multimarkdown"))
-#+end_src
-
-*** JavaScript
-
-**** paranthesis
-#+begin_src emacs-lisp
-  (add-hook 'js-mode-hook 'electric-pair-local-mode)
-#+end_src
-**** jest
-
-#+begin_src emacs-lisp
-  (use-package jest
-    :ensure t
-    :after (js-mode)
-    :hook (js-mode . jest-minor-mode))
-#+end_src
-
-**** Npm
-
-#+begin_src emacs-lisp
-  (use-package npm
-    :ensure t
-    :commands
-    (npm-update
-     npm-run
-     npm-menu
-     npm-init
-     npm-install-menu
-     npm-mode
-     npm))
-#+end_src
-
-=M-x npm=
-
-**** node_modeules binaries
-
-Need it get flycheck to find local binaries.
-
-#+begin_src emacs-lisp
-  (use-package add-node-modules-path
-    :ensure t
-    :hook (web-mode js-mode typescript-mode))
-#+end_src
-
-*** TypeScript
-**** basic
-
-#+begin_src emacs-lisp
-  (use-package typescript-mode
-    :ensure t
-    :defer t)
-#+end_src
-
-**** LSP
-
-#+begin_src shell :async :tangle no
-  npm i -g typescript-language-server
-  npm i -g typescript
-#+end_src
-
-*** SSH
-
-#+begin_src emacs-lisp
-  (use-package ssh-config-mode
-    :ensure t
-    :mode (("/\\.ssh/config\\'"     . ssh-config-mode)
-           ("/sshd?_config\\'"      . ssh-config-mode)
-           ("/known_hosts\\'"       . ssh-known-hosts-mode)
-           ("/authorized_keys2?\\'" . ssh-authorized-keys-mode)))
-#+end_src
-
-*** SQL
-
-#+begin_src emacs-lisp
-  (use-package ejc-sql
-    :ensure t
-    :defer 2
-    :custom
-    (clomacs-httpd-default-port 8191)
-    (ejc-jdbc-drivers
-     '("mysql" [mysql/mysql-connector-java "8.0.22"]
-       "oracle" [com.oracle.jdbc/ojdbc8 "19.8.0.0"])))
-
-  (use-package sql-indent
-    :ensure t
-    :diminish sqlind-minor-mode
-    :hook (sql-mode . sqlind-minor-mode))
-
-  (use-package sqlup-mode
-    :ensure t
-    :diminish sqlup-mode
-    :hook (sql-mode . sqlup-mode))
 #+end_src
 
 ** Magit
@@ -1559,14 +1250,6 @@ Need it get flycheck to find local binaries.
     (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
     (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
     (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
-#+end_src
-
-** Docker
-
-#+begin_src emacs-lisp
-  (use-package docker
-    :ensure t
-    :bind ("C-c d" . docker))
 #+end_src
 
 * Org
@@ -1623,8 +1306,9 @@ Need it get flycheck to find local binaries.
     (org-ellipsis "…" "a pretty ellipsis. Alternatives … ⤵ ▼, ↴, ⬎, ⤷, and ⋱.")
     (org-refile-targets
      '((nil :maxlevel . 9)
-       ("~/Dropbox/notes/notes.org" :maxlevel . 2)
+       ("~/Dropbox/notes/notes.org" :maxlevel . 3)
        ("~/Dropbox/notes/orgzly/notes.org" :maxlevel . 2)
+       ("~/.emacs.d/archive.org" :maxlevel . 1)
        (org-agenda-files :maxlevel . 9)))
     (org-refile-use-outline-path nil)
     (org-directory "~/Dropbox/notes/")

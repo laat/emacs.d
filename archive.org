@@ -1,5 +1,4 @@
 * emacs.d
-** emacs.d archive
 ** LSP
 
 #+begin_src emacs-lisp

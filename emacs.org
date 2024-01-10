@@ -287,6 +287,14 @@ Return to last cursor position when opening a file.
     (setq delete-by-moving-to-trash t))
 #+end_src
 
+** Keychain
+
+#+begin_src emacs-lisp
+  (eval-after-load 'auth-source
+    '(when (member window-system '(mac ns))
+       (add-to-list 'auth-sources 'macos-keychain-internet)
+       (add-to-list 'auth-sources 'macos-keychain-generic)))
+#+end_src
 * GPG
 ** Add json to auth sources
 
@@ -505,6 +513,13 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 #+end_src
 
 * UI Configuration
+
+** Mouse
+Shift click with mouse selection.
+
+#+begin_src emacs-lisp
+(global-set-key (kbd "S-<down-mouse-1>") #'mouse-set-mark)
+#+end_src
 ** Emacs Dashboard
 
 #+begin_src emacs-lisp
@@ -682,7 +697,7 @@ Exclude lots of stuff
      (doom-modeline-minor-modes t)))
 
 
-  ;; (diminish 'visual-line-mode)
+  (diminish 'visual-line-mode)
 #+end_src
 
 Installint fonts:
@@ -1242,6 +1257,7 @@ Set this to the folder where you keep your Git repos!
 #+begin_src emacs-lisp
   (use-package git-gutter
     :hook (prog-mode . git-gutter-mode)
+    :diminish
     :config
     (setq git-gutter:update-interval 0.02))
 

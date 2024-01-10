@@ -1113,7 +1113,7 @@ mode.
 
 
 
-** Tree Sitter
+*** Tree Sitter
 
 #+begin_src emacs-lisp
   (use-package treesit-auto

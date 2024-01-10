@@ -99,7 +99,7 @@ Frame title
     :config
     (when (eq system-type 'darwin)
       ;; brew install gnu-tar
-      (setq-default quelpa-build-tar-executable "/usr/local/bin/gtar")))
+      (setq-default quelpa-build-tar-executable "/opt/homebrew/bin/gtar")))
 
   (use-package quelpa-use-package
     :ensure t
@@ -1096,6 +1096,16 @@ mode.
 #+end_src
 
 
+*** treesit
+#+begin_src emacs-lisp
+  (use-package treesit-auto
+    :ensure t
+    :custom
+    (treesit-auto-install 'prompt)
+    :config
+    (treesit-auto-add-to-auto-mode-alist 'all)
+    (global-treesit-auto-mode))
+#+end_src
 ** LSP
 
 #+begin_src emacs-lisp
@@ -1120,7 +1130,23 @@ mode.
     :ensure t
     :commands lsp-ui-mode)
 #+end_src
-
+** Copilot
+#+begin_src emacs-lisp
+  (use-package copilot
+    :quelpa (copilot :fetcher github
+                     :repo "zerolfx/copilot.el"
+                     :branch "main"
+                     :files ("dist" "*.el"))
+    :config
+    ;; (add-hook 'prog-mode-hook 'copilot-mode)
+    :general
+    (:states 'insert :keymaps 'copilot-mode-map
+             "C-l" 'copilot-accept-completion
+             "C-ø" 'copilot-next-completion
+             "C-æ" 'copilot-previous-completion)
+    (laat/leader-keys
+      "tc" '(copilot-mode :which-key "copilot-mode")))
+#+end_src
 ** Projects
 
 Set this to the folder where you keep your Git repos!
@@ -1518,6 +1544,21 @@ Need it get flycheck to find local binaries.
     :general
     (laat/leader-keys
       "gh" '(forge-dispatch :which-key "forge")))
+#+end_src
+
+** Git Gutter
+
+#+begin_src emacs-lisp
+  (use-package git-gutter
+    :hook (prog-mode . git-gutter-mode)
+    :config
+    (setq git-gutter:update-interval 0.02))
+
+  (use-package git-gutter-fringe
+    :config
+    (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
+    (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
+    (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
 #+end_src
 
 ** Docker

@@ -839,9 +839,12 @@ M-x nerd-the-icons-install-fonts
 Emacs does not know that there are multiple written Norwegian languages.
 
 #+begin_src emacs-lisp
-  (delete '("norsk" "nn_NO") ispell-dicts-name2locale-equivs-alist)
-  (add-to-list 'ispell-dicts-name2locale-equivs-alist '("norsk-bokmål" "nb_NO"))
-  (add-to-list 'ispell-dicts-name2locale-equivs-alist '("norsk-nynorsk" "nn_NO"))
+  (use-package ispell
+    :diminish
+    :config
+    (delete '("norsk" "nn_NO") ispell-dicts-name2locale-equivs-alist)
+    (add-to-list 'ispell-dicts-name2locale-equivs-alist '("norsk-bokmål" "nb_NO"))
+    (add-to-list 'ispell-dicts-name2locale-equivs-alist '("norsk-nynorsk" "nn_NO")))
 #+end_src
 
 *** OSX hunspell
@@ -856,9 +859,6 @@ It is important to have the spellcheck files for your LANG. I've tried to make i
 #+begin_src emacs-lisp :tangle no :results value replace
   (getenv "LANG")
 #+end_src
-
-#+RESULTS:
-: en_NO.UTF-8
 
 It's sometimes weird like =en_NO.UTF-8= so set it to something you have downloaded.
 

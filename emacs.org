@@ -1125,6 +1125,30 @@ mode.
     (global-treesit-auto-mode))
 #+end_src
 
+*** yasnippet
+
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :ensure t
+    :config
+    (yas-global-mode t)
+    :diminish yas-minor-mode)
+#+end_src
+
+*** Compilation
+#+end_src
+
+
+[[https://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode][ANSI Coloring in Compilation Mode]]
+#+begin_src emacs-lisp
+  (ignore-errors
+    (require 'ansi-color)
+    (defun my-colorize-compilation-buffer ()
+      (when (eq major-mode 'compilation-mode)
+        (ansi-color-apply-on-region compilation-filter-start (point-max))))
+    (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
+#+end_src
+
 ** Copilot
 
 #+begin_src emacs-lisp
@@ -1141,7 +1165,7 @@ mode.
              "C-ø" 'copilot-next-completion
              "C-æ" 'copilot-previous-completion)
     (laat/leader-keys
-      "tc" '(copilot-mode :which-key "copilot-mode")))
+      "tc" '(copilot-mode :which-key "Copilot")))
 #+end_src
 
 ** Projects
@@ -1171,23 +1195,10 @@ Set this to the folder where you keep your Git repos!
       :config (counsel-projectile-mode))
 #+end_src
 
-** Compilation
-#+end_src
-
-
-[[https://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode][ANSI Coloring in Compilation Mode]]
-#+begin_src emacs-lisp
-  (ignore-errors
-    (require 'ansi-color)
-    (defun my-colorize-compilation-buffer ()
-      (when (eq major-mode 'compilation-mode)
-        (ansi-color-apply-on-region compilation-filter-start (point-max))))
-    (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
-#+end_src
-
 ** Completion
 
 #+begin_src emacs-lisp
+
   (use-package company
     :ensure t
     :diminish
@@ -1205,19 +1216,11 @@ Set this to the folder where you keep your Git repos!
 
 #+end_src
 
-** yasnippet
+** Git
+*** Magit
 
 #+begin_src emacs-lisp
-  (use-package yasnippet
-    :ensure t
-    :config
-    (yas-global-mode t)
-    :diminish yas-minor-mode)
-#+end_src
 
-** Magit
-
-#+begin_src emacs-lisp
   (use-package magit
     :ensure t
     :general
@@ -1238,23 +1241,27 @@ Set this to the folder where you keep your Git repos!
     :config
     ;; use margin instead of fringe
     (diff-hl-margin-mode))
+
 #+end_src
 
-** Forge
+*** Forge
 
 
 #+begin_src emacs-lisp
+
   (use-package forge
     :ensure t
     :after magit
     :general
     (laat/leader-keys
       "gh" '(forge-dispatch :which-key "forge")))
+
 #+end_src
 
-** Git Gutter
+*** Git Gutter
 
 #+begin_src emacs-lisp
+
   (use-package git-gutter
     :hook (prog-mode . git-gutter-mode)
     :diminish
@@ -1266,6 +1273,7 @@ Set this to the folder where you keep your Git repos!
     (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
     (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
     (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
+
 #+end_src
 
 * Org

@@ -992,15 +992,15 @@ mode.
 #+begin_src emacs-lisp
   (use-package subword
     :diminish subword-mode
-    :config (add-hook 'prog-mode-hook 'subword-mode))
+    :hook (prog-mode . subword-mode))
 #+end_src
 
 *** Eldoc
 
 #+begin_src emacs-lisp
   (use-package eldoc
-    :diminish eldoc-mode
-    :config (add-hook 'prog-mode-hook 'eldoc-mode))
+    :diminish
+    :hook (prog-mode . eldoc-mode))
 #+end_src
 
 *** Find indent
@@ -1008,7 +1008,7 @@ mode.
 #+begin_src emacs-lisp
   (use-package dtrt-indent
     :diminish
-    :hook ((json-mode . dtrt-indent-mode))
+    :hook (json-mode . dtrt-indent-mode)
     :ensure t)
 #+end_src
 
@@ -1120,19 +1120,6 @@ mode.
 
 
 
-*** Tree Sitter
-
-#+begin_src emacs-lisp
-  (use-package treesit)
-  (use-package treesit-auto
-    :ensure t
-    :custom
-    (treesit-auto-install 'prompt)
-    :config
-    (treesit-auto-add-to-auto-mode-alist 'all)
-    (global-treesit-auto-mode))
-#+end_src
-
 *** yasnippet
 
 #+begin_src emacs-lisp
@@ -1155,6 +1142,70 @@ mode.
       (when (eq major-mode 'compilation-mode)
         (ansi-color-apply-on-region compilation-filter-start (point-max))))
     (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer))
+#+end_src
+
+*** Tree Sitter
+
+#+begin_src emacs-lisp
+  (use-package treesit)
+  (use-package treesit-auto
+    :ensure t
+    :custom
+    (treesit-auto-install 'prompt)
+    :config
+    (treesit-auto-add-to-auto-mode-alist 'all)
+    (global-treesit-auto-mode))
+#+end_src
+
+*** Completion
+
+#+begin_src emacs-lisp
+
+  (use-package company
+    :ensure t
+    :diminish
+    :bind
+    (("C-SPC" . company-complete-common)
+     :map prog-mode-map
+     ("<tab>" . company-indent-or-complete-common))
+    :config
+    (global-company-mode))
+
+  (use-package company-box
+    :ensure t
+    :diminish
+    :hook (company-mode . company-box-mode))
+
+#+end_src
+
+*** LSP
+
+#+begin_src emacs-lisp
+  (use-package eglot
+    :ensure t
+    :hook (prog-mode . eglot-ensure)
+    :init
+    (setq eglot-stay-out-of '(flymake))
+    :general
+    (laat/leader-keys
+      "v" '(:ignore t :which-key "language server")
+      "vo" '(eglot-code-action-organize-imports :which-key "organize import")
+      "v." '(eglot-code-actions :which-key "code actions")
+      "vr" '(eglot-rename :which-key "rename")
+      "v=" '(eglot-format :which-key "format"))
+    :custom
+    (eglot-confirm-server-initiated-edits nil "no confirm"))
+#+end_src
+
+*** Flymake
+
+#+begin_src emacs-lisp
+  (use-package flymake
+    :hook (prog-mode . flymake-mode)
+    :bind (:map flymake-mode-map
+                ("C-c ! n" . flymake-goto-next-error)
+                ("C-c ! p" . flymake-goto-prev-error)
+                ("C-c ! l" . flymake-show-buffer-diagnostics)))
 #+end_src
 
 ** Copilot
@@ -1201,27 +1252,6 @@ Set this to the folder where you keep your Git repos!
     (use-package counsel-projectile
       :ensure t
       :config (counsel-projectile-mode))
-#+end_src
-
-** Completion
-
-#+begin_src emacs-lisp
-
-  (use-package company
-    :ensure t
-    :diminish
-    :bind
-    (("C-SPC" . company-complete-common)
-     :map prog-mode-map
-     ("<tab>" . company-indent-or-complete-common))
-    :config
-    (global-company-mode))
-
-  (use-package company-box
-    :ensure t
-    :diminish
-    :hook (company-mode . company-box-mode))
-
 #+end_src
 
 ** Git
@@ -1279,31 +1309,6 @@ Set this to the folder where you keep your Git repos!
 
 #+end_src
 
-** LSP
-
-#+begin_src emacs-lisp
-  (use-package eglot
-    :hook (prog-mode . eglot-ensure)
-    :init
-    (setq eglot-stay-out-of '(flymake))
-    :general
-    (laat/leader-keys
-      "v" '(:ignore t :which-key "language server")
-      "vo" '(eglot-code-action-organize-imports :which-key "organize import")
-      "v." '(eglot-code-actions :which-key "code actions")
-      "vr" '(eglot-rename :which-key "rename")
-      "v=" '(eglot-format :which-key "format"))
-    :custom
-    (eglot-confirm-server-initiated-edits nil "no confirm"))
-
-  (use-package flymake
-    :hook (prog-mode . flymake-mode)
-    :bind (:map flymake-mode-map
-                ("C-c ! n" . flymake-goto-next-error)
-                ("C-c ! p" . flymake-goto-prev-error)
-                ("C-c ! l" . flymake-show-buffer-diagnostics)))
-#+end_src
-
 ** Languages
 
 *** Ruby
@@ -1353,6 +1358,32 @@ Set this to the folder where you keep your Git repos!
                  '(tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")))
 #+end_src
 
+*** Svelte
+
+#+begin_src emacs-lisp
+  (use-package svelte-mode
+    :ensure
+    :defer t
+    :hook (svelte-mode . emmet-mode)
+    :config
+    (add-to-list 'treesit-language-source-alist
+                 '(svelte "https://github.com/Himujjal/tree-sitter-svelte" "master" "src"))
+    (add-to-list 'eglot-server-programs
+                 '(svelte-mode . ("svelteserver" "--stdio"))))
+#+end_src
+
+
+*** HTML
+
+#+begin_src emacs-lisp
+    (use-package emmet-mode
+      :ensure t
+      ;; :hook (svelte-mode . emmet-mode)
+      ;; :hook (web-mode . emmet-mode)
+      ;; :hook (html-mode . emmet-mode)
+      ;; :hook (css-mode . emmet-mode)
+  )
+#+end_src
 
 * Org
 ** Base Config
@@ -1381,6 +1412,8 @@ Set this to the folder where you keep your Git repos!
      :keymaps 'org-mode-map
      "C-c C-j" 'counsel-org-goto
      "s-f" 'counsel-org-goto
+     "s-j" 'org-metadown
+     "s-k" 'org-metaup
      ;; C-j and C-k walks up the treee
      [remap outline-forward-same-level] 'org-forward-element
      [remap outline-backward-same-level] 'org-backward-element)

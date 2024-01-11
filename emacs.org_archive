@@ -1,5 +1,16 @@
-* emacs.d
-** LSP
+#    -*- mode: org -*-
+
+
+Archived entries from file /Users/sigurd/.emacs.d/emacs.org
+
+
+* LSP
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-11 Thu 14:40
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Archive
+:ARCHIVE_CATEGORY: emacs
+:END:
 
 #+begin_src emacs-lisp
   (use-package lsp-mode
@@ -22,7 +33,14 @@
   (use-package lsp-ui
     :ensure t
     :commands lsp-ui-mode)
-** Syntax Checking
+
+* Syntax Checking
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-11 Thu 14:40
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Archive
+:ARCHIVE_CATEGORY: emacs
+:END:
 
 #+begin_src emacs-lisp
   (use-package flycheck
@@ -39,10 +57,17 @@
     :init (global-flycheck-mode))
 #+end_src
 
-** Languages
 
-*** Lispish
-**** lispy
+* Languages
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-11 Thu 14:40
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Archive
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+** Lispish
+*** lispy
 
 #+begin_src emacs-lisp
   (use-package lispy
@@ -57,7 +82,7 @@
     (lispy-eval-display-style 'overlay))
 #+end_src
 
-**** lispyville
+*** lispyville
 
 #+begin_src emacs-lisp
   (use-package lispyville
@@ -84,7 +109,7 @@
 #+end_src
 
 
-**** Parinfer
+*** Parinfer
 
 #+begin_src emacs-lisp
   (use-package parinfer-rust-mode
@@ -99,7 +124,7 @@
       "tp" '(parinfer-rust-toggle-paren-mode :which-key "toggle parinfer mode")))
 #+end_src
 
-**** Aggressive indent
+*** Aggressive indent
 
 #+begin_src emacs-lisp
   (use-package aggressive-indent
@@ -109,7 +134,7 @@
     :hook ((emacs-lisp-mode lisp-mode clojure-mode) . aggressive-indent-mode))
 #+end_src
 
-*** Dockerfile
+** Dockerfile
 
 #+begin_src emacs-lisp
   (use-package dockerfile-mode
@@ -117,7 +142,7 @@
     :ensure t)
 #+end_src
 
-*** Docker Compose
+** Docker Compose
 
 #+begin_src emacs-lisp
 (use-package docker-compose-mode
@@ -125,7 +150,7 @@
   :ensure t)
 #+end_src
 
-*** C#
+** C#
 
 #+begin_src emacs-lisp
   (use-package csharp-mode
@@ -135,7 +160,7 @@
 
 =M-x lsp-install-server RET csharp RET=
 
-*** F#
+** F#
 
 #+begin_src emacs-lisp
   (use-package fsharp-mode
@@ -145,11 +170,11 @@
     (inferior-fsharp-program "dotnet fsi --readline-"))
 #+end_src
 
-**** LSP
+*** LSP
 
 =M-x lsp-install-server RET fsac RET=
 
-*** Clojure
+** Clojure
 
 #+begin_src emacs-lisp
   (use-package clojure-mode
@@ -178,7 +203,7 @@
      ))
 #+end_src
 
-*** JSON
+** JSON
 
 #+begin_src emacs-lisp
     (use-package json-mode
@@ -190,7 +215,7 @@
       :commands (counsel-jq))
 #+end_src
 
-**** LSP
+*** LSP
 
 M-x lsp-install-server RET json-ls RET
 
@@ -200,7 +225,7 @@ or
   npm i -g vscode-json-languageserver
 #+end_src
 
-*** YAML
+** YAML
 
 #+begin_src emacs-lisp
   (use-package yaml-mode
@@ -208,11 +233,11 @@ or
     :mode ("\\.yaml\\'" "\\.yml\\'"))
 #+end_src
 
-**** LSP
+*** LSP
 
 =M-x lsp-install-server RET yamlls RET=
 
-*** Markdown
+** Markdown
 
 #+begin_src emacs-lisp
   (use-package markdown-mode
@@ -224,13 +249,13 @@ or
     :init (setq markdown-command "multimarkdown"))
 #+end_src
 
-*** JavaScript
+** JavaScript
 
-**** paranthesis
+*** paranthesis
 #+begin_src emacs-lisp
   (add-hook 'js-mode-hook 'electric-pair-local-mode)
 #+end_src
-**** jest
+*** jest
 
 #+begin_src emacs-lisp
   (use-package jest
@@ -239,7 +264,7 @@ or
     :hook (js-mode . jest-minor-mode))
 #+end_src
 
-**** Npm
+*** Npm
 
 #+begin_src emacs-lisp
   (use-package npm
@@ -256,7 +281,7 @@ or
 
 =M-x npm=
 
-**** node_modeules binaries
+*** node_modeules binaries
 
 Need it get flycheck to find local binaries.
 
@@ -267,8 +292,8 @@ Need it get flycheck to find local binaries.
   ;;   :custom (add-node-modules-path-command '("pnpm bin" "pnpm bin -w")))
 #+end_src
 
-*** TypeScript
-**** basic
+** TypeScript
+*** basic
 
 #+begin_src emacs-lisp
   (use-package typescript-mode
@@ -276,14 +301,14 @@ Need it get flycheck to find local binaries.
     :defer t)
 #+end_src
 
-**** LSP
+*** LSP
 
 #+begin_src shell :async :tangle no
   npm i -g typescript-language-server
   npm i -g typescript
 #+end_src
 
-*** SSH
+** SSH
 
 #+begin_src emacs-lisp
   (use-package ssh-config-mode
@@ -294,7 +319,7 @@ Need it get flycheck to find local binaries.
            ("/authorized_keys2?\\'" . ssh-authorized-keys-mode)))
 #+end_src
 
-*** SQL
+** SQL
 
 #+begin_src emacs-lisp
   (use-package ejc-sql
@@ -317,7 +342,14 @@ Need it get flycheck to find local binaries.
     :hook (sql-mode . sqlup-mode))
 #+end_src
 
-** Docker
+
+* Docker
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-11 Thu 14:40
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Archive
+:ARCHIVE_CATEGORY: emacs
+:END:
 
 #+begin_src emacs-lisp
   (use-package docker
@@ -325,8 +357,15 @@ Need it get flycheck to find local binaries.
     :bind ("C-c d" . docker))
 #+end_src
 
-** Ideas
-*** https://github.com/lepisma/rogue
-*** https://github.com/deb0ch/emacs-winum
-*** https://github.com/purcell/elisp-slime-nav
-*** https://melpa.org/#/ytdl
+
+* Ideas
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-11 Thu 14:40
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Archive
+:ARCHIVE_CATEGORY: emacs
+:END:
+** https://github.com/lepisma/rogue
+** https://github.com/deb0ch/emacs-winum
+** https://github.com/purcell/elisp-slime-nav
+** https://melpa.org/#/ytdl

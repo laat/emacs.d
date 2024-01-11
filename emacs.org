@@ -1894,3 +1894,4 @@ emacs -q --eval='(message "%s" (emacs-init-time))'
 open -n /Applications/Emacs.app --args -q --eval='(message "%s" (emacs-init-time))'
 #+end_src
 
+

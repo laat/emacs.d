@@ -1242,13 +1242,6 @@ Set this to the folder where you keep your Git repos!
     :config
     (add-hook 'git-commit-mode-hook 'evil-insert-state)
     (add-to-list 'evil-insert-state-modes 'magit-log-edit-mode))
-  (use-package diff-hl
-    :ensure t
-    :hook (dired-mode . diff-hl-dired-mode-unless-remote)
-    :hook (magit-post-refresh . diff-hl-magit-post-refresh)
-    :config
-    ;; use margin instead of fringe
-    (diff-hl-margin-mode))
 
 #+end_src
 
@@ -1270,17 +1263,19 @@ Set this to the folder where you keep your Git repos!
 
 #+begin_src emacs-lisp
 
-  (use-package git-gutter
-    :hook (prog-mode . git-gutter-mode)
-    :diminish
-    :config
-    (setq git-gutter:update-interval 0.02))
+    (use-package git-gutter
+      :hook
+      (prog-mode . git-gutter-mode)
+      (org-mode . git-gutter-mode)
+      :diminish
+      :config
+      (setq git-gutter:update-interval 0.02))
 
-  (use-package git-gutter-fringe
-    :config
-    (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
-    (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
-    (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
+    (use-package git-gutter-fringe
+      :config
+      (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
+      (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
+      (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
 
 #+end_src
 

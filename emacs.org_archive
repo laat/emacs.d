@@ -369,3 +369,22 @@ Need it get flycheck to find local binaries.
 ** https://github.com/deb0ch/emacs-winum
 ** https://github.com/purcell/elisp-slime-nav
 ** https://melpa.org/#/ytdl
+
+* diff-hl
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-11 Thu 16:54
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Development/Git
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+  (use-package diff-hl
+    :ensure t
+    :hook (dired-mode . diff-hl-dired-mode-unless-remote)
+    :hook (magit-post-refresh . diff-hl-magit-post-refresh)
+    :config
+    ;; use margin instead of fringe
+    (diff-hl-margin-mode))
+#+end_src
+

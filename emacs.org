@@ -1307,6 +1307,16 @@ Set this to the folder where you keep your Git repos!
 
 #+end_src
 
+*** Modes
+
+#+begin_src emacs-lisp
+(use-package git-modes
+  :ensure t
+  :mode (("\\.gitattributes\\'" . gitattributes-mode)
+         ("\\.gitconfig\\'" . gitconfig-mode)
+         ("\\.gitignore\\'" . gitignore-mode)))
+#+end_src
+
 ** Languages
 
 
@@ -1946,7 +1956,6 @@ sequenceDiagram
 Needs =brew install coreutils=
 
 #+begin_src emacs-lisp
-
   (when (eq system-type 'darwin)
     (setq insert-directory-program "gls"
           dired-listing-switches "-alBh --group-directories-first"

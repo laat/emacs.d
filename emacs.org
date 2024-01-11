@@ -255,7 +255,7 @@ Return to last cursor position when opening a file.
   (save-place-mode +1)
 #+end_src
 
-* Basic Config OS X
+* Basic Config Macos
 ** PATH
 
 #+begin_src emacs-lisp
@@ -560,6 +560,9 @@ Shift click with mouse selection.
   (defun laat/switch-to-mobile-notes ()
     (interactive)
     (find-file "~/Dropbox/notes/orgzly/notes.org"))
+  (defun laat/switch-to-mobile-inbox ()
+    (interactive)
+    (find-file "~/Dropbox/notes/orgzly/Inbox.org"))
   (defun laat/switch-to-notes ()
     (interactive)
     (find-file "~/Dropbox/notes/notes.org"))
@@ -579,6 +582,7 @@ Shift click with mouse selection.
     "fs" '(laat/switch-to-scratch :which-key "scratch")
     "fn" '(laat/switch-to-notes :which-key "notes")
     "fb" '(laat/switch-to-mobile-notes :which-key "mobile notes")
+    "fi" '(laat/switch-to-mobile-inbox :which-key "mobile inbox")
     "fm" '(laat/switch-to-messages :which-key "mobile notes")
     "fe" '(laat/switch-to-config :which-key "emacs config")
     "fj" '(laat/switch-to-journal :which-key "journal")
@@ -1119,6 +1123,7 @@ mode.
 *** Tree Sitter
 
 #+begin_src emacs-lisp
+  (use-package treesit)
   (use-package treesit-auto
     :ensure t
     :custom
@@ -1278,6 +1283,81 @@ Set this to the folder where you keep your Git repos!
     (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
 
 #+end_src
+
+** LSP
+
+#+begin_src emacs-lisp
+  (use-package eglot
+    :hook (prog-mode . eglot-ensure)
+    :init
+    (setq eglot-stay-out-of '(flymake))
+    :general
+    (laat/leader-keys
+      "v" '(:ignore t :which-key "language server")
+      "vo" '(eglot-code-action-organize-imports :which-key "organize import")
+      "v." '(eglot-code-actions :which-key "code actions")
+      "vr" '(eglot-rename :which-key "rename")
+      "v=" '(eglot-format :which-key "format"))
+    :custom
+    (eglot-confirm-server-initiated-edits nil "no confirm"))
+
+  (use-package flymake
+    :hook (prog-mode . flymake-mode)
+    :bind (:map flymake-mode-map
+                ("C-c ! n" . flymake-goto-next-error)
+                ("C-c ! p" . flymake-goto-prev-error)
+                ("C-c ! l" . flymake-show-buffer-diagnostics)))
+#+end_src
+
+** Languages
+
+*** Ruby
+
+#+begin_src emacs-lisp
+  (use-package ruby-ts-mode
+    :mode "\\.rb\\'"
+    :mode "Rakefile\\'"
+    :mode "Gemfile\\'"
+    :general
+    (laat/local-leader-keys
+      :states 'normal
+      :keymaps 'ruby-ts-mode-map
+      "s" '(treesit-beginning-of-defun :which-key "defun start")
+      "e" '(treesit-end-of-defun :which-key "defun end"))
+    :config
+    (add-to-list 'treesit-language-source-alist '(ruby "https://github.com/tree-sitter/tree-sitter-ruby" "master" "src"))
+    :custom
+    (ruby-indent-level 4)
+    (ruby-indent-tabs-mode nil))
+#+end_src
+
+*** JavaScript
+
+#+begin_src emacs-lisp
+  (use-package js-base-mode
+    :defer t
+    :ensure js
+    :custom
+    (js-indent-level 2)
+    :config
+    (add-to-list 'treesit-language-source-alist
+                 '(javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")))
+#+end_src
+
+*** TypeScript
+
+#+begin_src emacs-lisp
+  (use-package typescript-ts-mode
+    :ensure typescript-ts-mode
+    :defer t
+    :custom
+    (typescript-indent-level 2)
+    :config
+    (add-to-list 'treesit-language-source-alist
+                 '(typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+                 '(tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")))
+#+end_src
+
 
 * Org
 ** Base Config
@@ -1475,7 +1555,7 @@ Magit bash script
     (setq langtool-bin "/usr/local/bin/languagetool"))
 #+end_src
 
-On OSX:
+On Macos:
 #+begin_src shell :tangle no
 brew install languagetool
 #+end_src
@@ -1512,7 +1592,7 @@ brew install languagetool
       "yi" '(org-download-clipboard :which-key "clipboard image")))
 #+end_src
 
-On OSX use before calling =org-download-clipboard=
+On Macos use before calling =org-download-clipboard=
 #+begin_src shell :tangle no
   brew install pngpaste
 #+end_src

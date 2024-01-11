@@ -1192,6 +1192,7 @@ mode.
       "vr" '(eglot-rename :which-key "rename")
       "v=" '(eglot-format :which-key "format"))
     :custom
+    (eglot-autoshutdown t)
     (eglot-confirm-server-initiated-edits nil "no confirm"))
 #+end_src
 

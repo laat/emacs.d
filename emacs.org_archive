@@ -404,3 +404,35 @@ Need it get flycheck to find local binaries.
     :custom
     (emmet-insert-flash-time 0.001))
 #+end_src
+
+* apheleia
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-11 Thu 21:35
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Development/Basic
+:ARCHIVE_CATEGORY: emacs
+:END:
+#+begin_src emacs-lisp
+  (use-package apheleia
+    :ensure t
+    :defer t
+    :hook (prog-mode . apheleia-mode)
+    :config
+    (apheleia-global-mode t))
+#+end_src
+
+
+* Format
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-11 Thu 21:37
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Development/Basic
+:ARCHIVE_CATEGORY: emacs
+:END:
+#+begin_src emacs-lisp
+  (use-package format-all
+    :ensure t
+    :commands format-all-mode
+    :hook (prog-mode . format-all-mode))
+#+end_src
+

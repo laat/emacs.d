@@ -1310,6 +1310,7 @@ Set this to the folder where you keep your Git repos!
 ** Languages
 
 
+
 *** Ruby
 
 #+begin_src emacs-lisp
@@ -1948,7 +1949,7 @@ Needs =brew install coreutils=
 
   (when (eq system-type 'darwin)
     (setq insert-directory-program "gls"
-          dired-listing-switches "-al --group-directories-first"
+          dired-listing-switches "-alBh --group-directories-first"
           dired-use-ls-dired t))
 #+end_src
 

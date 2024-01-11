@@ -1184,8 +1184,6 @@ mode.
   (use-package eglot
     :ensure t
     :hook (prog-mode . eglot-ensure)
-    :init
-    (setq eglot-stay-out-of '(flymake))
     :general
     (laat/leader-keys
       "v" '(:ignore t :which-key "language server")
@@ -1311,6 +1309,7 @@ Set this to the folder where you keep your Git repos!
 
 ** Languages
 
+
 *** Ruby
 
 #+begin_src emacs-lisp
@@ -1364,7 +1363,6 @@ Set this to the folder where you keep your Git repos!
   (use-package svelte-mode
     :ensure
     :defer t
-    :hook (svelte-mode . emmet-mode)
     :config
     (add-to-list 'treesit-language-source-alist
                  '(svelte "https://github.com/Himujjal/tree-sitter-svelte" "master" "src"))
@@ -1372,18 +1370,6 @@ Set this to the folder where you keep your Git repos!
                  '(svelte-mode . ("svelteserver" "--stdio"))))
 #+end_src
 
-
-*** HTML
-
-#+begin_src emacs-lisp
-    (use-package emmet-mode
-      :ensure t
-      ;; :hook (svelte-mode . emmet-mode)
-      ;; :hook (web-mode . emmet-mode)
-      ;; :hook (html-mode . emmet-mode)
-      ;; :hook (css-mode . emmet-mode)
-  )
-#+end_src
 
 * Org
 ** Base Config

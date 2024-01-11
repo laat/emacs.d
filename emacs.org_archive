@@ -388,3 +388,19 @@ Need it get flycheck to find local binaries.
     (diff-hl-margin-mode))
 #+end_src
 
+
+* Emmet
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-11 Thu 20:33
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Development/Basic
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+  (use-package emmet-mode
+    :ensure t
+    :diminish
+    :custom
+    (emmet-insert-flash-time 0.001))
+#+end_src

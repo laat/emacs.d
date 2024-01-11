@@ -436,3 +436,35 @@ Need it get flycheck to find local binaries.
     :hook (prog-mode . format-all-mode))
 #+end_src
 
+
+* Color Theme
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-11 Thu 22:08
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: UI Configuration
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+  (use-package doom-themes
+    :ensure t
+    :init (load-theme 'doom-one t))
+#+end_src
+
+
+* Color Theme
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-11 Thu 22:25
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: UI Configuration
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+  (use-package modus-themes
+    :ensure t
+    :config
+    (require-theme 'modus-themes)
+    (load-theme 'modus-vivendi))
+#+end_src
+

@@ -506,6 +506,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
      ((kbd "s-q") . save-buffers-kill-emacs)
      ((kbd "s-s") . save-buffer)
      ((kbd "s-f") . swiper)
+     ((kbd "s-F") . counsel-rg)
      ((kbd "s-v") . evil-paste-after)
      ((kbd "s-x") . execute-extended-command)
      ((kbd "s-w") . delete-frame)
@@ -695,6 +696,7 @@ Exclude lots of stuff
 
   (use-package nerd-icons
     :ensure t)
+
   (use-package doom-modeline
     :ensure t
     :init

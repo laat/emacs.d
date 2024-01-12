@@ -1250,10 +1250,10 @@ Set this to the folder where you keep your Git repos!
     (add-hook 'git-commit-mode-hook 'evil-insert-state)
     (add-to-list 'evil-insert-state-modes 'magit-log-edit-mode))
 
-  (defun laat/kill-magit-diff-buffer-in-current-repo (&rest _)
-    "Delete the magit-diff buffer related to the current repo"
-    (let ((magit-diff-buffer-in-current-repo (magit-mode-get-buffer 'magit-diff-mode)))
-      (kill-buffer magit-diff-buffer-in-current-repo)))
+  ;; (defun laat/kill-magit-diff-buffer-in-current-repo (&rest _)
+  ;;   "Delete the magit-diff buffer related to the current repo"
+  ;;   (let ((magit-diff-buffer-in-current-repo (magit-mode-get-buffer 'magit-diff-mode)))
+  ;;     (kill-buffer magit-diff-buffer-in-current-repo)))
   ;;
   ;; When 'C-c C-c' or 'C-c C-l' are pressed in the magit commit message buffer,
   ;; delete the magit-diff buffer related to the current repo.

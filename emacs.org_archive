@@ -587,3 +587,21 @@ Need it get flycheck to find local binaries.
     (add-to-list 'eglot-server-programs
                  '(swift-mode . ("xcrun" "sourcekit-lsp"))))
 #+end_src
+
+* languagetool
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-12 Fri 17:35
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Org
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+  (use-package langtool
+    :ensure t
+    :ensure-system-package languagetool
+    :custom
+    (langtool-default-language "en-US")
+    (langtool-bin (executable-find "languagetool")))
+#+end_src
+

@@ -1592,17 +1592,6 @@ Magit bash script
   fi
 #+end_src
 
-** languagetool
-
-#+begin_src emacs-lisp
-  (use-package langtool
-    :ensure t
-    :ensure-system-package languagetool
-    :custom
-    (langtool-default-language "en-US")
-    (langtool-bin (executable-find "languagetool")))
-#+end_src
-
 ** writegood
 
 #+begin_src emacs-lisp

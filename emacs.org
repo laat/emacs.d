@@ -85,11 +85,15 @@ Frame title
   (package-install 'use-package))
 #+end_src
 
-** Ensure system packages
+** System Packages
+
 #+begin_src emacs-lisp
-(use-package use-package-ensure-system-package
-  :ensure t)
+  (use-package system-packages
+    :ensure t
+    :defer t)
 #+end_src
+
+
 ** Quelpa
 
 #+begin_src emacs-lisp
@@ -255,7 +259,7 @@ Return to last cursor position when opening a file.
   (save-place-mode +1)
 #+end_src
 
-* Basic Config Macos
+* Basic Config MacOS
 ** PATH
 
 #+begin_src emacs-lisp
@@ -1593,15 +1597,10 @@ Magit bash script
 #+begin_src emacs-lisp
   (use-package langtool
     :ensure t
-    :init
-    (setq langtool-default-language "en-US")
-    :config
-    (setq langtool-bin "/usr/local/bin/languagetool"))
-#+end_src
-
-On Macos:
-#+begin_src shell :tangle no
-brew install languagetool
+    :ensure-system-package languagetool
+    :custom
+    (langtool-default-language "en-US")
+    (langtool-bin (executable-find "languagetool")))
 #+end_src
 
 ** writegood

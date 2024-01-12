@@ -259,6 +259,22 @@ Return to last cursor position when opening a file.
   (save-place-mode +1)
 #+end_src
 
+** PATH
+
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :ensure t
+    :defer t
+    :if (memq window-system '(mac ns darwin))
+    :init
+    (setq
+     ;; exec-path-from-shell-debug t
+     ;; bash has the correct path (on my system) and is faster
+     exec-path-from-shell-shell-name "bash"
+     ;; removed -i because -l has correct path on my system
+     exec-path-from-shell-arguments '("-l"))
+    :config (exec-path-from-shell-initialize))
+#+end_src
 * Key Binds
 ** General
 
@@ -462,29 +478,9 @@ Return to last cursor position when opening a file.
      ((kbd "s--") . text-scale-decrease)))
 #+end_src
 
-* Basic Config MacOS
-** PATH
-
-#+begin_src emacs-lisp
-  (use-package exec-path-from-shell
-    :ensure t
-    :defer t
-    :if (memq window-system '(mac ns darwin))
-    :init
-    (setq
-     ;; exec-path-from-shell-debug t
-     ;; bash has the correct path (on my system) and is faster
-     exec-path-from-shell-shell-name "bash"
-     ;; removed -i because -l has correct path on my system
-     exec-path-from-shell-arguments '("-l"))
-    :config (exec-path-from-shell-initialize))
-#+end_src
+* MacOS
 
 ** Trash
-
-#+begin_src shell
-  brew install trash
-#+end_src
 
 #+begin_src emacs-lisp
   (use-package osx-trash

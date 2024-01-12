@@ -665,3 +665,20 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
         (org-project-capture-single-file)))
 #+end_src
 
+
+* Nice bullets
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-12 Fri 20:01
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Org
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+  (use-package org-bullets
+    :ensure t
+    :hook (org-mode . org-bullets-mode)
+    :custom
+    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+#+end_src
+

@@ -1610,16 +1610,6 @@ On Macos use before calling =org-download-clipboard=
   brew install pngpaste
 #+end_src
 
-* Nice bullets
-
-#+begin_src emacs-lisp
-  (use-package org-bullets
-    :ensure t
-    :hook (org-mode . org-bullets-mode)
-    :custom
-    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-#+end_src
-
 ** Visual center
 
 #+begin_src emacs-lisp

@@ -821,3 +821,18 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     :hook (evil-mode . global-evil-mc-mode))
 #+end_src
 
+
+* vterm-evil
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-12 Fri 22:42
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Terminals
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+
+  (with-eval-after-load 'evil
+    (evil-set-initial-state 'vterm-mode 'emacs))
+#+end_src
+

@@ -365,6 +365,7 @@ Fix path
     :ensure t
     :after evil
     :config
+    (delete 'vterm evil-collection-mode-list)
     (evil-collection-init))
 
   (use-package evil-matchit
@@ -403,7 +404,6 @@ Fix path
 
   (use-package evil-multiedit
     :ensure t
-    :hook (evil-mode . global-evil-mc-mode)
     :general
     (:states '(normal visual)
              "s-d" 'evil-multiedit-match-and-next

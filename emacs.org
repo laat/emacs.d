@@ -1252,7 +1252,7 @@ Set this to the folder where you keep your Git repos!
 
 #+end_src
 
-When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, delete the magit-diff window related to the current repo.
+When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill the magit-diff buffer related to the current repo.
 
 #+begin_src emacs-lisp
   (defun laat/magit-cleanup-magit-diff-buffer ()

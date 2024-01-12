@@ -639,3 +639,20 @@ Need it get flycheck to find local binaries.
 
 Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 
+
+* Nice bullets
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-12 Fri 18:35
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Org
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+  (use-package org-bullets
+    :ensure t
+    :hook (org-mode . org-bullets-mode)
+    :custom
+    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+#+end_src
+

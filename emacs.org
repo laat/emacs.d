@@ -360,7 +360,7 @@ Return to last cursor position when opening a file.
     (after-init . evil-mode)
     :general
     (general-define-key
-     :keymaps '(insert)
+     :keymaps '(insert normal)
      "<s-backspace>" 'evil-delete-backward-word)
     :config
     (evil-mode 1)
@@ -436,7 +436,7 @@ Return to last cursor position when opening a file.
 
   (use-package evil-lion
     :ensure t
-    :defer t
+    :after evil
     :config
     (evil-lion-mode))
 
@@ -1610,15 +1610,17 @@ On Macos use before calling =org-download-clipboard=
   brew install pngpaste
 #+end_src
 
-** Nice bullets
+** Bullets
 
 #+begin_src emacs-lisp
-  (use-package org-bullets
+  (use-package svg-lib
     :ensure t
-    :after org
-    :hook (org-mode . org-bullets-mode)
-    :custom
-    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+    :quelpa (svg-lib :fetcher github :repo "rougier/svg-lib"))
+
+  (use-package org-margin
+    :ensure t
+    :quelpa (org-margin :fetcher github :repo "rougier/org-margin")
+    :hook (org-mode . org-margin-mode))
 #+end_src
 
 ** Visual center
@@ -1820,7 +1822,7 @@ sequenceDiagram
 ** org-yt
 
 #+begin_src org
-  [[yt:PeVQwYUxYEg] ]
+  [[yt:PeVQwYUxYEg]]
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1882,6 +1884,7 @@ sequenceDiagram
 
 #+begin_src emacs-lisp
   (use-package djvu
+    :ensure t
     :defer t)
 
   (use-package org-noter

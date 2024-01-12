@@ -570,3 +570,20 @@ Need it get flycheck to find local binaries.
     (doom-themes-org-config))
 #+end_src
 
+
+* Swift
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-12 Fri 16:38
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Development/Languages
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+  (use-package swift-mode
+    :ensure t
+    :defer t
+    :config
+    (add-to-list 'eglot-server-programs
+                 '(swift-mode . ("xcrun" "sourcekit-lsp"))))
+#+end_src

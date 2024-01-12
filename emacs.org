@@ -261,6 +261,7 @@ Return to last cursor position when opening a file.
 #+begin_src emacs-lisp
   (use-package exec-path-from-shell
     :ensure t
+    :defer t
     :if (memq window-system '(mac ns darwin))
     :init
     (setq
@@ -317,7 +318,9 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 #+begin_src emacs-lisp
   (use-package general
     :ensure t
-    :after evil
+    :functions
+    laat/leader-keys
+    laat/leader-local-keys
     :config
     (general-evil-setup)
     (general-create-definer laat/leader-keys
@@ -350,10 +353,17 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 
   (use-package evil
     :ensure t
+    :defines
+    evil-inner-text-objects-map
+    evil-insert-state-map
+    evil-motion-state-map
+    evil-normal-state-map
     :init
     (setq evil-want-integration t)
     (setq evil-want-keybinding nil)
     (setq evil-collection-want-unimpaired-p nil)
+    :hook
+    (after-init . evil-mode)
     :general
     (general-define-key
      :keymaps '(insert)
@@ -366,13 +376,13 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 
     ;; visual lines
     (define-key evil-normal-state-map
-      (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+                (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
     (define-key evil-normal-state-map
-      (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+                (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
     (define-key evil-motion-state-map
-      (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+                (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
     (define-key evil-motion-state-map
-      (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+                (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
 
     (setq-default evil-cross-lines t)
 
@@ -448,15 +458,9 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 #+begin_src emacs-lisp
   (use-package hydra
     :after evil
-    :ensure t
-    :config
-    (defhydra laat/zoom-hydra ()
-      "zoom"
-      ("0" (text-scale-set 0) "reset" :exit t)
-      ("j" text-scale-increase "in")
-      ("k" text-scale-decrease "out"))
-    (laat/leader-keys
-      "z" '(laat/zoom-hydra/body :which-key "zoom")))
+    :defer t
+    :ensure t)
+
   (use-package use-package-hydra
     :ensure t)
 #+end_src
@@ -499,8 +503,7 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
      mac-right-option-modifier 'none
      mac-option-modifier 'meta
      mac-command-modifier 'super)
-    (after 'evil
-      (define-key evil-insert-state-map (kbd "s-v") 'yank))
+    (after 'evil (define-key evil-insert-state-map (kbd "s-v") 'yank))
     (bind-keys
      ((kbd "s-a") . mark-whole-buffer)
      ((kbd "s-c") . kill-ring-save)
@@ -787,6 +790,7 @@ M-x nerd-the-icons-install-fonts
 
   (use-package ivy-rich
     :ensure t
+    :after ivy
     :defer 3
     :init
     (ivy-rich-mode 1))
@@ -1395,16 +1399,6 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
 #+end_src
 
 
-*** Swift
-
-#+begin_src emacs-lisp
-  (use-package svelte-mode
-    :ensure
-    :defer t
-    :config
-    (add-to-list 'eglot-server-programs
-                 '(svelte-mode . ("xcrun" "sourcekit-lsp"))))
-#+end_src
 * Org
 ** Base Config
 
@@ -1456,6 +1450,7 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
     (add-hook 'org-capture-mode-hook #'org-id-get-create)
     :custom
+    ;; (org-startup-with-inline-images t)
     (org-catch-invisible-edits 'smart)
     (org-ctrl-k-protect-subtree t)
     (org-image-actual-width nil "allows #+ATTR_ORG: :width 100")
@@ -1520,7 +1515,9 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
 ** htmlize syntax highlight
 Syntax highlihgt exported html
 #+begin_src emacs-lisp
-  (use-package htmlize :ensure t)
+  (use-package htmlize
+    :ensure t
+    :after org)
 #+end_src
 
 to set a background color
@@ -1698,10 +1695,11 @@ On Macos use before calling =org-download-clipboard=
 ** Babel
 *** Images
 #+begin_src emacs-lisp
-  (add-hook 'org-babel-after-execute-hook (lambda ()
-                                            (when org-inline-image-overlays
-                                              (org-redisplay-inline-images))))
-
+  (after 'org
+    (add-hook 'org-babel-after-execute-hook
+              (lambda ()
+                (when org-inline-image-overlays
+                  (org-redisplay-inline-images)))))
 #+end_src
 *** Emacs lisp
 
@@ -1811,6 +1809,7 @@ sequenceDiagram
 
 #+begin_src emacs-lisp
   (use-package ob-sql
+    :defer t
     :after org
     :config
     (add-to-list 'org-babel-load-languages '(sql . t))
@@ -1830,23 +1829,24 @@ sequenceDiagram
 
 #+begin_src swiftui :tangle no :results file
   Rectangle()
-    .fill(Color.yellow)
+    .fill(Color.green)
     .frame(maxWidth: .infinity, maxHeight: .infinity)
 #+end_src
 
 *** load babel languages
 
 #+begin_src emacs-lisp
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((emacs-lisp . t)
-     (fsharp . t)
-     (http . t)
-     (js . t)
-     (mermaid . t)
-     (shell . t)
-     (sql . t)
-     (typescript . t)))
+  (after 'org
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (fsharp . t)
+       (http . t)
+       (js . t)
+       (mermaid . t)
+       (shell . t)
+       (sql . t)
+       (typescript . t))))
 #+end_src
 
 
@@ -1858,6 +1858,7 @@ sequenceDiagram
 
 #+begin_src emacs-lisp
   (use-package org-yt
+    :after org
     :quelpa (org-yt :fetcher github :repo "TobiasZawada/org-yt"
                     :commit "40cc1ac76d741055cbefa13860d9f070a7ade001")
     :config
@@ -1913,10 +1914,13 @@ sequenceDiagram
 ** PDF
 
 #+begin_src emacs-lisp
+  (use-package djvu
+    :defer t)
+
   (use-package org-noter
     :ensure t
     :defer t
-    :after org)
+    :after '(org djvu))
 
   (use-package org-pdftools
     :ensure t

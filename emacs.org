@@ -288,8 +288,8 @@ Return to last cursor position when opening a file.
     :ensure t
     :ensure-system-package trash
     :if (memq window-system '(mac ns darwin))
-    :config
-    (setq delete-by-moving-to-trash t))
+    :custom
+    (delete-by-moving-to-trash t))
 #+end_src
 
 ** Keychain
@@ -801,7 +801,8 @@ M-x nerd-the-icons-install-fonts
     :ensure t
     :diminish
     :bind
-    (("C-M-j" . 'counsel-switch-buffer)
+    (("s-b" . 'counsel-switch-buffer)
+     ("C-M-j" . 'counsel-switch-buffer)
      :map minibuffer-local-map
      ("C-r" . 'counsel-minibuffer-history))
     :config
@@ -866,6 +867,7 @@ Emacs does not know that there are multiple written Norwegian languages.
 #+begin_src emacs-lisp
   (use-package ispell
     :diminish
+    :defer 3
     :config
     (delete '("norsk" "nn_NO") ispell-dicts-name2locale-equivs-alist)
     (add-to-list 'ispell-dicts-name2locale-equivs-alist '("norsk-bokmål" "nb_NO"))
@@ -1060,10 +1062,8 @@ mode.
 #+begin_src emacs-lisp
   (use-package whitespace-cleanup-mode
     :ensure t
-    :diminish whitespace-cleanup-mode
-    :commands whitespace-cleanup-mode
-    :init
-    (add-hook 'prog-mode-hook 'whitespace-cleanup-mode))
+    :diminish
+    :hook (prog-mode . whitespace-cleanup-mode))
 
   (setq-default tab-width 2)
   (setq-default indent-tabs-mode nil)
@@ -1076,14 +1076,12 @@ mode.
   (use-package whitespace
     :ensure t
     :diminish
-    :init
-    (add-hook 'prog-mode-hook #'whitespace-mode)
-    (add-hook 'before-save-hook #'whitespace-cleanup)
-    :config
-    (setq whitespace-line-column nil)
-    (setq whitespace-global-modes '(not org-mode))
-    (setq
-     whitespace-style
+    :hook (prog-mdoe. whitespace-mode)
+    :hook (before-save . whitespace-cleanup)
+    :custom
+    (whitespace-line-column nil)
+    (whitespace-global-modes '(not org-mode))
+    (whitespace-style
      '(face
        tabs
        spaces
@@ -1103,10 +1101,10 @@ mode.
     :ensure t
     :diminish highlight-indent-guides-mode
     :hook (prog-mode . highlight-indent-guides-mode)
-    :config
-    (setq highlight-indent-guides-method 'bitmap
-          highlight-indent-guides-bitmap-function 'highlight-indent-guides--bitmap-line
-          highlight-indent-guides-responsive 'top))
+    :custom
+    (highlight-indent-guides-method 'bitmap)
+    (highlight-indent-guides-bitmap-function 'highlight-indent-guides--bitmap-line)
+    (highlight-indent-guides-responsive 'top))
 #+end_src
 
 *** Comments
@@ -1452,7 +1450,6 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
     (add-hook 'org-capture-mode-hook #'org-id-get-create)
     :custom
-    ;; (org-startup-with-inline-images t)
     (org-catch-invisible-edits 'smart)
     (org-ctrl-k-protect-subtree t)
     (org-image-actual-width nil "allows #+ATTR_ORG: :width 100")
@@ -1597,7 +1594,6 @@ Magit bash script
 #+begin_src emacs-lisp
   (use-package writegood-mode
     :ensure t
-    :defer t
     :commands
     (writegood-mode
      writegood-grade-level

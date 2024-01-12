@@ -1267,6 +1267,15 @@ Set this to the folder where you keep your Git repos!
 
 #+end_src
 
+#+begin_src emacs-lisp
+  (defun laat/magit-cleanup-buffer ()
+    (dolist ($buf (magit-mode-get-buffers))
+      (with-current-buffer $buf
+        (if (eq major-mode 'clojure-mode)
+            (quit-window $buf)))
+      ))
+#+end_src
+
 *** Forge
 
 

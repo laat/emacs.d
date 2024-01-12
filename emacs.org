@@ -324,7 +324,6 @@ Return to last cursor position when opening a file.
       :non-normal-prefix "C-,")
     (laat/leader-keys
       "t" '(:ignore t :which-key "toggles")
-      "y" '(:ignore t :which-key "helpers")
       "f" '(:ignore t :which-key "quick access")
       "SPC" 'execute-extended-command)
     (laat/leader-keys

@@ -1618,7 +1618,7 @@ On Macos use before calling =org-download-clipboard=
   (use-package visual-fill-column
     :ensure t
     :custom
-    (visual-fill-column-width 110)
+    (visual-fill-column-width 100)
     (visual-fill-column-center-text t)
     :hook (org-mode . laat/org-mode-visual-fill)
     :config

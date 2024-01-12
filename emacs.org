@@ -1255,16 +1255,19 @@ Set this to the folder where you keep your Git repos!
 When 'C-c C-c' or 'C-c C-l' are pressed in the magit commit message buffer, delete the magit-diff window related to the current repo.
 
 #+begin_src emacs-lisp
-  (defun laat/magit-cleanup-buffer ()
+  (defun laat/magit-cleanup-magit-diff-buffer ()
     (dolist ($buf (magit-mode-get-buffers))
       (with-current-buffer $buf
-        (if (eq major-mode 'clojure-mode)
-            (quit-window $buf)))))
+        (if (eq major-mode 'magit-diff-mode)
+            (kill-buffer $buf)))))
 
   (add-hook 'git-commit-setup-hook
             (lambda ()
-              (add-hook 'with-editor-post-finish-hook #'laat/magit-cleanup-buffer nil t)
-              (add-hook 'with-editor-post-cancel-hook #'laat/magit-cleanup-buffer nil t)))
+              (add-hook 'with-editor-post-cancel-hook
+                        'laat/magit-cleanup-magit-diff-buffer)
+              (add-hook 'with-editor-post-finish-hook
+                        'laat/magit-cleanup-magit-diff-buffer)))
+
 #+end_src
 
 *** Forge

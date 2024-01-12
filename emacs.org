@@ -292,6 +292,17 @@ Return to last cursor position when opening a file.
     (delete-by-moving-to-trash t))
 #+end_src
 
+** Dictionary.app
+
+#+begin_src emacs-lisp
+  (use-package osx-dictionary
+    :ensure t
+    :if (memq window-system '(mac ns darwin))
+    :commands
+    osx-dictionary-search-word-at-point
+    osx-dictionary-search-input)
+#+end_src
+
 ** Keychain
 
 #+begin_src emacs-lisp
@@ -1888,24 +1899,6 @@ sequenceDiagram
 #+end_src
 
 * Apps
-** Spotify
-
-#+begin_src emacs-lisp
-  (use-package spotify
-    :ensure t
-    :commands
-    (spotify-playpause
-     spotify-quit
-     spotify-previous
-     spotify-next)
-    :general
-    (laat/leader-keys
-      "s SPC" '(spotify-playpause :which-key "play/pause")
-      "sn" '(spotify-next :which-key "next")
-      "sp" '(spotify-previous :which-key "previous")
-      "sq" '(spotify-quit :which-key "quit")))
-#+end_src
-
 ** elfeed
 
 #+begin_src emacs-lisp

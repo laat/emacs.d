@@ -765,3 +765,28 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
  (add-to-list 'default-frame-alist '(alpha . (90 . 90)))
 #+end_src
 
+
+* Spotify
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-12 Fri 21:09
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Apps
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+  (use-package spotify
+    :ensure t
+    :commands
+    (spotify-playpause
+     spotify-quit
+     spotify-previous
+     spotify-next)
+    :general
+    (laat/leader-keys
+      "s SPC" '(spotify-playpause :which-key "play/pause")
+      "sn" '(spotify-next :which-key "next")
+      "sp" '(spotify-previous :which-key "previous")
+      "sq" '(spotify-quit :which-key "quit")))
+#+end_src
+

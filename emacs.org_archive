@@ -605,3 +605,37 @@ Need it get flycheck to find local binaries.
     (langtool-bin (executable-find "languagetool")))
 #+end_src
 
+
+* Add json to auth sources
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-12 Fri 18:01
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: GPG
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+(dolist (file '("~/.authinfo.json" "~/.authinfo.json.gpg"))
+  ((lambda ()
+     (when (file-exists-p file) (add-to-list 'auth-sources file)))))
+#+end_src
+
+
+* GPG
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-12 Fri 18:02
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_CATEGORY: emacs
+:END:
+** Add json to auth sources
+
+#+begin_src emacs-lisp
+(dolist (file '("~/.authinfo.json" "~/.authinfo.json.gpg"))
+  ((lambda ()
+     (when (file-exists-p file) (add-to-list 'auth-sources file)))))
+#+end_src
+
+** OS X
+
+Need GPG. [[https://gpgtools.org/][OSX toolkit]]
+

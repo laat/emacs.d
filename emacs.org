@@ -303,19 +303,6 @@ Return to last cursor position when opening a file.
 
 #+end_src
 
-* GPG
-** Add json to auth sources
-
-#+begin_src emacs-lisp
-(dolist (file '("~/.authinfo.json" "~/.authinfo.json.gpg"))
-  ((lambda ()
-     (when (file-exists-p file) (add-to-list 'auth-sources file)))))
-#+end_src
-
-** OS X
-
-Need GPG. [[https://gpgtools.org/][OSX toolkit]]
-
 * Key Binds
 ** General
 

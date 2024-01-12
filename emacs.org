@@ -1610,17 +1610,14 @@ On Macos use before calling =org-download-clipboard=
   brew install pngpaste
 #+end_src
 
-** Bullets
+* Nice bullets
 
 #+begin_src emacs-lisp
-  (use-package svg-lib
+  (use-package org-bullets
     :ensure t
-    :quelpa (svg-lib :fetcher github :repo "rougier/svg-lib"))
-
-  (use-package org-margin
-    :ensure t
-    :quelpa (org-margin :fetcher github :repo "rougier/org-margin")
-    :hook (org-mode . org-margin-mode))
+    :hook (org-mode . org-bullets-mode)
+    :custom
+    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 #+end_src
 
 ** Visual center
@@ -1822,7 +1819,7 @@ sequenceDiagram
 ** org-yt
 
 #+begin_src org
-  [[yt:PeVQwYUxYEg]]
+  [[yt:PeVQwYUxYEg] ]
 #+end_src
 
 #+begin_src emacs-lisp

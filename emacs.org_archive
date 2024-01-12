@@ -640,19 +640,28 @@ Need it get flycheck to find local binaries.
 Need GPG. [[https://gpgtools.org/][OSX toolkit]]
 
 
-* Nice bullets
+
+* org-project
 :PROPERTIES:
-:ARCHIVE_TIME: 2024-01-12 Fri 18:35
+:ARCHIVE_TIME: 2024-01-12 Fri 19:25
 :ARCHIVE_FILE: ~/.emacs.d/emacs.org
 :ARCHIVE_OLPATH: Org
 :ARCHIVE_CATEGORY: emacs
 :END:
 
 #+begin_src emacs-lisp
-  (use-package org-bullets
-    :ensure t
-    :hook (org-mode . org-bullets-mode)
-    :custom
-    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+    (use-package helm
+      :ensure t)
+    (use-package org-projectile
+      :ensure t)
+    (use-package org-project-capture
+      :bind (("C-c n p" . org-project-capture-project-todo-completing-read))
+      :ensure t
+      :config
+      (progn
+        (setq org-project-capture-backend
+              (make-instance 'org-project-capture-projectile-backend))
+        (setq org-project-capture-projects-file "~/Dropbox/notes/projects.org")
+        (org-project-capture-single-file)))
 #+end_src
 

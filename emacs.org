@@ -341,6 +341,10 @@ Return to last cursor position when opening a file.
 #+begin_src emacs-lisp
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
+
+  (use-package undo-fu
+    :ensure t)
+
   (use-package evil
     :ensure t
     :defines
@@ -389,12 +393,6 @@ Return to last cursor position when opening a file.
     (evil-ex-define-cmd "q[uit]" 'laat/ex-kill-buffer-and-close)
     (evil-ex-define-cmd "wq" 'laat/ex-save-kill-buffer-and-close))
 
-  ;;   ;; https://github.com/Somelauw/evil-org-mode/issues/93#issuecomment-950306532
-  ;;   (fset 'evil-redirect-digit-argument 'ignore) ;; before evil-org loaded
-  ;;   (add-to-list 'evil-digit-bound-motions 'evil-org-beginning-of-line)
-  ;;   (evil-define-key 'motion 'evil-org-mode
-  ;;     (kbd "0") 'evil-org-beginning-of-line))
-
   (use-package evil-matchit
     :ensure t
     :after evil
@@ -412,7 +410,8 @@ Return to last cursor position when opening a file.
     :after evil
     :config
     (global-evil-visualstar-mode t)
-    (setq evil-visualstar/persistent t))
+    :custom
+    (evil-visualstar/persistent t))
 
   (use-package evil-surround
     :ensure t
@@ -422,16 +421,18 @@ Return to last cursor position when opening a file.
   (use-package evil-numbers
     :ensure t
     :after evil
-    :config
-    (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
-    (define-key evil-normal-state-map (kbd "C-S-a") 'evil-numbers/dec-at-pt))
+    :general
+    (:states 'normal
+             "C-a" 'evil-numbers/inc-at-pt
+             "C-S-a" 'evil-numbers/dec-at-pt))
 
   (use-package expand-region
     :ensure t
     :after evil
-    :config
-    (define-key evil-normal-state-map (kbd "+") 'er/expand-region)
-    (define-key evil-normal-state-map (kbd "-") 'er/contract-region))
+    :general
+    (:states 'normal
+             "+" 'er/expand-region
+             "-" 'er/contract-region))
 
   (use-package evil-lion
     :ensure t
@@ -439,8 +440,6 @@ Return to last cursor position when opening a file.
     :config
     (evil-lion-mode))
 
-  (use-package undo-fu
-    :ensure t)
 #+end_src
 
 ** Hydra

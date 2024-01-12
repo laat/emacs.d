@@ -806,3 +806,18 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     :ensure t)
 #+end_src
 
+
+* evil-mc
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-12 Fri 22:07
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Key Binds
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+  (use-package evil-mc
+    :ensure t
+    :hook (evil-mode . global-evil-mc-mode))
+#+end_src
+

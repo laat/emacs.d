@@ -360,11 +360,6 @@ Fix path
     (evil-ex-define-cmd "q[uit]" 'laat/ex-kill-buffer-and-close)
     (evil-ex-define-cmd "wq" 'laat/ex-save-kill-buffer-and-close))
 
-  (use-package evil-matchit
-    :ensure t
-    :after evil
-    :config
-    (global-evil-matchit-mode 1))
 
   (use-package evil-collection
     :ensure t
@@ -372,18 +367,18 @@ Fix path
     :config
     (evil-collection-init))
 
+  (use-package evil-matchit
+    :ensure t
+    :hook (evil-mode . global-evil-matchit-mode))
+
   (use-package evil-visualstar
     :ensure t
-    :after evil
-    :config
-    (global-evil-visualstar-mode t)
-    :custom
-    (evil-visualstar/persistent t))
+    :hook (evil-mode . global-evil-visualstar-mode)
+    :custom (evil-visualstar/persistent t))
 
   (use-package evil-surround
     :ensure t
-    :after evil
-    :config (global-evil-surround-mode 1))
+    :hook (evil-mode . global-evil-surround-mode ))
 
   (use-package evil-numbers
     :ensure t
@@ -403,10 +398,16 @@ Fix path
 
   (use-package evil-lion
     :ensure t
-    :after evil
-    :config
-    (evil-lion-mode))
+    :hook (evil-mode . evil-lion-mode))
 
+
+  (use-package evil-multiedit
+    :ensure t
+    :hook (evil-mode . global-evil-mc-mode)
+    :general
+    (:states '(normal visual)
+             "s-d" 'evil-multiedit-match-and-next
+             "s-D" 'evil-multiedit-match-and-prev))
 #+end_src
 
 ** Hydra
@@ -1388,10 +1389,7 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
   (use-package org
     :pin gnu
     :ensure org-contrib
-    :hook
-    ((org-mode . visual-line-mode)
-     (org-mode . org-indent-mode)
-     (org-capture-mode . evil-insert-state))
+    :hook (org-capture-mode . evil-insert-state)
     :general
     (general-define-key
      :keymaps 'org-mode-map
@@ -1474,8 +1472,7 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
 
   (use-package org-indent
     :diminish
-    :after org
-    :commands (org-intent-mode))
+    :hook (org-mode . org-indent-mode))
 
   (use-package org-superstar
     :ensure t

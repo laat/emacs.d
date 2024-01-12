@@ -1323,9 +1323,6 @@ Set this to the folder where you keep your Git repos!
 #+end_src
 
 ** Languages
-
-
-
 *** Ruby
 
 #+begin_src emacs-lisp
@@ -1387,6 +1384,16 @@ Set this to the folder where you keep your Git repos!
 #+end_src
 
 
+*** Swift
+
+#+begin_src emacs-lisp
+  (use-package svelte-mode
+    :ensure
+    :defer t
+    :config
+    (add-to-list 'eglot-server-programs
+                 '(svelte-mode . ("xcrun" "sourcekit-lsp"))))
+#+end_src
 * Org
 ** Base Config
 
@@ -1678,6 +1685,13 @@ On Macos use before calling =org-download-clipboard=
 #+end_src
 
 ** Babel
+*** Images
+#+begin_src emacs-lisp
+  (add-hook 'org-babel-after-execute-hook (lambda ()
+                                            (when org-inline-image-overlays
+                                              (org-redisplay-inline-images))))
+
+#+end_src
 *** Emacs lisp
 
 #+begin_src emacs-lisp
@@ -1694,6 +1708,7 @@ On Macos use before calling =org-download-clipboard=
 #+begin_src emacs-lisp
   (use-package ob-async
     :ensure t
+    :after org
     :custom
     (ob-async-no-async-languages-alist '("ipython")))
 #+end_src
@@ -1708,6 +1723,7 @@ this does not block with the =:async= header
 #+begin_src emacs-lisp
   (use-package ob-typescript
     :ensure t
+    :after org
     :config
     (add-to-list 'org-babel-load-languages '(typescript . t)))
 #+end_src
@@ -1744,6 +1760,11 @@ this does not block with the =:async= header
 
 =C-c C-x C-v org-toggle-inline-images=
 
+#+begin_src shell :tangle no
+  export PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=true
+  npm install -g @mermaid-js/mermaid-cli
+#+end_src
+
 #+begin_src emacs-lisp
   (use-package ob-mermaid
     :ensure t
@@ -1756,6 +1777,9 @@ this does not block with the =:async= header
 sequenceDiagram
     A-->B: Works!
 #+end_src
+
+#+RESULTS:
+[[file:mermaid.png]]
 
 *** fsharp
 
@@ -1781,6 +1805,20 @@ sequenceDiagram
     (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages)
     (add-to-list 'org-babel-tangle-lang-exts '("sql" . "sql"))
     (add-to-list 'org-src-lang-modes (cons "SQL" 'sql)))
+#+end_src
+
+*** SwiftUI
+
+#+begin_src emacs-lisp
+    (use-package ob-swiftui
+      :ensure t
+      :config (ob-swiftui-setup))
+#+end_src
+
+#+begin_src swiftui :tangle no :results file
+  Rectangle()
+    .fill(Color.yellow)
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
 #+end_src
 
 *** load babel languages
@@ -1998,11 +2036,11 @@ Needs =brew install coreutils=
 #+end_src
 
 #+begin_src shell
-# -q ignores personal Emacs files but loads the site files.
-emacs -q --eval='(message "%s" (emacs-init-time))'
+  # -q ignores personal Emacs files but loads the site files.
+  emacs -q --eval='(message "%s" (emacs-init-time))'
 
-;; For macOS users:
-open -n /Applications/Emacs.app --args -q --eval='(message "%s" (emacs-init-time))'
+  ;; For macOS users:
+  open -n /Applications/Emacs.app --args -q --eval='(message "%s" (emacs-init-time))'
 #+end_src
 
 

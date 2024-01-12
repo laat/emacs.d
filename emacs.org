@@ -259,12 +259,10 @@ Return to last cursor position when opening a file.
   (save-place-mode +1)
 #+end_src
 
-** PATH
-
+Fix path
 #+begin_src emacs-lisp
   (use-package exec-path-from-shell
     :ensure t
-    :defer t
     :if (memq window-system '(mac ns darwin))
     :init
     (setq
@@ -281,9 +279,6 @@ Return to last cursor position when opening a file.
 #+begin_src emacs-lisp
   (use-package general
     :ensure t
-    :functions
-    laat/leader-keys
-    laat/leader-local-keys
     :config
     (general-evil-setup)
     (general-create-definer laat/leader-keys
@@ -795,15 +790,6 @@ M-x nerd-the-icons-install-fonts
     (setcdr (assoc 'counsel-M-x ivy-initial-inputs-alist) "")
     (setcdr (assoc 'org-refile ivy-initial-inputs-alist) ""))
 
-#+end_src
-
-** smex
-
-=M-x= with recent first
-
-#+begin_src emacs-lisp
-  (use-package smex
-    :ensure t)
 #+end_src
 
 ** Drag Stuff

@@ -1248,7 +1248,10 @@ Set this to the folder where you keep your Git repos!
     (magit-display-buffer-function #'magit-display-buffer-fullframe-status-topleft-v1)
     :config
     (add-hook 'git-commit-mode-hook 'evil-insert-state)
-    (add-to-list 'evil-insert-state-modes 'magit-log-edit-mode))
+    (add-to-list 'evil-insert-state-modes 'magit-log-edit-mode)
+    (define-key magit-mode-map
+                (kbd "q")
+                (lambda() (interactive) (magit-mode-bury-buffer t))))
 
 #+end_src
 

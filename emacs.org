@@ -1492,8 +1492,8 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     :after org
     :commands (org-intent-mode))
 
-#+end_src
 
+#+end_src
 ** htmlize syntax highlight
 Syntax highlihgt exported html
 #+begin_src emacs-lisp

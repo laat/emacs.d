@@ -619,14 +619,14 @@ Exclude lots of stuff
 ** Winner
 
 #+begin_src emacs-lisp
-  (use-package windmove
-    :defer t
+  (use-package winner
+    :ensure t
     :commands
-    laat/hydra-move-splitter-left
-    laat/hydra-move-splitter-right
-    laat/hydra-move-splitter-up
-    laat/hydra-move-splitter-right
+    winner-undo
+    winner-redo
     :config
+    (winner-mode 1)
+    (require 'windmove)
     (defun laat/hydra-move-splitter-left (arg)
       "Move window splitter left."
       (interactive "p")
@@ -657,12 +657,7 @@ Exclude lots of stuff
       (if (let ((windmove-wrap-around))
             (windmove-find-other-window 'up))
           (shrink-window arg)
-        (enlarge-window arg))))
-
-  (use-package winner
-    :ensure t
-    :commands (winner-undo winner-redo)
-    :config (winner-mode 1)
+        (enlarge-window arg)))
     :hydra
     (laat/window-hydra
      (:color red)

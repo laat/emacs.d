@@ -511,8 +511,6 @@ Fix path
 #+end_src
 
 * UI Configuration
-
-
 ** Color Theme
 
 #+begin_src emacs-lisp
@@ -534,6 +532,7 @@ Shift click with mouse selection.
 #+begin_src emacs-lisp
 (global-set-key (kbd "S-<down-mouse-1>") #'mouse-set-mark)
 #+end_src
+
 ** Emacs Dashboard
 
 #+begin_src emacs-lisp

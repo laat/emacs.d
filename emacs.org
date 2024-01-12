@@ -1250,30 +1250,21 @@ Set this to the folder where you keep your Git repos!
     (add-hook 'git-commit-mode-hook 'evil-insert-state)
     (add-to-list 'evil-insert-state-modes 'magit-log-edit-mode))
 
-  ;; (defun laat/kill-magit-diff-buffer-in-current-repo (&rest _)
-  ;;   "Delete the magit-diff buffer related to the current repo"
-  ;;   (let ((magit-diff-buffer-in-current-repo (magit-mode-get-buffer 'magit-diff-mode)))
-  ;;     (kill-buffer magit-diff-buffer-in-current-repo)))
-  ;;
-  ;; When 'C-c C-c' or 'C-c C-l' are pressed in the magit commit message buffer,
-  ;; delete the magit-diff buffer related to the current repo.
-  ;;
-  ;; (add-hook 'git-commit-setup-hook
-  ;;           (lambda ()
-  ;;             (add-hook 'with-editor-post-finish-hook #'laat/kill-magit-diff-buffer-in-current-repo
-  ;;                       nil t)
-  ;;             (add-hook 'with-editor-post-cancel-hook #'laat/kill-magit-diff-buffer-in-current-repo
-  ;;                       nil t)))
-
 #+end_src
+
+When 'C-c C-c' or 'C-c C-l' are pressed in the magit commit message buffer, delete the magit-diff window related to the current repo.
 
 #+begin_src emacs-lisp
   (defun laat/magit-cleanup-buffer ()
     (dolist ($buf (magit-mode-get-buffers))
       (with-current-buffer $buf
         (if (eq major-mode 'clojure-mode)
-            (quit-window $buf)))
-      ))
+            (quit-window $buf)))))
+
+  (add-hook 'git-commit-setup-hook
+            (lambda ()
+              (add-hook 'with-editor-post-finish-hook #'laat/magit-cleanup-buffer nil t)
+              (add-hook 'with-editor-post-cancel-hook #'laat/magit-cleanup-buffer nil t)))
 #+end_src
 
 *** Forge

@@ -714,32 +714,6 @@ Exclude lots of stuff
 Installint fonts:
 M-x nerd-the-icons-install-fonts
 
-** Treemacs
-
-#+begin_src emacs-lisp
-  (use-package treemacs
-    :ensure t
-    :general
-    ("C-c t" 'treemacs))
-
-  (use-package treemacs-evil
-    :ensure t
-    :after (treemacs evil))
-
-  (use-package treemacs-projectile
-    :ensure t
-    :after (treemacs projectile))
-
-  (use-package treemacs-magit
-    :ensure t
-    :after (treemacs magit))
-
-  (use-package treemacs-all-the-icons
-    :ensure t
-    :after (treemacs all-the-icons))
-
-#+end_src
-
 ** Helpful
 
 #+begin_src emacs-lisp

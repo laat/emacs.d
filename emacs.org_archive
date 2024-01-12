@@ -520,3 +520,36 @@ Need it get flycheck to find local binaries.
 #+end_src
 
 =hello=
+
+* Treemacs
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-12 Fri 12:28
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: UI Configuration
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+  (use-package treemacs
+    :ensure t
+    :general
+    ("C-c t" 'treemacs))
+
+  (use-package treemacs-evil
+    :ensure t
+    :after (treemacs evil))
+
+  (use-package treemacs-projectile
+    :ensure t
+    :after (treemacs projectile))
+
+  (use-package treemacs-magit
+    :ensure t
+    :after (treemacs magit))
+
+  (use-package treemacs-all-the-icons
+    :ensure t
+    :after (treemacs all-the-icons))
+
+#+end_src
+

@@ -685,7 +685,9 @@ Exclude lots of stuff
 #+begin_src emacs-lisp
   (use-package doom-themes
     :ensure t
-    :init (load-theme 'doom-one t))
+    :config
+    (load-theme 'doom-one t)
+    (doom-themes-org-config))
 #+end_src
 
 ** Mode line
@@ -1417,6 +1419,8 @@ Set this to the folder where you keep your Git repos!
      ;; C-j and C-k walks up the treee
      [remap outline-forward-same-level] 'org-forward-element
      [remap outline-backward-same-level] 'org-backward-element)
+    (:keymaps 'org-src-mode-map
+              "C-c C-c" 'org-edit-src-exit)
     (laat/leader-keys
       "x" '(org-capture :which-key "capture")
       "a" '(org-agenda :which-key "agenda")
@@ -1429,7 +1433,7 @@ Set this to the folder where you keep your Git repos!
       "r" '(org-babel-remove-result :which-key "remove result")
       "cc" '(org-ctrl-c-ctrl-c :which-key "C-c C-c"))
     :config
-    (bind-key "C-c C-c" 'org-edit-src-exit org-src-mode-map)
+    (require 'org-faces)
     ;; https://emacs.stackexchange.com/questions/26923
     (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
     (add-hook 'org-capture-mode-hook #'org-id-get-create)
@@ -1644,7 +1648,7 @@ On Macos use before calling =org-download-clipboard=
   (use-package visual-fill-column
     :ensure t
     :custom
-    (visual-fill-column-width 100)
+    (visual-fill-column-width 110)
     (visual-fill-column-center-text t)
     :hook (org-mode . laat/org-mode-visual-fill)
     :config

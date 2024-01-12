@@ -553,3 +553,20 @@ Need it get flycheck to find local binaries.
 
 #+end_src
 
+
+* Color Theme
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-12 Fri 14:46
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: UI Configuration
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+  (use-package doom-themes
+    :ensure t
+    :config
+    (load-theme 'doom-one t)
+    (doom-themes-org-config))
+#+end_src
+

@@ -259,61 +259,6 @@ Return to last cursor position when opening a file.
   (save-place-mode +1)
 #+end_src
 
-* Basic Config MacOS
-** PATH
-
-#+begin_src emacs-lisp
-  (use-package exec-path-from-shell
-    :ensure t
-    :defer t
-    :if (memq window-system '(mac ns darwin))
-    :init
-    (setq
-     ;; exec-path-from-shell-debug t
-     ;; bash has the correct path (on my system) and is faster
-     exec-path-from-shell-shell-name "bash"
-     ;; removed -i because -l has correct path on my system
-     exec-path-from-shell-arguments '("-l"))
-    :config (exec-path-from-shell-initialize))
-#+end_src
-
-** Trash
-
-#+begin_src shell
-  brew install trash
-#+end_src
-
-#+begin_src emacs-lisp
-  (use-package osx-trash
-    :ensure t
-    :ensure-system-package trash
-    :if (memq window-system '(mac ns darwin))
-    :custom
-    (delete-by-moving-to-trash t))
-#+end_src
-
-** Dictionary.app
-
-#+begin_src emacs-lisp
-  (use-package osx-dictionary
-    :ensure t
-    :if (memq window-system '(mac ns darwin))
-    :commands
-    osx-dictionary-search-word-at-point
-    osx-dictionary-search-input)
-#+end_src
-
-** Keychain
-
-#+begin_src emacs-lisp
-
-  (eval-after-load 'auth-source
-    '(when (member window-system '(mac ns))
-       (add-to-list 'auth-sources 'macos-keychain-internet)
-       (add-to-list 'auth-sources 'macos-keychain-generic)))
-
-#+end_src
-
 * Key Binds
 ** General
 
@@ -515,6 +460,62 @@ Return to last cursor position when opening a file.
      ((kbd "s-0") . laat/text-scale-zero)
      ((kbd "s-+") . text-scale-increase)
      ((kbd "s--") . text-scale-decrease)))
+#+end_src
+
+* Basic Config MacOS
+** PATH
+
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :ensure t
+    :defer t
+    :if (memq window-system '(mac ns darwin))
+    :init
+    (setq
+     ;; exec-path-from-shell-debug t
+     ;; bash has the correct path (on my system) and is faster
+     exec-path-from-shell-shell-name "bash"
+     ;; removed -i because -l has correct path on my system
+     exec-path-from-shell-arguments '("-l"))
+    :config (exec-path-from-shell-initialize))
+#+end_src
+
+** Trash
+
+#+begin_src shell
+  brew install trash
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package osx-trash
+    :ensure t
+    :ensure-system-package trash
+    :if (memq window-system '(mac ns darwin))
+    :custom
+    (delete-by-moving-to-trash t))
+#+end_src
+
+** Dictionary.app
+
+#+begin_src emacs-lisp
+  (use-package osx-dictionary
+    :ensure t
+    :if (memq window-system '(mac ns darwin))
+    :general
+    (laat/leader-keys
+      "@@" 'osx-dictionary-search-word-at-point
+      "@æ" 'osx-dictionary-search-input))
+#+end_src
+
+** Keychain
+
+#+begin_src emacs-lisp
+
+  (eval-after-load 'auth-source
+    '(when (member window-system '(mac ns))
+       (add-to-list 'auth-sources 'macos-keychain-internet)
+       (add-to-list 'auth-sources 'macos-keychain-generic)))
+
 #+end_src
 
 * UI Configuration

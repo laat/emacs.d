@@ -1288,7 +1288,8 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     :after magit
     :general
     (laat/leader-keys
-      "gh" '(forge-dispatch :which-key "forge")))
+      "gh" '(forge-dispatch :which-key "forge")
+      "g SPC" '(forge-browse :which-key "browse")))
 
 #+end_src
 
@@ -1390,7 +1391,9 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
 #+begin_src emacs-lisp
   (defun laat/insert-kbd (key)
     "Ask for a key then insert its description. Will work on both
-    org-mode and any mode that accepts plain html."
+      org-mode and any mode that accepts plain html."
+    (interactive
+     (list (read-key-sequence "Press key: ")))
     (let* ((orgp (derived-mode-p 'org-mode))
            (tag (if orgp "~%s~" "<kbd>%s</kbd>")))
       (if (null (equal key "\C-m"))
@@ -1481,10 +1484,7 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     :ensure t
     :diminish
     :after org
-    :hook
-    ((org-mode . evil-org-mode)
-     (evil-org-mode . (lambda ()
-                        (evil-org-set-key-theme))))
+    :hook (org-mode . evil-org-mode)
     :config
     (require 'evil-org-agenda)
     (evil-org-agenda-set-keys))

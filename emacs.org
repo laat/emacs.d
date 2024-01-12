@@ -1258,12 +1258,12 @@ Set this to the folder where you keep your Git repos!
   ;; When 'C-c C-c' or 'C-c C-l' are pressed in the magit commit message buffer,
   ;; delete the magit-diff buffer related to the current repo.
   ;;
-  (add-hook 'git-commit-setup-hook
-            (lambda ()
-              (add-hook 'with-editor-post-finish-hook #'laat/kill-magit-diff-buffer-in-current-repo
-                        nil t)
-              (add-hook 'with-editor-post-cancel-hook #'laat/kill-magit-diff-buffer-in-current-repo
-                        nil t)))
+  ;; (add-hook 'git-commit-setup-hook
+  ;;           (lambda ()
+  ;;             (add-hook 'with-editor-post-finish-hook #'laat/kill-magit-diff-buffer-in-current-repo
+  ;;                       nil t)
+  ;;             (add-hook 'with-editor-post-cancel-hook #'laat/kill-magit-diff-buffer-in-current-repo
+  ;;                       nil t)))
 
 #+end_src
 

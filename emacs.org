@@ -1472,6 +1472,12 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
 
 
 #+end_src
+** Notes Backup
+
+#+begin_src emacs-lisp
+  (use-package notes-backup) ;; my custom sctipt in lisp/notes-backup
+#+end_src
+
 ** htmlize syntax highlight
 Syntax highlihgt exported html
 #+begin_src emacs-lisp

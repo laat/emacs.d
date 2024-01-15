@@ -119,16 +119,6 @@ Create local packages in =~/emacs.d/lisp/=
   (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 #+end_src
 
-** after
-
-#+begin_src emacs-lisp
-(defmacro after (feature &rest body)
-  "After FEATURE is loaded, evaluate BODY."
-  (declare (indent defun))
-  `(eval-after-load ,feature
-     '(progn ,@body)))
-#+end_src
-
 * Garbage Collection
 
 #+begin_src emacs-lisp
@@ -455,7 +445,8 @@ Fix path
      mac-right-option-modifier 'none
      mac-option-modifier 'meta
      mac-command-modifier 'super)
-    (after 'evil (define-key evil-insert-state-map (kbd "s-v") 'yank))
+    (with-eval-after-load 'evil
+      (define-key evil-insert-state-map (kbd "s-v") 'yank))
     (bind-keys
      ((kbd "s-a") . mark-whole-buffer)
      ((kbd "s-c") . kill-ring-save)
@@ -585,7 +576,7 @@ Shift click with mouse selection.
   (defun laat/switch-to-config ()
     (interactive)
     (find-file "~/.emacs.d/emacs.org"))
-  (after 'evil
+  (with-eval-after-load 'evil
     (laat/leader-keys
       "ff" 'find-file
       "fp" 'projectile-find-file
@@ -1636,7 +1627,7 @@ On Macos use before calling =org-download-clipboard=
 ** Babel
 *** Images
 #+begin_src emacs-lisp
-  (after 'org
+  (with-eval-after-load 'org
     (add-hook 'org-babel-after-execute-hook
               (lambda ()
                 (when org-inline-image-overlays
@@ -1777,7 +1768,7 @@ sequenceDiagram
 *** load babel languages
 
 #+begin_src emacs-lisp
-  (after 'org
+  (with-eval-after-load 'org
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((emacs-lisp . t)

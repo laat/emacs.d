@@ -1472,6 +1472,7 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
 
 
 #+end_src
+
 ** Notes Backup
 
 #+begin_src emacs-lisp
@@ -1490,6 +1491,7 @@ to set a background color
 #+begin_src org
 #+HTML_HEAD: <style>pre.src {background-color: #303030; color: #e5e5e5;}</style>
 #+end_src
+
 ** org-protocol
 *** base config
 

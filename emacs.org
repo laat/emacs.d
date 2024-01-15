@@ -572,7 +572,7 @@ Shift click with mouse selection.
     (find-file "~/Dropbox/notes/agenda.org"))
   (defun laat/switch-to-journal ()
     (interactive)
-    (find-file "~/Dropbox/notes/34.org"))
+    (find-file "~/Dropbox/notes/journal.org"))
   (defun laat/switch-to-config ()
     (interactive)
     (find-file "~/.emacs.d/emacs.org"))
@@ -1429,7 +1429,7 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     (org-edit-src-auto-save-idle-delay 5)
     (org-src-ask-before-returning-to-edit-buffer nil)
     (org-capture-templates
-     `(("j" "Journal" entry (file+olp+datetree ,(concat org-directory "34.org"))
+     `(("j" "Journal" entry (file+olp+datetree ,(concat org-directory "journal.org"))
         "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n")
        ("s" "Simple" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
         "\n** %?\n\n\n\n")
@@ -1519,11 +1519,13 @@ to set a background color
 
 Automator.app (builtin) and ⌘-s is your friend. Remember =pass input=
 
+
 #+begin_src sh
   data="$@"
-  encoded=$(python -c "import sys, urllib; print urllib.quote(' '.join(sys.argv[1:]), safe='')" "${data[@]}")
+  encoded=$(python3 -c "import sys, urllib.parse; print(urllib.parse.quote(' '.join(sys.argv[1:]), safe=''))" "${data[@]}")
   open "org-protocol://capture?template=g&body=$encoded"
 #+end_src
+[[https://salvatore.denaro.nyc/2020/08/capturing-text-from-any-mac-application.html][Source]]
 
 #+DOWNLOADED: screenshot @ 2020-11-27 18:29:46
 #+ATTR_ORG: :width 600

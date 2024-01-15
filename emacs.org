@@ -1035,6 +1035,7 @@ mode.
             (lambda () (setq show-trailing-whitespace t)))
 
   (use-package whitespace
+    :disabled t
     :ensure t
     :diminish
     :hook (prog-mdoe. whitespace-mode)
@@ -1414,11 +1415,14 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     (org-image-actual-width nil "allows #+ATTR_ORG: :width 100")
     (org-cycle-separator-lines 0 "compact folding")
     (org-ellipsis "…" "a pretty ellipsis. Alternatives … ⤵ ▼, ↴, ⬎, ⤷, and ⋱.")
+    (org-agenda-files
+     '("~/Dropbox/notes/agenda.org"
+       "~/Dropbox/notes/orgzly/agenda.org"
+       "~/.notes/agenda.org"))
     (org-refile-targets
      '((nil :maxlevel . 9)
        ("~/Dropbox/notes/notes.org" :maxlevel . 3)
        ("~/Dropbox/notes/orgzly/notes.org" :maxlevel . 2)
-       ("~/.emacs.d/archive.org" :maxlevel . 1)
        (org-agenda-files :maxlevel . 9)))
     (org-refile-use-outline-path nil)
     (org-directory "~/Dropbox/notes/")

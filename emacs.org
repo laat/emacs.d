@@ -208,7 +208,7 @@ When opening a file, always follow symlinks.
 Ask before terminating.
 
 #+begin_src emacs-lisp
-  (setq confirm-kill-emacs 'y-or-n-p)
+  ;; (setq confirm-kill-emacs 'y-or-n-p)
 #+end_src
 
 Not a typewriter.

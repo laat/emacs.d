@@ -267,10 +267,16 @@ Fix path
 Custom variable to distinguish emacs install.
 
 #+begin_src emacs-lisp
-(defcustom laat/at-home nil
-  "Non-nil if at home."
-  :type 'boolean
-  :group 'laat)
+  (defcustom laat/at-home nil
+    "Non-nil if at home."
+    :type 'boolean
+    :group 'laat)
+
+  (defun laat/toggle-at-home ()
+    "Toggle at home."
+    (interactive)
+    (setq laat/at-home (not laat/at-home))
+    (message (if laat/at-home "at home" "at work")))
 #+end_src
 
 * Key Binds
@@ -291,6 +297,7 @@ Custom variable to distinguish emacs install.
       :non-normal-prefix "C-,")
     (laat/leader-keys
       "t" '(:ignore t :which-key "toggles")
+      "th" '(laat/toggle-at-home :which-key "at home")
       "f" '(:ignore t :which-key "quick access")
       "SPC" 'execute-extended-command)
     (laat/leader-keys

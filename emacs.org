@@ -466,7 +466,6 @@ Fix path
 #+end_src
 
 * MacOS
-
 ** Trash
 
 #+begin_src emacs-lisp
@@ -1408,6 +1407,10 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     ;; https://emacs.stackexchange.com/questions/26923
     (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
     (add-hook 'org-capture-mode-hook #'org-id-get-create)
+    (org-link-set-parameters
+     "copy"
+     :follow (lambda (link) (kill-new link))
+     :export (lambda (_ desc &rest _) desc))
     :custom
     (org-catch-invisible-edits 'smart)
     (org-ctrl-k-protect-subtree t)
@@ -1472,8 +1475,6 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     :hook (org-mode . org-superstar-mode)
     :config
     (org-superstar-configure-like-org-bullets))
-
-
 #+end_src
 
 ** Notes Backup

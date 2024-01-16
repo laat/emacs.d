@@ -1612,10 +1612,6 @@ Automator.app (builtin) and ⌘-s is your friend. Remember =pass input=
 #+end_src
 [[https://salvatore.denaro.nyc/2020/08/capturing-text-from-any-mac-application.html][Source]]
 
-#+DOWNLOADED: screenshot @ 2020-11-27 18:29:46
-#+ATTR_ORG: :width 600
-[[file:Org/2020-11-27_18-29-46_screenshot.png]]
-
 *** Open Magit on OS X
 
 Magit bash script

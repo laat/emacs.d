@@ -506,6 +506,16 @@ Fix path
 
 #+end_src
 
+** Sort folders first OS X
+
+Needs =brew install coreutils=
+
+#+begin_src emacs-lisp
+  (when (eq system-type 'darwin)
+    (setq insert-directory-program "gls"
+          dired-listing-switches "-alBh --group-directories-first"
+          dired-use-ls-dired t))
+#+end_src
 * UI Configuration
 ** Color Theme
 
@@ -2042,16 +2052,6 @@ sequenceDiagram
     :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 
-** Sort folders first OS X
-
-Needs =brew install coreutils=
-
-#+begin_src emacs-lisp
-  (when (eq system-type 'darwin)
-    (setq insert-directory-program "gls"
-          dired-listing-switches "-alBh --group-directories-first"
-          dired-use-ls-dired t))
-#+end_src
 
 * Terminals
 ** vterm

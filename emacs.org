@@ -568,7 +568,7 @@ Shift click with mouse selection.
       (unless (and (not (dashboard-filter-agenda-by-time))
                    (if laat/at-home
                        (not (string= 'work category))
-                     (string= 'work category)))
+                     (not (string= 'life category))))
         (point))))
 
   (use-package dashboard
@@ -1493,7 +1493,8 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     (org-ellipsis "…" "a pretty ellipsis. Alternatives … ⤵ ▼, ↴, ⬎, ⤷, and ⋱.")
     (org-agenda-files
      '("~/.notes/agenda.org"
-       "~/Dropbox/notes/agenda.org"))
+       "~/Dropbox/notes/agenda.org"
+       "~/Dropbox/notes/notes.org"))
     (org-refile-targets
      '((nil :maxlevel . 9)
        ("~/Dropbox/notes/notes.org" :maxlevel . 3)
@@ -2104,6 +2105,7 @@ sequenceDiagram
   (use-package all-the-icons-dired
     :ensure t
     :after (all-the-icons)
+    :diminish
     :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 

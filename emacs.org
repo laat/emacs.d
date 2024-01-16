@@ -2089,7 +2089,10 @@ sequenceDiagram
 #+begin_src emacs-lisp
   (use-package vterm
     :ensure t
-    :defer t)
+    :defer t
+    :config
+    (with-eval-after-load 'evil
+      (evil-set-initial-state 'vterm-mode 'emacs)))
 #+end_src
 
 * Startup Timing

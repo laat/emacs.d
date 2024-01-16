@@ -1035,10 +1035,9 @@ mode.
             (lambda () (setq show-trailing-whitespace t)))
 
   (use-package whitespace
-    :disabled t
     :ensure t
     :diminish
-    :hook (prog-mdoe. whitespace-mode)
+    :hook (prog-mode . whitespace-mode)
     :hook (before-save . whitespace-cleanup)
     :custom
     (whitespace-line-column nil)

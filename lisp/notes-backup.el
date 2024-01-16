@@ -8,7 +8,7 @@
 (defcustom laat/notes-backup-scripts nil
   "The backup script."
   :type '(repeat :tag "List of sync scripts" file)
-  :group 'notes-backup)
+  :group 'laat)
 
 ;;;###autoload
 (defun laat/execute-backup-script ()

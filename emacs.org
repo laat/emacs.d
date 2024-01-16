@@ -1493,13 +1493,14 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
         "\n** TODO %?\n\n\n\n")
        ("j" "Journal" entry (file+olp+datetree ,(concat org-directory "journal.org"))
         "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n")
+       ("p" "Protocol")
        ;; https://salvatore.denaro.nyc/2020/08/capturing-text-from-any-mac-application.html
-       ("g" "Protocol Grab" entry (file+headline "~/.notes/inbox.org"  "Desktop Inbox" )
+       ("pg" "Protocol Grab" entry (file+headline "~/.notes/inbox.org"  "Desktop Inbox" )
         "* %? \n%i\n" :prepend t :created t )
        ;; org-capture Chrome Extension
-       ("p" "Protocol" entry (file+headline "~/.notes/inbox.org" "Desktop Inbox")
+       ("pp" "Protocol" entry (file+headline "~/.notes/inbox.org" "Desktop Inbox")
         "* %?\n\n[[%:link][%:description]] \n\n#+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n")
-       ("L" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
+       ("pL" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
         "* %?\n\n[[%:link][%:description]]"))))
 
   (use-package evil-org
@@ -1574,7 +1575,7 @@ Automator.app (builtin) and ⌘-s is your friend. Remember =pass input=
 #+begin_src sh
   data="$@"
   encoded=$(python3 -c "import sys, urllib.parse; print(urllib.parse.quote(' '.join(sys.argv[1:]), safe=''))" "${data[@]}")
-  open "org-protocol://capture?template=g&body=$encoded"
+  open "org-protocol://capture?template=pg&body=$encoded"
 #+end_src
 [[https://salvatore.denaro.nyc/2020/08/capturing-text-from-any-mac-application.html][Source]]
 

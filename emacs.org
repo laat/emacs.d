@@ -297,6 +297,7 @@ Custom variable to distinguish emacs install.
       :non-normal-prefix "C-,")
     (laat/leader-keys
       "t" '(:ignore t :which-key "toggles")
+      "e" '(:ignore t :which-key "execute")
       "th" '(laat/toggle-at-home :which-key "at home")
       "f" '(:ignore t :which-key "quick access")
       "SPC" 'execute-extended-command)
@@ -1554,7 +1555,10 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
 ** Notes Backup
 
 #+begin_src emacs-lisp
-  (use-package notes-backup) ;; my custom sctipt in lisp/notes-backup
+  (use-package backup-scripts
+    :general
+    (laat/leader-keys
+      "eb" '(laat/execute-backup-scripts :which-key "backup scripts")))
 #+end_src
 
 ** htmlize syntax highlight

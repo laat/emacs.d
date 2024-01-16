@@ -6,8 +6,13 @@
 
 ;;; Code:
 (defcustom laat/backup-scripts nil
-  "The backup script."
+  "The backup scripts to execute."
   :type '(repeat :tag "List of sync scripts" file)
+  :group 'laat)
+
+(defcustom laat/backup-idle-seconds 300
+  "The number of seconds of idletime before executing the script."
+  :type 'integer
   :group 'laat)
 
 ;;;###autoload
@@ -28,7 +33,7 @@
 
 
 ;;;###autoload
-(run-with-idle-timer 300 :repeat 'laat/execute-backup-scripts)
+(run-with-idle-timer laat/backup-idle-seconds :repeat 'laat/execute-backup-scripts)
 
 (provide 'backup-scripts)
 ;;; backup-scripts.el ends here

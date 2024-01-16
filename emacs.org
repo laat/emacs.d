@@ -523,7 +523,7 @@ Custom variable to distinguish emacs install.
 
 #+end_src
 
-** Sort folders first OS X
+** Sort folders first
 
 Needs =brew install coreutils=
 
@@ -602,9 +602,6 @@ Shift click with mouse selection.
   (defun laat/switch-to-messages ()
     (interactive)
     (switch-to-buffer "*Messages*"))
-  (defun laat/switch-to-mobile-notes ()
-    (interactive)
-    (find-file "~/.notes/notes.org"))
   (defun laat/switch-to-mobile-inbox ()
     (interactive)
     (find-file "~/.notes/inbox.org"))
@@ -613,7 +610,9 @@ Shift click with mouse selection.
     (find-file "~/Dropbox/notes/notes.org"))
   (defun laat/switch-to-agenda-file ()
     (interactive)
-    (find-file "~/.notes/agenda.org"))
+    (if laat/at-home
+        (find-file "~/.notes/agenda.org")
+      (find-file "~/Dropbox/notes/agenda.org")))
   (defun laat/switch-to-journal ()
     (interactive)
     (find-file "~/Dropbox/notes/journal.org"))
@@ -626,10 +625,9 @@ Shift click with mouse selection.
       "fp" 'projectile-find-file
       "fd" '(laat/switch-to-dashboard :which-key "dashboard")
       "fs" '(laat/switch-to-scratch :which-key "scratch")
+      "fm" '(laat/switch-to-messages :which-key "messages")
       "fn" '(laat/switch-to-notes :which-key "notes")
-      "fb" '(laat/switch-to-mobile-notes :which-key "mobile notes")
       "fi" '(laat/switch-to-mobile-inbox :which-key "mobile inbox")
-      "fm" '(laat/switch-to-messages :which-key "mobile notes")
       "fe" '(laat/switch-to-config :which-key "emacs config")
       "fj" '(laat/switch-to-journal :which-key "journal")
       "fa" '(laat/switch-to-agenda-file :which-key "agenda file")))
@@ -1131,6 +1129,7 @@ mode.
 #+begin_src emacs-lisp
   (use-package yasnippet
     :ensure t
+    :defer 4
     :config
     (yas-global-mode t)
     :diminish yas-minor-mode)
@@ -1246,6 +1245,7 @@ Set this to the folder where you keep your Git repos!
     (projectile-completion-system 'ivy)
     (projectile-switch-project-action #'projectile-dired)
     (projectile-ignored-projects '("~/"))
+    (projectile-auto-discover nil)
     :general
     (laat/leader-keys
       "'" 'projectile-run-vterm
@@ -1445,13 +1445,23 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
       :states 'normal
       :keymaps 'org-mode-map
       "j" '(counsel-org-goto :which-key "go to heading")
-      "t" '(org-todo :which-key "task")
+      "d" '(org-todo :which-key "todo")
       "r" '(org-babel-remove-result :which-key "remove result")
-      "cc" '(org-ctrl-c-ctrl-c :which-key "C-c C-c"))
+      "cc" '(org-ctrl-c-ctrl-c :which-key "C-c C-c")
+      "t" '(:ignore t :which-key "timer")
+      "ts" '(org-timer-start :which-key "start")
+      "tx" '(org-timer-set-timer :which-key "set")
+      "t." '(org-timer :which-key "insert")
+      "ti" '(org-timer-item :which-key "insert item")
+      "t," '(org-timer-pause-or-continue :which-key "play/pause")
+      "td" '(org-timer-stop :which-key "stop"))
     :config
     (require 'org-faces)
     ;; https://emacs.stackexchange.com/questions/26923
     (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
+
+    ;; no other windows
+    (add-hook 'org-capture-mode-hook 'delete-other-windows)
 
     ;; I want ids
     (add-hook 'org-capture-mode-hook #'org-id-get-create)
@@ -1498,6 +1508,10 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
         "\n** TODO %?\n\n\n\n")
        ("l" "TODO Life" entry (file+headline "~/.notes/agenda.org" "Life Tasks")
         "\n** TODO %?\n\n\n\n")
+       ("t" "Helgas tips" entry (file+headline ,(concat org-directory "notes.org") "Helgas tips")
+        "\n* %?\n\n\n\n")
+       ("m" "Meeting" entry (file+headline ,(concat org-directory "work.org") "Meetings")
+        "\n** %T %?\n\n\n\n")
        ("j" "Journal" entry (file+olp+datetree ,(concat org-directory "journal.org"))
         "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n")
        ("p" "Protocol")

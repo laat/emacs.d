@@ -559,16 +559,16 @@ Shift click with mouse selection.
     (switch-to-buffer "*Messages*"))
   (defun laat/switch-to-mobile-notes ()
     (interactive)
-    (find-file "~/Dropbox/notes/orgzly/notes.org"))
+    (find-file "~/.notes/notes.org"))
   (defun laat/switch-to-mobile-inbox ()
     (interactive)
-    (find-file "~/Dropbox/notes/orgzly/Inbox.org"))
+    (find-file "~/.notes/inbox.org"))
   (defun laat/switch-to-notes ()
     (interactive)
     (find-file "~/Dropbox/notes/notes.org"))
   (defun laat/switch-to-agenda-file ()
     (interactive)
-    (find-file "~/Dropbox/notes/agenda.org"))
+    (find-file "~/.notes/agenda.org"))
   (defun laat/switch-to-journal ()
     (interactive)
     (find-file "~/Dropbox/notes/journal.org"))
@@ -1375,6 +1375,7 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
         (insert (format tag ""))
         (forward-char (if orgp -1 -6)))))
 
+
   (use-package org
     :pin gnu
     :ensure org-contrib
@@ -1406,11 +1407,24 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     (require 'org-faces)
     ;; https://emacs.stackexchange.com/questions/26923
     (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
+
+    ;; I want ids
     (add-hook 'org-capture-mode-hook #'org-id-get-create)
+    (add-hook 'org-after-refile-insert-hook #'org-id-get-create)
+
+    ;; magic copy links
     (org-link-set-parameters
      "copy"
      :follow (lambda (link) (kill-new link))
      :export (lambda (_ desc &rest _) desc))
+
+    ;; add date captured
+    (defun laat/add-property-with-date-captured ()
+      "Add DATE_CAPTURED property to the current item."
+      (interactive)
+      (org-set-property "DATE_CAPTURED" (format-time-string "%F")))
+    (add-hook 'org-capture-before-finalize-hook 'laat/add-property-with-date-captured)
+
     :custom
     (org-catch-invisible-edits 'smart)
     (org-ctrl-k-protect-subtree t)
@@ -1418,13 +1432,11 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     (org-cycle-separator-lines 0 "compact folding")
     (org-ellipsis "…" "a pretty ellipsis. Alternatives … ⤵ ▼, ↴, ⬎, ⤷, and ⋱.")
     (org-agenda-files
-     '("~/Dropbox/notes/agenda.org"
-       "~/Dropbox/notes/orgzly/agenda.org"
-       "~/.notes/agenda.org"))
+     '("~/.notes/agenda.org"
+       "~/Dropbox/notes/agenda.org"))
     (org-refile-targets
      '((nil :maxlevel . 9)
        ("~/Dropbox/notes/notes.org" :maxlevel . 3)
-       ("~/Dropbox/notes/orgzly/notes.org" :maxlevel . 2)
        (org-agenda-files :maxlevel . 9)))
     (org-refile-use-outline-path nil)
     (org-directory "~/Dropbox/notes/")
@@ -1435,27 +1447,22 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     (org-edit-src-auto-save-idle-delay 5)
     (org-src-ask-before-returning-to-edit-buffer nil)
     (org-capture-templates
-     `(("j" "Journal" entry (file+olp+datetree ,(concat org-directory "journal.org"))
-        "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n")
-       ("s" "Simple" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
+     `(("s" "Simple" entry (file+headline "~/.notes/inbox.org" "Desktop Inbox")
         "\n** %?\n\n\n\n")
        ("w" "TODO Work" entry (file+headline ,(concat org-directory "agenda.org") "Work Tasks")
         "\n** TODO %?\n\n\n\n")
-       ("l" "TODO Life" entry (file+headline ,(concat org-directory "agenda.org") "Life Tasks")
+       ("l" "TODO Life" entry (file+headline "~/.notes/agenda.org" "Life Tasks")
         "\n** TODO %?\n\n\n\n")
-       ("m" "Mobile TODO" entry (file+headline ,(concat org-directory "orgzly/agenda.org") "Agenda på telefonen")
-        "\n** TODO %?\n\n\n\n")
+       ("j" "Journal" entry (file+olp+datetree ,(concat org-directory "journal.org"))
+        "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n")
        ;; https://salvatore.denaro.nyc/2020/08/capturing-text-from-any-mac-application.html
-       ("g" "Protocol Grab" entry (file+headline ,(concat org-directory "notes.org") "Inbox" )
+       ("g" "Protocol Grab" entry (file+headline "~/.notes/inbox.org"  "Desktop Inbox" )
         "* %? \n%i\n" :prepend t :created t )
        ;; org-capture Chrome Extension
-       ("p" "Protocol" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
-        "* %?\nCaptured On: %U \n\n[[%:link][%:description]] \n\n#+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n")
+       ("p" "Protocol" entry (file+headline "~/.notes/inbox.org" "Desktop Inbox")
+        "* %?\n\n[[%:link][%:description]] \n\n#+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n")
        ("L" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
-        "* %?\nCaptured On: %U \n\n[[%:link][%:description]]")
-       ;; work
-       ("n" "NRK Program" entry (file+headline ,(concat org-directory "notes.org") "NRK Programmer")
-        "* %? \nWhen: %U \n\n"))))
+        "* %?\n\n[[%:link][%:description]]"))))
 
   (use-package evil-org
     :ensure t

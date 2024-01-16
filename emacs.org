@@ -398,6 +398,12 @@ Fix path
     (:states '(normal visual)
              "s-d" 'evil-multiedit-match-and-next
              "s-D" 'evil-multiedit-match-and-prev))
+
+  (use-package evil-string-inflection
+    :ensure t
+    :general
+    (:states 'normal
+             "g+" 'evil_operator_string_inflection))
 #+end_src
 
 ** Hydra

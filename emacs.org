@@ -416,9 +416,10 @@ Custom variable to distinguish emacs install.
              "g+" 'evil_operator_string_inflection))
 
   (use-package evil-mc
+      :ensure t
       :init
-      (add-hook 'prog-mode-hook 'turn-on-evil-mc-mode)
-      (add-hook 'text-mode-hook 'turn-on-evil-mc-mode)
+      :hook (prog-mode . turn-on-evil-mc-mode)
+      :hook (text-mode . turn-on-evil-mc-mode)
       :config
       (add-hook 'magit-mode-hook 'turn-off-evil-mc-mode)
       (setq-default evil-mc-one-cursor-show-mode-line-text nil)
@@ -1327,19 +1328,21 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
 
 #+begin_src emacs-lisp
 
-    (use-package git-gutter
-      :hook
-      (prog-mode . git-gutter-mode)
-      (org-mode . git-gutter-mode)
-      :diminish
-      :config
-      (setq git-gutter:update-interval 0.02))
+  (use-package git-gutter
+    :ensure t
+    :hook
+    (prog-mode . git-gutter-mode)
+    (org-mode . git-gutter-mode)
+    :diminish
+    :custom
+    (git-gutter:update-interval 0.02))
 
-    (use-package git-gutter-fringe
-      :config
-      (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
-      (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
-      (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
+  (use-package git-gutter-fringe
+    :ensure t
+    :config
+    (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
+    (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
+    (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
 
 #+end_src
 

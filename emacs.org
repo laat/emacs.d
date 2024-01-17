@@ -414,6 +414,20 @@ Custom variable to distinguish emacs install.
     :general
     (:states 'normal
              "g+" 'evil_operator_string_inflection))
+
+  (use-package evil-mc
+      :init
+      (add-hook 'prog-mode-hook 'turn-on-evil-mc-mode)
+      (add-hook 'text-mode-hook 'turn-on-evil-mc-mode)
+      :config
+      (add-hook 'magit-mode-hook 'turn-off-evil-mc-mode)
+      (setq-default evil-mc-one-cursor-show-mode-line-text nil)
+      (setq evil-mc-enable-bar-cursor nil)
+      :general
+      (:states '(insert normal) :keymaps 'evil-mc-key-map
+               "s-d" #'evil-mc-make-cursor-move-next-line
+               "s-D" #'evil-mc-make-cursor-move-prev-line
+               "C-s-d" #'evil-mc-undo-all-cursors))
 #+end_src
 
 ** Hydra

@@ -2166,7 +2166,7 @@ sequenceDiagram
   # -q ignores personal Emacs files but loads the site files.
   emacs -q --eval='(message "%s" (emacs-init-time))'
 
-  ;; For macOS users:
+  # For macOS users:
   open -n /Applications/Emacs.app --args -q --eval='(message "%s" (emacs-init-time))'
 #+end_src
 

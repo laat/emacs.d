@@ -534,6 +534,7 @@ Needs =brew install coreutils=
           dired-listing-switches "-alBh --group-directories-first"
           dired-use-ls-dired t))
 #+end_src
+
 * UI Configuration
 ** Color Theme
 

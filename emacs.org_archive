@@ -836,3 +836,21 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     (evil-set-initial-state 'vterm-mode 'emacs))
 #+end_src
 
+
+* Evil Multiedit
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-17 Wed 11:36
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Key Binds
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+  (use-package evil-multiedit
+    :ensure t
+    :general
+    (:states '(normal visual)
+             "s-d" 'evil-multiedit-match-and-next
+             "s-D" 'evil-multiedit-match-and-prev))
+#+end_src
+

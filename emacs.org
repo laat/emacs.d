@@ -409,14 +409,6 @@ Custom variable to distinguish emacs install.
     :ensure t
     :hook (evil-mode . evil-lion-mode))
 
-
-  (use-package evil-multiedit
-    :ensure t
-    :general
-    (:states '(normal visual)
-             "s-d" 'evil-multiedit-match-and-next
-             "s-D" 'evil-multiedit-match-and-prev))
-
   (use-package evil-string-inflection
     :ensure t
     :general

@@ -1249,7 +1249,7 @@ Set this to the folder where you keep your Git repos!
     :custom
     (projectile-completion-system 'ivy)
     (projectile-switch-project-action #'projectile-dired)
-    (projectile-ignored-projects '("~/"))
+    (projectile-ignored-projects '("~/" "/opt/homebrew/"))
     (projectile-auto-discover nil)
     :general
     (laat/leader-keys
@@ -1579,14 +1579,21 @@ to set a background color
 *** base config
 
 #+begin_src emacs-lisp
+  (use-package org-protocol
+    :defer t)
+#+end_src
+
+*** Open Magit in the terminal on OS X
+
+A custom protocol
+
+#+begin_src emacs-lisp
   (defun laat/protocol-magit (data)
     "Open magit buffer for repository"
     (magit-status-setup-buffer (plist-get data :repo))
     (select-frame-set-input-focus (selected-frame)))
 
-  (use-package org-protocol
-    :defer t
-    :config
+  (with-eval-after-load 'org-protocol
     (add-to-list
      'org-protocol-protocol-alist
      '("Open magit status"
@@ -1594,25 +1601,6 @@ to set a background color
        :function laat/protocol-magit
        :kill-client t)))
 #+end_src
-
-*** Chrome Extensoion
-
-- [[http://slumpy.org/blog/2015-07-07-org-capture-chrome-extension/][Org-Capture Chrome Extension]]
-- [[https://github.com/sprig/org-capture-extension][sprig/org-capture-extension]]
-
-*** Text from all OS X Apps
-
-Automator.app (builtin) and ⌘-s is your friend. Remember =pass input=
-
-
-#+begin_src sh
-  data="$@"
-  encoded=$(python3 -c "import sys, urllib.parse; print(urllib.parse.quote(' '.join(sys.argv[1:]), safe=''))" "${data[@]}")
-  open "org-protocol://capture?template=pg&body=$encoded"
-#+end_src
-[[https://salvatore.denaro.nyc/2020/08/capturing-text-from-any-mac-application.html][Source]]
-
-*** Open Magit on OS X
 
 Magit bash script
 
@@ -1638,6 +1626,23 @@ Magit bash script
       emacsclient "${proto}"
   fi
 #+end_src
+
+*** Chrome Extensoion
+
+- [[http://slumpy.org/blog/2015-07-07-org-capture-chrome-extension/][Org-Capture Chrome Extension]]
+- [[https://github.com/sprig/org-capture-extension][sprig/org-capture-extension]]
+
+*** Text from all OS X Apps
+
+Automator.app (builtin) and ⌘-s is your friend. Remember =pass input=
+
+
+#+begin_src sh
+  data="$@"
+  encoded=$(python3 -c "import sys, urllib.parse; print(urllib.parse.quote(' '.join(sys.argv[1:]), safe=''))" "${data[@]}")
+  open "org-protocol://capture?template=pg&body=$encoded"
+#+end_src
+[[https://salvatore.denaro.nyc/2020/08/capturing-text-from-any-mac-application.html][Source]]
 
 ** writegood
 
@@ -2005,6 +2010,7 @@ sequenceDiagram
       (org-display-inline-images)
       (blink-cursor-mode 0)
       (org-indent-mode 0)
+      (toggle-frame-fullscreen)
       (org-present-hide-cursor)
       (org-present-read-only)
       (evil-define-key 'normal org-present-mode-keymap
@@ -2031,6 +2037,7 @@ sequenceDiagram
       (if (not org-startup-with-inline-images)
           (org-remove-inline-images))
       (org-present-show-cursor)
+      (toggle-frame-fullscreen)
       (blink-cursor-mode 1)
       (org-indent-mode 1)
       (org-present-read-write))
@@ -2073,6 +2080,14 @@ sequenceDiagram
     :magic ("%PDF" . pdf-view-mode)
     :config
     (pdf-tools-install :no-query))
+
+  (use-package pdf-view-restore
+    :ensure t
+    :after pdf-tools
+    :custom
+    (pdf-view-restore-filename "~/.emacs.d/.pdf-view-restore")
+    :config
+    (add-hook 'pdf-view-mode-hook 'pdf-view-restore-mode))
 #+end_src
 
 ** Epub reader

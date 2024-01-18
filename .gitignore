@@ -1,3 +1,4 @@
+*.sqlite
 .swp
 custom.el
 init.el

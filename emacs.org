@@ -493,6 +493,7 @@ Custom variable to distinguish emacs install.
      ((kbd "s-x") . execute-extended-command)
      ((kbd "s-w") . delete-frame)
      ((kbd "s-z") . undo)
+     ((kbd "s-Z") . undo-redo)
      ((kbd "s-0") . laat/text-scale-zero)
      ((kbd "s-+") . text-scale-increase)
      ((kbd "s--") . text-scale-decrease)))

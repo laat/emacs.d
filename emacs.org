@@ -1439,6 +1439,17 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
 #+end_src
 
 
+*** Markdown
+
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :ensure-system-package marksman ;; LSP
+    :commands (markdown-mode gfm-mode)
+    :mode (("\\.md\\'" . gfm-mode)
+           ("\\.markdown\\'" . gfm-mode)))
+#+end_src
+
 *** robots.txt
 
 #+begin_src emacs-lisp
@@ -1457,17 +1468,6 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     :mode ("srm\\.conf\\'" . apache-mode)
     :mode ("access\\.conf\\'" . apache-mode)
     :mode ("sites-\\(available\\|enabled\\)/" . apache-mode))
-#+end_src
-
-*** markdown
-
-#+begin_src emacs-lisp
-  (use-package markdown-mode
-    :ensure t
-    :ensure-system-package marksman ;; LSP
-    :commands (markdown-mode gfm-mode)
-    :mode (("\\.md\\'" . gfm-mode)
-           ("\\.markdown\\'" . gfm-mode)))
 #+end_src
 
 * Org
@@ -2191,6 +2191,25 @@ sequenceDiagram
     :general
     (:states '(normal) :keymaps 'dired-mode-map
              "P" #'dired-preview-mode))
+#+end_src
+
+** Colors
+
+#+begin_src emacs-lisp
+  (use-package diredfl
+    :ensure t
+    :hook (dired-mode . diredfl-mode))
+#+end_src
+
+** Subtree
+
+#+begin_src emacs-lisp
+  (use-package dired-subtree
+    :ensure t
+    :after dired
+    :general
+    (:states '(normal) :keymaps 'dired-mode-map
+               "TAB" #'dired-subtree-toggle))
 #+end_src
 
 * Terminals

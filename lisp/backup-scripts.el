@@ -25,11 +25,9 @@
            (process (start-file-process-shell-command "backup" buff-name file-name)))
       (set-process-sentinel process
                             (lambda (_ event)
-                              (message (concat "backup " file-name " " event))
+                              (message (concat "backup " file-name " " (string-trim event)))
                               (cond ((string-match-p "finished" event)
-                                     (progn
-                                       (kill-buffer buff-name)
-                                       (message (concat "backup: " file-name " complete"))))))))))
+                                     (kill-buffer buff-name))))))))
 
 
 ;;;###autoload

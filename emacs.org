@@ -843,6 +843,7 @@ M-x nerd-the-icons-install-fonts
 
   (use-package counsel
     :ensure t
+    :ensure-system-package rg
     :diminish
     :bind
     (("s-b" . 'counsel-switch-buffer)

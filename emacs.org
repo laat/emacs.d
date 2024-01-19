@@ -24,11 +24,6 @@ Disable visible scrollbar.
   (scroll-bar-mode -1)
 #+end_src
 
-Disable the toolbar on every thing else
-
-#+begin_src emacs-lisp
-  (tool-bar-mode -1)
-#+end_src
 
 Disable tooltips
 
@@ -131,6 +126,12 @@ Create local packages in =~/emacs.d/lisp/=
 #+end_src
 
 * Basic Config
+
+Disable the toolbar on every thing else
+
+#+begin_src emacs-lisp
+  (tool-bar-mode -1)
+#+end_src
 
 Don't delete any backups.
 #+BEGIN_SRC emacs-lisp

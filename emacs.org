@@ -2187,6 +2187,12 @@ sequenceDiagram
       :commands hackernews)
 #+end_src
 
+** Docker
+
+#+begin_src emacs-lisp
+  (use-package docker :ensure t)
+#+end_src
+
 * File Management
 
 ** Icons

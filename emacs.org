@@ -830,7 +830,8 @@ M-x nerd-the-icons-install-fonts
      ("C-k" . ivy-previous-line)
      ("C-d" . ivy-reverse-i-search-kill))
     :config
-    (ivy-mode 1))
+    (ivy-mode 1)
+    (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order))))
 
   (use-package ivy-rich
     :ensure t

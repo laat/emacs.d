@@ -1216,7 +1216,11 @@ mode.
 #+begin_src emacs-lisp
   (use-package eglot
     :ensure t
-    :hook (prog-mode . eglot-ensure)
+    :hook (ruby-ts-mode . eglot-ensure)
+    :hook (typescript-ts-mode . eglot-ensure)
+    :hook (js-base-mode . eglot-ensure)
+    :hook (svelte-mode . eglot-ensure)
+    :hook (markdown-mode . eglot-ensure)
     :general
     (laat/leader-keys
       "v" '(:ignore t :which-key "language server")
@@ -1348,6 +1352,7 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     :hook
     (prog-mode . git-gutter-mode)
     (org-mode . git-gutter-mode)
+    (markdown-mode . git-gutter-mode)
     :diminish
     :custom
     (git-gutter:update-interval 0.02))
@@ -1432,6 +1437,37 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
                  '(svelte-mode . ("svelteserver" "--stdio"))))
 #+end_src
 
+
+*** robots.txt
+
+#+begin_src emacs-lisp
+  (use-package robots-txt-mode
+    :ensure t
+    :mode ("/robots\\.txt\\'" . robots-txt-mode))
+#+end_src
+
+*** apache-mode
+
+#+begin_src emacs-lisp
+  (use-package apache-mode
+    :ensure t
+    :mode ("\\.htaccess\\'" . apache-mode)
+    :mode ("httpd\\.conf\\'" . apache-mode)
+    :mode ("srm\\.conf\\'" . apache-mode)
+    :mode ("access\\.conf\\'" . apache-mode)
+    :mode ("sites-\\(available\\|enabled\\)/" . apache-mode))
+#+end_src
+
+*** markdown
+
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :ensure-system-package marksman ;; LSP
+    :commands (markdown-mode gfm-mode)
+    :mode (("\\.md\\'" . gfm-mode)
+           ("\\.markdown\\'" . gfm-mode)))
+#+end_src
 
 * Org
 ** Base Config

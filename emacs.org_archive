@@ -893,3 +893,21 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     :ensure t)
 #+end_src
 
+
+* cal
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-19 Fri 23:00
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: MacOS
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+(use-package maccalfw
+  :commands maccalfw-open
+    :quelpa (copilot :fetcher github
+                     :repo "haji-ali/maccalfw"
+                     :branch "main"
+                     :files ("maccalfw.el" "src")))
+#+end_src
+

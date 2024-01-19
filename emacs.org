@@ -2232,6 +2232,10 @@ sequenceDiagram
     :ensure t
     :defer t
     :config
+    (when (member window-system '(mac ns))
+      (define-key vterm-mode-map (kbd "s-v") 'vterm-yank)
+      (define-key vterm-mode-map (kbd "<s-backspace>")
+                  (lambda () (interactive) (vterm-send-key (kbd "C-u")))))
     (with-eval-after-load 'evil
       (evil-set-initial-state 'vterm-mode 'emacs)))
 #+end_src

@@ -854,3 +854,28 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
              "s-D" 'evil-multiedit-match-and-prev))
 #+end_src
 
+
+* symex
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-19 Fri 17:39
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+
+(use-package symex
+  :ensure t
+  :config
+  (symex-initialize)
+  :custom
+  (symex-modal-backend 'evil))
+
+
+(use-package rigpa
+  :quelpa (rigpa :fetcher github :repo "countvajhula/rigpa")
+  :after (evil symex)
+  :config
+  (setq rigpa-mode t))
+
+#+end_src

@@ -2009,6 +2009,11 @@ sequenceDiagram
     :after org
     :ensure t
     :defer t)
+
+  (use-package orgit-forge
+    :after '(org forge)
+    :ensure t
+    :defer t)
 #+end_src
 
 [[orgit:~/.emacs.d][emacs.d git status]]

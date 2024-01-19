@@ -575,6 +575,7 @@ Needs =brew install coreutils=
 #+end_src
 
 ** Mouse
+
 Shift click with mouse selection.
 
 #+begin_src emacs-lisp
@@ -1011,6 +1012,16 @@ Download en_US from [[http://wordlist.aspell.net/dicts/][aspell.net]] and extrac
 
 #+begin_src emacs-lisp
   (use-package diminish :ensure t)
+#+end_src
+
+** Bell
+
+#+begin_src emacs-lisp
+  (use-package mode-line-bell
+    :ensure t
+    :defer 3
+    :config
+    (mode-line-bell-mode))
 #+end_src
 
 * Development

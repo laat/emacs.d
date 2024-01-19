@@ -2132,6 +2132,16 @@ sequenceDiagram
     :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 
+** Preview
+
+#+begin_src emacs-lisp
+  (use-package dired-preview
+    :ensure t
+    :after dired
+    :general
+    (:states '(normal) :keymaps 'dired-mode-map
+             "P" #'dired-preview-mode))
+#+end_src
 
 * Terminals
 ** vterm

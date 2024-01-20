@@ -2021,6 +2021,14 @@ sequenceDiagram
 ** PDF
 
 #+begin_src emacs-lisp
+
+  (use-package pdf-view
+  :ensure nil
+  :after pdf-tools
+  :bind (:map pdf-view-mode-map
+        ("C-s" . isearch-forward))
+  :custom (pdf-view-use-unicode-ligther nil))
+
   (use-package djvu
     :ensure t
     :defer t)

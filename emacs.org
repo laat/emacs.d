@@ -2041,6 +2041,13 @@ sequenceDiagram
     :config
     (with-eval-after-load 'pdf-annot
       (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
+
+  (use-package pdf-view
+    :ensure nil
+    :after pdf-tools
+    :bind (:map pdf-view-mode-map
+                ("C-s" . isearch-forward))
+    :custom (pdf-view-use-unicode-ligther nil))
 #+end_src
 
 ** org-present

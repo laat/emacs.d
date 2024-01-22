@@ -2276,6 +2276,7 @@ sequenceDiagram
 #+begin_src emacs-lisp
   (use-package eshell
     :config
+
     (defun laat/eshell-quit-or-delete-char (arg)
       (interactive "p")
       (if (and (eolp) (looking-back eshell-prompt-regexp))
@@ -2284,9 +2285,11 @@ sequenceDiagram
             (ignore-errors
               (delete-window)))
         (delete-forward-char arg)))
+
     (defun eshell/gst (&rest args)
       (magit-status (pop args) nil)
       (eshell/echo))
+
     :general
     (:keymaps 'eshell-mode-map
               "C-l" (lambda () (interactive)

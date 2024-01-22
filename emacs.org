@@ -376,6 +376,7 @@ Custom variable to distinguish emacs install.
     :after evil
     :config
     (delete 'vterm evil-collection-mode-list)
+    (delete 'eshell evil-collection-mode-list)
     (evil-collection-init))
 
   (use-package evil-matchit
@@ -2292,12 +2293,14 @@ sequenceDiagram
 
     :general
     (:keymaps 'eshell-mode-map
+              "<s-backspace>" 'eshell-kill-input
               "C-l" (lambda () (interactive)
                       (let ((input (eshell-get-old-input)))
                         (eshell/clear-scrollback)
                         (eshell-emit-prompt)
                         (insert input)))
-              "C-d" 'laat/eshell-quit-or-delete-char))
+              "C-d" 'laat/eshell-quit-or-delete-char
+              (kbd "<tab>") 'completion-at-point))
 
   (use-package eat
     :quelpa (eat :fetcher git

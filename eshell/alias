@@ -4,7 +4,11 @@ alias p corepack pnpm $*
 alias pnpm corepack pnpm $*
 alias pnpx corepack pnpx $*
 alias ll ls -l $*
+alias la ls -a $*
 alias gd magit-diff-unstaged
 alias d dired $1
 alias doc docker compose $*
 alias k kubectl $*
+alias e find-file $1
+alias vim find-file $1
+alias t terraform $*

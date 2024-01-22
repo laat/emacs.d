@@ -832,7 +832,9 @@ M-x nerd-the-icons-install-fonts
      ("C-d" . ivy-reverse-i-search-kill))
     :config
     (ivy-mode 1)
-    (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order))))
+    (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
+    :custom
+    (ivy-read-action-function 'ivy-hydra-read-action))
 
   (use-package ivy-rich
     :ensure t
@@ -840,6 +842,16 @@ M-x nerd-the-icons-install-fonts
     :defer 3
     :init
     (ivy-rich-mode 1))
+
+  (use-package all-the-icons-ivy-rich
+      :ensure t
+      :after ivy-rich
+      :config
+      (all-the-icons-ivy-rich-mode))
+
+  (use-package ivy-hydra
+    :ensure t
+    :after (ivy hydra))
 
   (use-package counsel
     :ensure t
@@ -1295,7 +1307,7 @@ Set this to the folder where you keep your Git repos!
     (projectile-auto-discover nil)
     :general
     (laat/leader-keys
-      "'" 'projectile-run-vterm
+      "'" 'projectile-run-eshell
       "p" 'projectile-command-map)
     :bind-keymap
     ("C-c p" . projectile-command-map))
@@ -2239,7 +2251,8 @@ sequenceDiagram
     :after dired
     :general
     (:states '(normal) :keymaps 'dired-mode-map
-               "TAB" #'dired-subtree-toggle))
+             "<tab>" #'dired-subtree-toggle
+             "<backtab>" #'dired-subtree-cycle))
 #+end_src
 
 * Terminals
@@ -2256,6 +2269,47 @@ sequenceDiagram
                   (lambda () (interactive) (vterm-send-key (kbd "C-u")))))
     (with-eval-after-load 'evil
       (evil-set-initial-state 'vterm-mode 'emacs)))
+#+end_src
+
+** eshell
+
+#+begin_src emacs-lisp
+  (use-package eshell
+    :config
+    (defun laat/eshell-quit-or-delete-char (arg)
+      (interactive "p")
+      (if (and (eolp) (looking-back eshell-prompt-regexp))
+          (progn
+            (eshell-life-is-too-much) ; Why not? (eshell/exit)
+            (ignore-errors
+              (delete-window)))
+        (delete-forward-char arg)))
+    (defun eshell/gst (&rest args)
+      (magit-status (pop args) nil)
+      (eshell/echo))
+    :general
+    (:keymaps 'eshell-mode-map
+              "C-l" (lambda () (interactive)
+                      (let ((input (eshell-get-old-input)))
+                        (eshell/clear-scrollback)
+                        (eshell-emit-prompt)
+                        (insert input)))
+              "C-d" 'laat/eshell-quit-or-delete-char))
+
+  (use-package eat
+    :quelpa (eat :fetcher git
+                 :url "https://codeberg.org/akib/emacs-eat"
+                 :files ("*.el" ("term" "term/*.el") "*.texi"
+                         "*.ti" ("terminfo/e" "terminfo/e/*")
+                         ("terminfo/65" "terminfo/65/*")
+                         ("integration" "integration/*")
+                         (:exclude ".dir-locals.el" "*-tests.el")))
+    :hook (eshell-mode . eat-eshell-mode)
+    :custom
+    (eshell-banner-message "")
+    :config
+    (with-eval-after-load 'evil
+      (evil-set-initial-state 'eshell-mode 'emacs)))
 #+end_src
 
 * Startup Timing

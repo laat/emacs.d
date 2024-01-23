@@ -930,3 +930,25 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     :hook (emacs-lisp-mode . aggressive-indent-mode))
 #+end_src
 
+
+* yasnippet
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-23 Tue 19:31
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Development/Basic
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :ensure t
+    :defer 4
+    :config
+    (yas-global-mode t)
+    :diminish yas-minor-mode)
+
+  (use-package yasnippet-snippets
+    :ensure t
+    :after yasnippet)
+#+end_src
+

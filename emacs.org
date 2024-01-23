@@ -1186,25 +1186,30 @@ mode.
 #+end_src
 
 
-
-
-*** yasnippet
+*** Tempel
 
 #+begin_src emacs-lisp
-  (use-package yasnippet
+  (use-package tempel
     :ensure t
-    :defer 4
-    :config
-    (yas-global-mode t)
-    :diminish yas-minor-mode)
+    :defer 3
+    :init
 
-  (use-package yasnippet-snippets
+    ;; Setup completion at point
+    (defun laat/tempel-setup-capf ()
+      (setq-local completion-at-point-functions
+                  (cons #'tempel-expand
+                        completion-at-point-functions)))
+
+    (add-hook 'conf-mode-hook 'laat/tempel-setup-capf)
+    (add-hook 'prog-mode-hook 'laat/tempel-setup-capf)
+    (add-hook 'text-mode-hook 'laat/tempel-setup-capf))
+
+  (use-package tempel-collection
     :ensure t
-    :after yasnippet)
+    :after tempel)
 #+end_src
 
 *** Compilation
-#+end_src
 
 
 [[https://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode][ANSI Coloring in Compilation Mode]]

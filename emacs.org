@@ -1287,18 +1287,6 @@ mode.
                 ("C-c ! l" . flymake-show-buffer-diagnostics)))
 #+end_src
 
-*** Aggressive Indent
-
-#+begin_src emacs-lisp
-  (use-package aggressive-indent
-    :ensure t
-    :diminish
-    :commands aggressive-indent-mode
-    :hook (clojure-mode . aggressive-indent-mode)
-    :hook (lisp-mode . aggressive-indent-mode)
-    :hook (emacs-lisp-mode . aggressive-indent-mode))
-#+end_src
-
 ** Copilot
 
 #+begin_src emacs-lisp

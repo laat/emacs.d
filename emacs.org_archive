@@ -911,3 +911,22 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
                      :files ("maccalfw.el" "src")))
 #+end_src
 
+
+* Aggressive Indent
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-23 Tue 19:16
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Development/Basic
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+  (use-package aggressive-indent
+    :ensure t
+    :diminish
+    :commands aggressive-indent-mode
+    :hook (clojure-mode . aggressive-indent-mode)
+    :hook (lisp-mode . aggressive-indent-mode)
+    :hook (emacs-lisp-mode . aggressive-indent-mode))
+#+end_src
+

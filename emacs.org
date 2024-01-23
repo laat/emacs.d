@@ -1500,6 +1500,19 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     :mode ("sites-\\(available\\|enabled\\)/" . apache-mode))
 #+end_src
 
+*** SQL
+
+#+begin_src emacs-lisp
+  (use-package sql-indent
+    :ensure t
+    :diminish sqlind-minor-mode
+    :hook (sql-mode . sqlind-minor-mode))
+
+  (use-package sqlup-mode
+    :ensure t
+    :diminish sqlup-mode
+    :hook (sql-mode . sqlup-mode))
+#+end_src
 * Org
 ** Base Config
 
@@ -1805,6 +1818,7 @@ On Macos use before calling =org-download-clipboard=
     (add-to-list 'org-structure-template-alist '("py" . "src python"))
     (add-to-list 'org-structure-template-alist '("sql" . "src sql"))
     (add-to-list 'org-structure-template-alist '("sqlite" . "src sqlite"))
+    (add-to-list 'org-structure-template-alist '("dsq" . "src dsq"))
     (add-to-list 'org-structure-template-alist '("js" . "src js"))
     (add-to-list 'org-structure-template-alist '("json" . "src json"))
     (add-to-list 'org-structure-template-alist '("md" . "src markdown"))
@@ -1935,7 +1949,9 @@ sequenceDiagram
     (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages)
     (add-to-list 'org-babel-tangle-lang-exts '("sql" . "sql"))
     (add-to-list 'org-src-lang-modes (cons "SQL" 'sql)))
+
 #+end_src
+
 
 *** SwiftUI
 
@@ -1950,6 +1966,15 @@ sequenceDiagram
   Rectangle()
     .fill(Color.green)
     .frame(maxWidth: .infinity, maxHeight: .infinity)
+#+end_src
+
+*** dsq
+
+#+begin_src emacs-lisp
+  (use-package ob-dsq
+    :ensure t
+    :ensure-system-package dsq
+    :after org)
 #+end_src
 
 *** load babel languages

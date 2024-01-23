@@ -115,6 +115,14 @@ Create local packages in =~/emacs.d/lisp/=
   (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 #+end_src
 
+** Diminish
+
+for ~:diminish~ in use-package
+
+#+begin_src emacs-lisp
+  (use-package diminish :ensure t)
+#+end_src
+
 * Garbage Collection
 
 #+begin_src emacs-lisp
@@ -1024,11 +1032,6 @@ Download en_US from [[http://wordlist.aspell.net/dicts/][aspell.net]] and extrac
     :after flyspell-correct)
 #+end_src
 
-** Diminish
-
-#+begin_src emacs-lisp
-  (use-package diminish :ensure t)
-#+end_src
 
 ** Bell
 
@@ -1801,6 +1804,7 @@ On Macos use before calling =org-download-clipboard=
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
     (add-to-list 'org-structure-template-alist '("py" . "src python"))
     (add-to-list 'org-structure-template-alist '("sql" . "src sql"))
+    (add-to-list 'org-structure-template-alist '("sqlite" . "src sqlite"))
     (add-to-list 'org-structure-template-alist '("js" . "src js"))
     (add-to-list 'org-structure-template-alist '("json" . "src json"))
     (add-to-list 'org-structure-template-alist '("md" . "src markdown"))
@@ -1960,6 +1964,7 @@ sequenceDiagram
        (js . t)
        (mermaid . t)
        (shell . t)
+       (sqlite . t)
        (sql . t)
        (typescript . t))))
 #+end_src
@@ -2304,6 +2309,7 @@ sequenceDiagram
               "C-d" 'laat/eshell-quit-or-delete-char
               (kbd "<tab>") 'completion-at-point))
 
+  (use-package compat :ensure t)
   (use-package eat
     :quelpa (eat :fetcher git
                  :url "https://codeberg.org/akib/emacs-eat"

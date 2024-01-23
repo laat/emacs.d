@@ -59,6 +59,7 @@ Frame title
   (setq frame-title-format "%b")
 #+end_src
 
+
 * Package manager
 
 ** Initialize package manager
@@ -864,6 +865,7 @@ M-x nerd-the-icons-install-fonts
 
   (use-package counsel
     :ensure t
+    :after ivy
     :ensure-system-package rg
     :diminish
     :bind
@@ -1235,6 +1237,9 @@ mode.
   (use-package company
     :ensure t
     :diminish
+    :general
+    (:keymaps 'company-active-map
+              "<tab>" 'company-complete-selection)
     :bind
     (("C-SPC" . company-complete-common)
      :map prog-mode-map
@@ -1325,6 +1330,7 @@ Set this to the folder where you keep your Git repos!
 
   (use-package counsel-projectile
     :ensure t
+    :after counsel
     :config (counsel-projectile-mode))
 #+end_src
 
@@ -2366,6 +2372,11 @@ sequenceDiagram
     :config
     (with-eval-after-load 'evil
       (evil-set-initial-state 'eshell-mode 'emacs)))
+
+  (use-package eshell-syntax-highlighting
+    :after eshell
+    :ensure t
+    :hook (eshell-mode . eshell-syntax-highlighting-mode))
 #+end_src
 
 * Startup Timing

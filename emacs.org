@@ -877,6 +877,9 @@ M-x nerd-the-icons-install-fonts
     (setcdr (assoc 'counsel-M-x ivy-initial-inputs-alist) "")
     (setcdr (assoc 'org-refile ivy-initial-inputs-alist) ""))
 
+  (use-package smex
+    :ensure t)
+
 #+end_src
 
 ** Drag Stuff
@@ -1192,6 +1195,10 @@ mode.
     :config
     (yas-global-mode t)
     :diminish yas-minor-mode)
+
+  (use-package yasnippet-snippets
+    :ensure t
+    :after yasnippet)
 #+end_src
 
 *** Compilation
@@ -1650,6 +1657,8 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     :diminish
     :after org
     :hook (org-mode . evil-org-mode)
+    :custom
+    (evil-org-key-theme '(navigation insert textobjects additional calendar shift))
     :config
     (require 'evil-org-agenda)
     (evil-org-agenda-set-keys))

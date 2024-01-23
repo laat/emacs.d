@@ -1519,6 +1519,7 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     :diminish sqlup-mode
     :hook (sql-mode . sqlup-mode))
 #+end_src
+
 * Org
 ** Base Config
 

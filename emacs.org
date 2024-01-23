@@ -1533,13 +1533,36 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     :hook (sql-mode . sqlup-mode))
 #+end_src
 
-* Org
-** Base Config
+*** Lisp
 
 #+begin_src emacs-lisp
+  (use-package symex
+    :ensure t
+    :general
+    (:states '(normal) :keymaps 'emacs-lisp-mode-map
+             "<RET>" 'symex-mode-interface)
+    (:states '(insert) :keymaps 'emacs-lisp-mode-map
+             "<escape>" 'symex-mode-interface)
+    :custom
+    (symex-modal-backend 'evil)
+    :config
+    (setq symex--user-evil-keyspec
+          '(("j" . symex-go-up)
+            ("k" . symex-go-down)
+            ("C-k" . symex-descend-branch)
+            ("M-j" . symex-goto-highest)
+            ("M-k" . symex-goto-lowest)
+            ("C-j" . symex-climb-branch)))
+    (symex-initialize))
+#+end_src
+
+* Org
+** Base Config
+#+begin_src emacs-lisp
   (defun laat/insert-kbd (key)
-    "Ask for a key then insert its description. Will work on both
-      org-mode and any mode that accepts plain html."
+    "Ask for a KEY then insert its description.
+
+     Will work on both `org-mode' and any mode that accepts plain html."
     (interactive
      (list (read-key-sequence "Press key: ")))
     (let* ((orgp (derived-mode-p 'org-mode))
@@ -1584,18 +1607,11 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
       "t." '(org-timer :which-key "insert")
       "ti" '(org-timer-item :which-key "insert item")
       "t," '(org-timer-pause-or-continue :which-key "play/pause")
-      "td" '(org-timer-stop :which-key "stop"))
+      "td" '(org-timer-stop :which-key "stop")
+      "y" '(:ignore t :which-key "yank")
+      "yk" '(laat/insert-kbd :which-key "keybinding"))
     :config
     (require 'org-faces)
-    ;; https://emacs.stackexchange.com/questions/26923
-    (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
-
-    ;; no other windows
-    (add-hook 'org-capture-mode-hook 'delete-other-windows)
-
-    ;; I want ids
-    (add-hook 'org-capture-mode-hook #'org-id-get-create)
-    (add-hook 'org-after-refile-insert-hook #'org-id-get-create)
 
     ;; magic copy links
     (org-link-set-parameters
@@ -1603,12 +1619,6 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
      :follow (lambda (link) (kill-new link))
      :export (lambda (_ desc &rest _) desc))
 
-    ;; add date captured
-    (defun laat/add-property-with-date-captured ()
-      "Add DATE_CAPTURED property to the current item."
-      (interactive)
-      (org-set-property "DATE_CAPTURED" (format-time-string "%F")))
-    (add-hook 'org-capture-before-finalize-hook 'laat/add-property-with-date-captured)
 
     :custom
     (org-catch-invisible-edits 'smart)
@@ -1620,13 +1630,6 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
      '("~/.notes/agenda.org"
        "~/Dropbox/notes/agenda.org"
        "~/Dropbox/notes/notes.org"))
-    (org-refile-targets
-     '((nil :maxlevel . 9)
-       ("~/Dropbox/notes/notes.org" :maxlevel . 3)
-       ("~/.notes/mobile-notes.org" :maxlevel . 1)
-       (org-agenda-files :maxlevel . 9)))
-    (org-refile-use-outline-path nil)
-    (org-refile-use-outline-path 'file)
     (org-outline-path-complete-in-steps nil)
     (org-directory "~/Dropbox/notes/")
     (org-log-done nil "track when TODO -> DONE")
@@ -1634,29 +1637,7 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     (org-todo-keywords '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
     (org-confirm-babel-evaluate nil "C-c C-c on code blocks do not ask")
     (org-edit-src-auto-save-idle-delay 5)
-    (org-src-ask-before-returning-to-edit-buffer nil)
-    (org-capture-templates
-     `(("s" "Simple" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
-        "\n** %?\n\n\n\n")
-       ("w" "TODO Work" entry (file+headline ,(concat org-directory "agenda.org") "Work Tasks")
-        "\n** TODO %?\n\n\n\n")
-       ("l" "TODO Life" entry (file "~/.notes/agenda.org")
-        "\n* TODO %?\n\n\n\n")
-       ("t" "Helgas tips" entry (file+headline ,(concat org-directory "notes.org") "Helgas tips")
-        "\n* %?\n\n\n\n")
-       ("m" "Meeting" entry (file+headline ,(concat org-directory "work.org") "Meetings")
-        "\n** %T %?\n\n\n\n")
-       ("j" "Journal" entry (file+olp+datetree ,(concat org-directory "journal.org"))
-        "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n")
-       ("p" "Protocol")
-       ;; https://salvatore.denaro.nyc/2020/08/capturing-text-from-any-mac-application.html
-       ("pg" "Protocol Grab" entry (file+headline "~/.notes/inbox.org"  "Desktop Inbox" )
-        "* %? \n%i\n" :prepend t :created t )
-       ;; org-capture Chrome Extension
-       ("pp" "Protocol" entry (file+headline "~/.notes/inbox.org" "Desktop Inbox")
-        "* %?\n\n[[%:link][%:description]] \n\n#+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n")
-       ("pL" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
-        "* %?\n\n[[%:link][%:description]]"))))
+    (org-src-ask-before-returning-to-edit-buffer nil))
 
   (use-package evil-org
     :ensure t
@@ -1678,6 +1659,67 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     :hook (org-mode . org-superstar-mode)
     :config
     (org-superstar-configure-like-org-bullets))
+#+end_src
+
+** Refile
+
+#+begin_src emacs-lisp
+  (use-package org-refile
+    :after org
+    :ensure nil
+    :config
+    ;; https://emacs.stackexchange.com/questions/26923
+    (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
+
+    ;; I want ids
+    (add-hook 'org-after-refile-insert-hook #'org-id-get-create)
+    :custom
+    (org-refile-targets
+     '((nil :maxlevel . 9)
+       ("~/Dropbox/notes/notes.org" :maxlevel . 3)
+       ("~/.notes/mobile-notes.org" :maxlevel . 1)
+       (org-agenda-files :maxlevel . 9)))
+    (org-refile-use-outline-path 'file))
+#+end_src
+
+** Capture
+
+#+begin_src emacs-lisp
+  (use-package org-capture
+    :after org
+    :ensure nil
+    :preface
+    (defun laat/add-property-with-date-captured ()
+      "Add DATE_CAPTURED property to the current item."
+      (interactive)
+      (org-set-property "CAPTURED" (format-time-string "%F")))
+    :custom
+    (org-capture-templates
+     `(("s" "Simple" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
+        "\n** %?\n\n\n\n")
+       ("w" "TODO Work" entry (file+headline ,(concat org-directory "agenda.org") "Work Tasks")
+        "\n** TODO %?\n\n\n\n")
+       ("l" "TODO Life" entry (file "~/.notes/agenda.org")
+        "\n* TODO %?\n\n\n\n")
+       ("t" "Helgas tips" entry (file+headline ,(concat org-directory "notes.org") "Helgas tips")
+        "\n* %?\n\n\n\n")
+       ("m" "Meeting" entry (file+headline ,(concat org-directory "work.org") "Meetings")
+        "\n** %T %?\n\n\n\n")
+       ("j" "Journal" entry (file+olp+datetree ,(concat org-directory "journal.org"))
+        "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n")
+       ("p" "Protocol")
+       ;; https://salvatore.denaro.nyc/2020/08/capturing-text-from-any-mac-application.html
+       ("pg" "Protocol Grab" entry (file+headline "~/.notes/inbox.org"  "Desktop Inbox" )
+        "* %? \n%i\n" :prepend t :created t )
+       ;; org-capture Chrome Extension
+       ("pp" "Protocol" entry (file+headline "~/.notes/inbox.org" "Desktop Inbox")
+        "* %?\n\n[[%:link][%:description]] \n\n#+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n")
+       ("pL" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
+        "* %?\n\n[[%:link][%:description]]")))
+    :config
+    (add-hook 'org-capture-mode-hook 'delete-other-windows)
+    (add-hook 'org-capture-mode-hook 'org-id-get-create)
+    (add-hook 'org-capture-before-finalize-hook 'laat/add-property-with-date-captured))
 #+end_src
 
 ** Notes Backup
@@ -1798,7 +1840,6 @@ Automator.app (builtin) and ⌘-s is your friend. Remember =pass input=
     (laat/local-leader-keys
       :states 'normal
       :keymaps 'org-mode-map
-      "y" '(:ignore t :which-key "yank")
       "yi" '(org-download-clipboard :which-key "clipboard image")))
 #+end_src
 

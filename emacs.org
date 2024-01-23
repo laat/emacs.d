@@ -2352,6 +2352,7 @@ sequenceDiagram
 
   (use-package compat :ensure t)
   (use-package eat
+    :diminish eat-eshell-mode
     :quelpa (eat :fetcher git
                  :url "https://codeberg.org/akib/emacs-eat"
                  :files ("*.el" ("term" "term/*.el") "*.texi"

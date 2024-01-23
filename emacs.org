@@ -1244,6 +1244,8 @@ mode.
     (("C-SPC" . company-complete-common)
      :map prog-mode-map
      ("<tab>" . company-indent-or-complete-common))
+    :custom
+    (company-global-modes '(not eshell-mode))
     :config
     (global-company-mode))
 

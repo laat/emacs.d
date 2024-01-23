@@ -12,3 +12,4 @@ alias k kubectl $*
 alias e find-file $1
 alias vim find-file $1
 alias t terraform $*
+alias ... cd ../..

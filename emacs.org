@@ -865,7 +865,7 @@ M-x nerd-the-icons-install-fonts
 
   (use-package counsel
     :ensure t
-    :after ivy
+    :defer 0.1
     :ensure-system-package rg
     :diminish
     :bind

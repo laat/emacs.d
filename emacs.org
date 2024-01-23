@@ -1506,7 +1506,13 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
   (use-package sql-indent
     :ensure t
     :diminish sqlind-minor-mode
-    :hook (sql-mode . sqlind-minor-mode))
+    :hook (sql-mode . sqlind-minor-mode)
+    :config
+    (add-hook 'sqlind-minor-mode-hook
+              (lambda ()
+                (setq sqlind-indentation-offsets-alist
+                      `(;;(select-table 0)
+                        ,@sqlind-default-indentation-offsets-alist)))))
 
   (use-package sqlup-mode
     :ensure t

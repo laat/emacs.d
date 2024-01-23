@@ -952,3 +952,24 @@ Need GPG. [[https://gpgtools.org/][OSX toolkit]]
     :after yasnippet)
 #+end_src
 
+
+* Astro
+:PROPERTIES:
+:ARCHIVE_TIME: 2024-01-23 Tue 21:00
+:ARCHIVE_FILE: ~/.emacs.d/emacs.org
+:ARCHIVE_OLPATH: Development/Languages
+:ARCHIVE_CATEGORY: emacs
+:END:
+
+#+begin_src emacs-lisp
+  (use-package astro-ts-mode
+    :ensure
+    :mode "\\.astro\\'"
+    :config
+    (add-to-list 'treesit-language-source-alist
+                 '(astro "https://github.com/virchau13/tree-sitter-astro"))
+    (add-to-list 'eglot-server-programs
+                 '(astro-ts-mode . ("astro-ls" "--stdio"
+                                    :initializationOptions (:typescript (:tsdk ""))))))
+#+end_src
+

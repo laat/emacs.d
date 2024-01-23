@@ -2210,7 +2210,9 @@ sequenceDiagram
 ** Docker
 
 #+begin_src emacs-lisp
-  (use-package docker :ensure t)
+  (use-package docker
+    :ensure t
+    :commands docker)
 #+end_src
 
 * File Management

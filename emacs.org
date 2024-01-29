@@ -1749,7 +1749,7 @@ Syntax highlihgt exported html
 
 to set a background color
 #+begin_src org
-#+HTML_HEAD: <style>pre.src {background-color: #303030; color: #e5e5e5;}</style>
+  ,#+HTML_HEAD: <style>pre.src {background-color: #303030; color: #e5e5e5;}</style>
 #+end_src
 
 ** org-protocol

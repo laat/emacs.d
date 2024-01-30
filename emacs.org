@@ -310,8 +310,7 @@ Custom variable to distinguish emacs install.
       "t" '(:ignore t :which-key "toggles")
       "e" '(:ignore t :which-key "execute")
       "th" '(laat/toggle-at-home :which-key "at home")
-      "f" '(:ignore t :which-key "quick access")
-      "SPC" 'execute-extended-command)
+      "f" '(:ignore t :which-key "quick access"))
     (laat/leader-keys
       "r" '(:ignore t :which-key "bookmarks")
       "rf" '(counsel-recentf :which-key "recent files")
@@ -825,7 +824,8 @@ M-x nerd-the-icons-install-fonts
     :diminish
     :general
     (laat/leader-keys
-      "b" 'ivy-switch-buffer)
+      "b" 'ivy-switch-buffer
+      "SPC" 'ivy-switch-buffer)
     :bind
     (("C-s" . swiper)
      :map ivy-minibuffer-map

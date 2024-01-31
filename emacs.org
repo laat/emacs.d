@@ -1751,6 +1751,16 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
       "Add DATE_CAPTURED property to the current item."
       (interactive)
       (org-set-property "CAPTURED" (format-time-string "%F")))
+    (defun laat/grab-spotify-current-song ()
+      (let ((song (do-applescript "
+  tell application \"Spotify\"
+    set artistName to artist of current track
+    set trackName to name of current track
+    set albumName to album of current track
+
+    return artistName & \" - \" & trackName & \" (\" & albumName & \")\"
+  end tell ")))
+        (replace-regexp-in-string "^\"" "" (replace-regexp-in-string "\"$" "" song t t) t t)))
     :custom
     (org-capture-templates
      `(("s" "Simple" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
@@ -1765,6 +1775,8 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
         "\n** %T %?\n\n\n\n")
        ("j" "Journal" entry (file+olp+datetree ,(concat org-directory "journal.org"))
         "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n")
+       ("!" "Song" entry (file+headline ,(concat org-directory "notes.org") "Inbox - Songs")
+        "\n** %(laat/grab-spotify-current-song)%?\n\n\n\n")
        ("p" "Protocol")
        ;; https://salvatore.denaro.nyc/2020/08/capturing-text-from-any-mac-application.html
        ("pg" "Protocol Grab" entry (file+headline "~/.notes/inbox.org"  "Desktop Inbox" )

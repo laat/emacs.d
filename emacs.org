@@ -1302,6 +1302,15 @@ mode.
                 ("C-c ! l" . flymake-show-buffer-diagnostics)))
 #+end_src
 
+*** Prettier
+
+#+begin_src emacs-lisp
+  (use-package prettier
+    :ensure t
+    :hook (typescript-ts-mode . prettier-mode)
+    :hook (js-base-mode . prettier-mode))
+#+end_src
+
 ** Copilot
 
 #+begin_src emacs-lisp
@@ -1479,11 +1488,25 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     (defun laat/eglot-ts-organize-imports ()
       (interactive)
       (laat/eglot-buffer "source.organizeImports.ts"))
+    (defun laat/eglot-ts-add-missing-imports ()
+      (interactive)
+      (laat/eglot-buffer "source.addMissingImports.ts"))
+    (defun laat/eglot-ts-remove-unused-imports ()
+      (interactive)
+      (laat/eglot-buffer "source.removeUnusedImports.ts"))
+    (defun laat/eglot-ts-fix-all ()
+      (interactive)
+      (laat/eglot-buffer "source.fixall.ts"))
+    (defun laat/eglot-ts-sort-imports ()
+      (interactive)
+      (laat/eglot-buffer "source.sortImports.ts"))
     :general
     (laat/local-leader-keys
       :states 'normal
       :keymaps 'typescript-ts-mode-map
-      "o" '(laat/eglot-ts-organize-imports :which-key "organize import"))
+      "o" '(laat/eglot-ts-organize-imports :which-key "organize import")
+      "i" '(laat/eglot-ts-add-missing-imports :which-key "add missing imports")
+      "u" '(laat/eglot-ts-remove-unused-imports :which-key "remove unused imports"))
     :custom
     (typescript-indent-level 2)
     :config
@@ -1645,6 +1668,7 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
 
 
     :custom
+    (org-insert-heading-respect-content t)
     (org-catch-invisible-edits 'smart)
     (org-ctrl-k-protect-subtree t)
     (org-image-actual-width nil "allows #+ATTR_ORG: :width 100")

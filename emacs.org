@@ -1278,12 +1278,11 @@ mode.
     :hook (svelte-mode . eglot-ensure)
     :hook (markdown-mode . eglot-ensure)
     :general
-    (laat/leader-keys
-      "v" '(:ignore t :which-key "language server")
-      "vo" '(eglot-code-action-organize-imports :which-key "organize import")
-      "v." '(eglot-code-actions :which-key "code actions")
-      "vr" '(eglot-rename :which-key "rename")
-      "v=" '(eglot-format :which-key "format"))
+    (laat/local-leader-keys
+      "o" '(eglot-code-action-organize-imports :which-key "organize import")
+      "." '(eglot-code-actions :which-key "code actions")
+      "r" '(eglot-rename :which-key "rename")
+      "=" '(eglot-format :which-key "format"))
     :custom
     (eglot-autoshutdown t)
     (eglot-confirm-server-initiated-edits nil "no confirm"))
@@ -1473,6 +1472,14 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
   (use-package typescript-ts-mode
     :ensure typescript-ts-mode
     :defer t
+    :preface
+    (defun laat/eglot-ts-organize-imports ()
+      (interactive)
+      (ignore-errors
+        (eglot-code-actions (buffer-end 0) (buffer-end 1) "source.organizeImports.ts" t)))
+    :general
+    (laat/local-leader-keys
+      "o" '(laat/eglot-ts-organize-imports :which-key "organize import"))
     :custom
     (typescript-indent-level 2)
     :config

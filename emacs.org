@@ -567,6 +567,13 @@ Needs =brew install coreutils=
   (define-key key-translation-map (kbd "M-s-7") (kbd "M-|"))
 #+end_src
 
+** Emoji
+
+#+begin_src emacs-lisp
+  (when (eq system-type 'darwin)
+    (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend))
+#+end_src
+
 * UI Configuration
 
 ** Color Theme
@@ -2359,6 +2366,14 @@ sequenceDiagram
 #+end_src
 
 * Terminals
+
+** direnv
+
+#+begin_src emacs-lisp
+  (use-package direnv
+    :ensure t)
+#+end_src
+
 ** vterm
 
 #+begin_src emacs-lisp

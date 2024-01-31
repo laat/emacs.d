@@ -1277,12 +1277,15 @@ mode.
     :hook (js-base-mode . eglot-ensure)
     :hook (svelte-mode . eglot-ensure)
     :hook (markdown-mode . eglot-ensure)
+    :preface
+    (defun laat/eglot-buffer (command)
+      (ignore-errors
+        (eglot-code-actions (buffer-end 0) (buffer-end 1) command t)))
     :general
     (laat/local-leader-keys
-      "o" '(eglot-code-action-organize-imports :which-key "organize import")
       "." '(eglot-code-actions :which-key "code actions")
       "r" '(eglot-rename :which-key "rename")
-      "=" '(eglot-format :which-key "format"))
+      "0" '(eglot-format :which-key "format"))
     :custom
     (eglot-autoshutdown t)
     (eglot-confirm-server-initiated-edits nil "no confirm"))
@@ -1475,10 +1478,11 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
     :preface
     (defun laat/eglot-ts-organize-imports ()
       (interactive)
-      (ignore-errors
-        (eglot-code-actions (buffer-end 0) (buffer-end 1) "source.organizeImports.ts" t)))
+      (laat/eglot-buffer "source.organizeImports.ts"))
     :general
     (laat/local-leader-keys
+      :states 'normal
+      :keymaps 'typescript-ts-mode-map
       "o" '(laat/eglot-ts-organize-imports :which-key "organize import"))
     :custom
     (typescript-indent-level 2)

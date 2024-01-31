@@ -1078,7 +1078,15 @@ mode.
 #+begin_src emacs-lisp
   (use-package eldoc
     :diminish
-    :hook (prog-mode . eldoc-mode))
+    :hook (prog-mode . eldoc-mode)
+    :custom
+    (eldoc-idle-delay 0.7))
+  (use-package eldoc-box
+    :ensure t
+    :diminish eldoc-box-hover-mode
+    :hook (eldoc-mode . eldoc-box-hover-mode)
+    :custom
+    (eldoc-box-only-multi-line t))
 #+end_src
 
 *** Find indent
@@ -1307,6 +1315,7 @@ mode.
 #+begin_src emacs-lisp
   (use-package prettier
     :ensure t
+    :diminish (prettier-mode . "🌸")
     :hook (typescript-ts-mode . prettier-mode)
     :hook (js-base-mode . prettier-mode))
 #+end_src

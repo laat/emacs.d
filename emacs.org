@@ -312,13 +312,13 @@ Custom variable to distinguish emacs install.
       "th" '(laat/toggle-at-home :which-key "at home")
       "f" '(:ignore t :which-key "quick access"))
     (laat/leader-keys
-      "r" '(:ignore t :which-key "bookmarks")
-      "rf" '(counsel-recentf :which-key "recent files")
-      "fr" '(counsel-recentf :which-key "recent files")
-      "rm" '(bookmark-set :which-key "set bookmark")
-      "rg" '(bookmark-jump :which-key "jump to bookmark")
-      "rl" '(list-bookmarks :which-key "list bookmarks")
-      "rd" '(bookmark-delete :which-key "delete bookmark")))
+      "b" '(:ignore t :which-key "bookmarks")
+      "bf" '(counsel-recentf :which-key "recent files")
+      "br" '(counsel-recentf :which-key "recent files")
+      "bm" '(bookmark-set :which-key "set bookmark")
+      "bg" '(bookmark-jump :which-key "jump to bookmark")
+      "bl" '(list-bookmarks :which-key "list bookmarks")
+      "bd" '(bookmark-delete :which-key "delete bookmark")))
 #+end_src
 
 ** Evil
@@ -824,7 +824,6 @@ M-x nerd-the-icons-install-fonts
     :diminish
     :general
     (laat/leader-keys
-      "b" 'ivy-switch-buffer
       "SPC" 'ivy-switch-buffer)
     :bind
     (("C-s" . swiper)
@@ -2379,8 +2378,9 @@ sequenceDiagram
 
 #+begin_src emacs-lisp
   (use-package eshell
+    :custom
+    (eshell-scroll-to-bottom-on-input t)
     :config
-
     (defun laat/eshell-quit-or-delete-char (arg)
       (interactive "p")
       (if (and (eolp) (looking-back eshell-prompt-regexp))

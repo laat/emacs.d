@@ -83,3 +83,4 @@ places
 /xkcd/
 /.pdf-view-restore
 /custom.el.bak
+/eln-cache/

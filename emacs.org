@@ -1668,6 +1668,8 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
       "yk" '(laat/insert-kbd :which-key "keybinding"))
     :config
     (require 'org-faces)
+    (require 'ox-md)
+
 
     ;; magic copy links
     (org-link-set-parameters

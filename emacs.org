@@ -12,6 +12,12 @@
 :header-args:emacs-lisp: :tangle ./early-init.el :mkdirp yes :results output silent
 :END:
 
+Lexical binding. This block must stay first in the file.
+
+#+begin_src emacs-lisp
+  ;;; early-init.el -*- lexical-binding: t; -*-
+#+end_src
+
 No startup message.
 
 #+begin_src emacs-lisp
@@ -59,10 +65,21 @@ Frame title
   (setq frame-title-format "%b")
 #+end_src
 
+Native Compilation Warnings
+
+#+begin_src emacs-lisp
+(setq native-comp-async-report-warnings-errors 'silent)
+#+end_src
 
 * Package manager
 
 ** Initialize package manager
+
+Lexical binding. This block must stay first in the file.
+
+#+begin_src emacs-lisp
+  ;;; init.el -*- lexical-binding: t; -*-
+#+end_src
 
 #+begin_src emacs-lisp
   (require 'package)

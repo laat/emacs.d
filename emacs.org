@@ -18,6 +18,20 @@ Lexical binding. This block must stay first in the file.
   ;;; early-init.el -*- lexical-binding: t; -*-
 #+end_src
 
+Collect garbage less often until =gcmh= takes over in =init.el=. The
+default threshold (800 kB) caused over 20 collections during startup.
+
+#+begin_src emacs-lisp
+  (setq gc-cons-threshold (* 128 1024 1024))
+#+end_src
+
+Activate packages from =package-quickstart.el= instead of reading every
+package's descriptor and autoloads at startup. See Package manager.
+
+#+begin_src emacs-lisp
+  (setq package-quickstart t)
+#+end_src
+
 No startup message.
 
 #+begin_src emacs-lisp
@@ -35,6 +49,12 @@ Disable tooltips
 
 #+begin_src emacs-lisp
   (tooltip-mode -1)
+#+end_src
+
+Disable the toolbar before the first frame is created.
+
+#+begin_src emacs-lisp
+  (tool-bar-mode -1)
 #+end_src
 
 Give some breathing room in the fringes
@@ -81,14 +101,33 @@ Lexical binding. This block must stay first in the file.
   ;;; init.el -*- lexical-binding: t; -*-
 #+end_src
 
+Emacs activates the installed packages before it loads =init.el=, so
+there is no =package-initialize= here (see Early Init).
+
 #+begin_src emacs-lisp
   (require 'package)
   (setq package-archives
         '(("melpa" . "https://melpa.org/packages/")
           ("gnu" . "https://elpa.gnu.org/packages/")
           ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
-  (setq package-enable-at-startup nil)
-  (package-initialize)
+#+end_src
+
+Pin org to GNU ELPA here rather than with =:pin= in =use-package=,
+which runs =package-initialize= at startup.
+
+#+begin_src emacs-lisp
+  (setq package-pinned-packages '((org . "gnu")))
+#+end_src
+
+Package quickstart (enabled in Early Init) activates all packages from
+one generated file. =package-install=, =package-delete= and quelpa
+regenerate it. After changing =elpa/= by hand, run =M-x
+package-quickstart-refresh=. On a fresh install the file does not exist
+yet, so create it here.
+
+#+begin_src emacs-lisp
+  (unless (file-exists-p package-quickstart-file)
+    (package-quickstart-refresh))
 #+end_src
 
 ** Bootstrap use-package
@@ -152,12 +191,6 @@ for ~:diminish~ in use-package
 #+end_src
 
 * Basic Config
-
-Disable the toolbar on every thing else
-
-#+begin_src emacs-lisp
-  (tool-bar-mode -1)
-#+end_src
 
 Don't delete any backups.
 #+BEGIN_SRC emacs-lisp
@@ -618,18 +651,10 @@ Shift click with mouse selection.
 
 ** Emacs Dashboard
 
-#+begin_src emacs-lisp
-  (defun laat/dashboard-filter-agenda ()
-    "Include entry if it has a scheduled-time or deadline-time in the future.
-  An entry is included if this function returns nil and excluded if returns a
-  point."
-    (let ((category (org-get-category (point))))
-      (unless (and (not (dashboard-filter-agenda-by-time))
-                   (if laat/at-home
-                       (not (string= 'work category))
-                     (not (string= 'life category))))
-        (point))))
+No agenda on the dashboard: it loads org and opens every agenda file
+at startup, which took over 3 seconds.
 
+#+begin_src emacs-lisp
   (use-package dashboard
     :ensure t
     :diminish (dashboard-mode page-break-lines-mode)
@@ -640,10 +665,8 @@ Shift click with mouse selection.
     (dashboard-startup-banner "~/.emacs.d/profile.png")
     (dashboard-projects-backend 'projectile)
     (dashboard-center-content t)
-    (dashboard-filter-agenda-entry 'laat/dashboard-filter-agenda)
     (dashboard-items
      '((bookmarks . 5)
-       (agenda . 5)
        (recents  . 5)
        (projects . 5)
        ;; (registers . 5)
@@ -902,8 +925,10 @@ M-x nerd-the-icons-install-fonts
     (setcdr (assoc 'counsel-M-x ivy-initial-inputs-alist) "")
     (setcdr (assoc 'org-refile ivy-initial-inputs-alist) ""))
 
+  ;; counsel-M-x requires smex when it needs it
   (use-package smex
-    :ensure t)
+    :ensure t
+    :defer t)
 
 #+end_src
 
@@ -1649,7 +1674,6 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
 
 
   (use-package org
-    :pin gnu
     :ensure org-contrib
     :general
     (general-define-key
@@ -1685,7 +1709,6 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
       "yk" '(laat/insert-kbd :which-key "keybinding"))
     :config
     (require 'org-faces)
-    (require 'ox-md)
 
 
     ;; magic copy links
@@ -1696,6 +1719,12 @@ When 'C-c C-c' or 'C-c C-k' are pressed in the magit commit message buffer, kill
 
 
     :custom
+    ;; Markdown export loads with the other backends on the first
+    ;; export, not with org.
+    (org-export-backends '(ascii html icalendar latex odt md))
+    ;; The default list adds gnus, rmail, bbdb, irc, w3m, eww and
+    ;; docview links; ol-gnus alone loads most of gnus.
+    (org-modules '(ol-doi ol-info))
     (org-insert-heading-respect-content t)
     (org-catch-invisible-edits 'smart)
     (org-ctrl-k-protect-subtree t)
@@ -2225,9 +2254,19 @@ sequenceDiagram
     :defer t
     :after '(org djvu))
 
+  ;; Register pdf: links with the autoloaded functions instead of calling
+  ;; `org-pdftools-setup-link', which loads org-noter and pdf-tools when
+  ;; the first org buffer opens.
   (use-package org-pdftools
     :ensure t
-    :hook (org-mode . org-pdftools-setup-link))
+    :defer t
+    :init
+    (with-eval-after-load 'ol
+      (org-link-set-parameters "pdf"
+                               :follow #'org-pdftools-open
+                               :complete #'org-pdftools-complete-link
+                               :store #'org-pdftools-store-link
+                               :export #'org-pdftools-export)))
 
   (use-package org-noter-pdftools
     :ensure t
@@ -2446,7 +2485,8 @@ sequenceDiagram
 
 #+begin_src emacs-lisp
   (use-package direnv
-    :ensure t)
+    :ensure t
+    :defer t)
 #+end_src
 
 ** vterm
@@ -2523,7 +2563,8 @@ sequenceDiagram
 #+begin_src emacs-lisp
    (use-package esup
      :init (setq esup-depth 0)
-     :ensure t)
+     :ensure t
+     :defer t)
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
